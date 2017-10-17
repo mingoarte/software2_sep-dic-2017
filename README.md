@@ -22,7 +22,7 @@ Para instalar el proyecto, debes clonar el proyecto, crear un ambiente virtual e
 cd ci4712-ui-designer
 python3 -m venv env
 source env/bin/activate
-sudo pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### Ojo: puede que tengas que instalar algunos otros paquetes con `apt`, si es así, actualiza el README
