@@ -3,6 +3,7 @@ En el presente documento se detallará las características y operaciones realiz
 
 ## Generación de un CAPTCHA.
 - Acceso: método GET.
+- URL: /generate_captcha/public_keys
 
 - Entrada: 
 	- Llave pública del CAPTCHA.
@@ -17,6 +18,7 @@ En el presente documento se detallará las características y operaciones realiz
 
 ## Validación de un CAPTCHA.
 - Acceso: método POST.
+- URL: /validate_captcha/
 
 - Entrada:
 	- Respuesta del usuario.
