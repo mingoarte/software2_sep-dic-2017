@@ -13,4 +13,5 @@ def showCaptcha(request):
 
 def showCaptchaCode(request):
 	context = {}
-	return render(request, 'tuisd/generatedCode.html', context)
+	image = '18892.png'
+	return render(request, 'tuisd/generatedCode.html', context, image)
