@@ -20,4 +20,5 @@ from servecaptcha import urls
 urlpatterns = [
     url(r'^servecaptcha/', include('servecaptcha.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('tuisd.urls')),
 ]

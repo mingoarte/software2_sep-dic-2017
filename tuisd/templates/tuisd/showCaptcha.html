@@ -1,0 +1,14 @@
+{% extends "tuisd/base.html" %}
+
+{% block content %}
+	<div  class="text-center">
+		<p>El Captcha (con el funcionamiento)</p>
+		<a href="{% url 'showCaptchaCode' %}" class="btn btn-primary" role="button">Ver código generado</a> 
+	</div>
+{% endblock %}
+
+{% block ayuda %}
+  Ayuda de mostrar captcha
+{% endblock %}
+
+
