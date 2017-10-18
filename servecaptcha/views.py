@@ -156,7 +156,7 @@ def validate_captcha(request):
         if keypair != captcha.keypair:
             data['error'] = 'private_key no permite validar captcha_id'
         else:
-            data['success'] = post['user_answer'] == captcha.answer
+            data['success'] = post['user_answer'].lower() == captcha.answer.lower()
             captcha.delete()
         response = JsonResponse(data)
     else:
