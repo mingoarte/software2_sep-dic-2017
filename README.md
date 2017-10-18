@@ -1,6 +1,6 @@
 # [CI4712] UI Designer
 
-## Requisitos de la instalación
+## Requisitos de la instalación
 
 - Python 3
 - Pip 3
