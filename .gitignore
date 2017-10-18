@@ -106,4 +106,6 @@ ENV/
 # migrations directory
 migrations/
 
-/static/
+/static/*.mp3
+/static/*.wav
+/static/*.png
