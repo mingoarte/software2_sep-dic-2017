@@ -10,12 +10,42 @@
   <div class="row">
     <div class="col-lg-4"></div>
     <div class="col-lg-4">
-      <h1>Funciona</h1>
+      		<p>FUNCIONA</p>
+          <button type="button" class="ventana" data-dismiss="modal">MODAL</button>
       
     </div>
     <div class="col-lg-4"></div>
     
   </div>
+
+  <div id="nuevo_campo" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Escriba el nuevo campo que desea agregar</h4>
+        </div>
+        <div class="modal-body">
+          <input id="newEntry" type="text" name="newEntry">
+        </div>
+        <div class="modal-footer"> 
+          <button id="aceptarNewEntry" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
+
+{% block custom_script %}
+  <script>
+  	$(".ventana").on('click', function() {
+  		$("#nuevo_campo").modal('toggle');
+  		$("#nuevo_campo").modal('show');
+  	});
+  </script>
+{% endblock custom_script %}
