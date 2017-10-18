@@ -1,0 +1,27 @@
+{% extends 'encuestas/base.html' %}
+{% load static %}
+{% block content %}
+<div style="text-align:center" class="page-header container">
+    <h1>Encuestas</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center">
+                <h2 class="panel-title">{{ pregunta.texto_pregunta }}</h2>
+            </div>
+            <div class="panel-body">
+                <ul>
+                {% for choice in pregunta.opcion_set.all %}
+                    <li>{{ choice.texto_opcion }} -- {{ choice.votos }} voto{{ choice.votos|pluralize }}</li>
+                {% endfor %}
+                </ul>
+
+                <a style="margin-top: 10px;" href="{% url 'encuestas:detail' pregunta.id %}" role="button" class="btn btn-primary">¿Votar de nuevo?</a>
+            </div>
+        </div>
+    </div>
+
+<a style="margin-top: 10px;" href="{% url 'encuestas:index' %}" role="button" class="btn btn-primary">Regresar</a>
+</div>
+{% endblock %}

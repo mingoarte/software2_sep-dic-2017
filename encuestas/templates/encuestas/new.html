@@ -1,0 +1,30 @@
+{% extends 'encuestas/base.html' %}
+{% load static %}
+{% block content %}
+<div style="text-align:center" class="page-header container">
+    <h1>Encuestas</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center">
+                <h2 class="panel-title">Crear Encuesta Nueva</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form_p.as_p }}
+                    {% for form in form_o %}
+                    {{ form.as_p }}
+                    {{ form_o.management_form }}
+                    {% endfor %}
+                    <button class="btn btn-primary btn-lg" type="submit">Generar Encuesta</button>
+                </form>
+
+                <a style="margin-top: 10px;" href="../" role="button" class="btn btn-primary">Regresar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
