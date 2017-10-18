@@ -5,28 +5,29 @@ from captcha.image import ImageCaptcha
 from .models import KeyPair, GeneratedCaptcha
 from .utils import random_string
 import random
+import tempfile
 
 
-def serveCaptchaImage(request, name):
-    image = ImageCaptcha()
-    image.write('%s' % name, 'static/%s.png' % name)
-
-    # Descomentar estas dos líneas hace que al ir a localhost/servecaptcha/image,
-    # se muestre una imagen en el navegador con el captcha generado
-    # Hay que proporcionarle un valor como primer argumento a image.write para que
-    # cree la imagen
-
-    #data = image.generate('%s' % name)
-    #response = HttpResponse(data, content_type="image/png")
+def serve_captcha_image(request, captcha_id):
+    try:
+        captcha = GeneratedCaptcha.objects.get(captcha_id=captcha_id)
+    except GeneratedCaptcha.DoesNotExist:
+        raise Http404("Captcha no existe")
+    image = ImageCaptcha().generate(captcha.answer, format='png')
+    response = HttpResponse(image.read(), content_type='image/png')
+    return response
 
 
-def serveCaptchaAudio(request, name):
-    audio = CaptchaAuditivo()
-    audio.write('%s' % name, 'static/%s.mp3' % name)
-
-    # Misma acotación de arriba
-
-    #return render(request, 'servecaptcha/index.html')
+def serve_captcha_audio(request, captcha_id):
+    try:
+        captcha = GeneratedCaptcha.objects.get(captcha_id=captcha_id)
+    except GeneratedCaptcha.DoesNotExist:
+        raise Http404("Captcha no existe")
+    with tempfile.TemporaryFile() as temp:
+        temp.write(CaptchaAuditivo().generate(captcha.answer))
+        temp.seek(0)
+        response = HttpResponse(temp.read(), content_type='audio/wav')
+    return response
 
 
 def serveCaptcha(request):
@@ -93,7 +94,7 @@ def generate_captcha(request, public_key: str):
             longitud_captcha = 6
             respuesta_captcha = random_string.alphanumeric(longitud_captcha)
 
-            captcha = GeneratedCaptcha(keypair=keypair, answer=respuesta_captcha)
+            captcha = GeneratedCaptcha(keypair=keypair, answer=123456)
             captcha.save()
 
             data = {
