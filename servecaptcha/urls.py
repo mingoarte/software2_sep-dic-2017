@@ -4,5 +4,6 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.serveCaptchaImage),
+    url(r'^image$', views.serveCaptchaImage),
+    url(r'^audio$', views.serveCaptchaAudio),
 ]
