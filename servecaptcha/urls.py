@@ -6,4 +6,5 @@ from . import views
 urlpatterns = [
     url(r'^image$', views.serveCaptchaImage),
     url(r'^audio$', views.serveCaptchaAudio),
+    url(r'^$', views.serveCaptcha),
 ]

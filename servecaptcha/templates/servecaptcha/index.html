@@ -1,5 +1,9 @@
 {% load static %}
-<img src="{% static 'download.jpg'%}" />
+{% static "" as baseUrl %}
+<img src="{{ baseUrl }}{{name}}.png" />
+
+<br>
+<br>
 
 <audio id='myaudio'  preload= 'auto' controls  type="audio/mpeg"  onload="play()"></audio>
 
@@ -8,6 +12,6 @@
 	window.onload = function play()
 	{
 	         var source = document.getElementById('myaudio');
-	         source.src = "{% static "out.mp3" %}";        
+	         source.src = "{{ baseUrl }}{{name}}.mp3";        
 	}
 </script>
