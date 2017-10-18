@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from uidesigner.audio_captcha import CaptchaAuditivo
 from captcha.image import ImageCaptcha
 from .models import KeyPair, GeneratedCaptcha
@@ -108,6 +109,8 @@ def generate_captcha(request, public_key: str):
 
     return response
 
+
+@csrf_exempt
 def validate_captcha(request):
     """ Funcíón del endpoint para la validación del CAPTCHA.
 
@@ -117,14 +120,45 @@ def validate_captcha(request):
 
         Argumentos:
             request: Django request.
-            captchaid: string que representa el CAPTCHAID.
-            public_key: string que representa la llave pública del diseñador que
+            captcha_id: string que representa el CAPTCHAID.
+            private_key: string que representa la llave pública del diseñador que
                         incluyó el captcha.
             user_answer: string que representa la respuesta del usuario al responder
                          el captcha.
 
         Retorna:
-            Un HTTP response OK si el captcha es válido, error en caso contrario.
+            JSON con dos campos:
+            error: vacio si la llamada fue exitosa, mensaje de error
+                   en caso contrario.
+            success: true o false dependiendo si la respuesta es correcta o no
 
     """
-    pass
+    if request.method == 'POST':
+        data = {'error': ''}
+        post = request.POST
+
+        # validando que esten los campos y son validos
+        for campo in ['captcha_id', 'private_key', 'user_answer']:
+            if campo not in post:
+                data['error'] = 'Falta el campo %s' % campo
+                return JsonResponse(data)
+        try:
+            keypair = KeyPair.objects.get(private_key=post['private_key'])
+        except KeyPair.DoesNotExist:
+            data['error'] = 'Fallo de autenticacion'
+            return JsonResponse(data)
+        try:
+            captcha = GeneratedCaptcha.objects.get(captcha_id=post['captcha_id'])
+        except GeneratedCaptcha.DoesNotExist:
+            data['error'] = 'captcha_id invalido'
+            return JsonResponse(data)
+
+        if keypair != captcha.keypair:
+            data['error'] = 'private_key no permite validar captcha_id'
+        else:
+            data['success'] = post['user_answer'] == captcha.answer
+            captcha.delete()
+        response = JsonResponse(data)
+    else:
+        response = HttpResponseNotAllowed(content="Sólo se permite el método POST.", permitted_methods=["POST"])
+    return response
