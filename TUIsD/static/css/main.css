@@ -1,0 +1,12 @@
+/*.builder{
+	margin: 0 200px 0 200px;
+}*/
+
+.block {
+	border-style: solid;
+    height: 450px;
+    border-radius: 50px;
+    background-color: #e3e7ed;
+    border-color: #79589f;
+    margin-top: 20px;
+}
