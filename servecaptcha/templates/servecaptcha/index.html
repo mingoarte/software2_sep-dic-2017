@@ -1,0 +1,17 @@
+{% load static %}
+{% static "" as baseUrl %}
+<img src="{{ baseUrl }}{{name}}.png" />
+
+<br>
+<br>
+
+<audio id='myaudio'  preload= 'auto' controls  type="audio/mpeg"  onload="play()"></audio>
+
+
+<script>
+	window.onload = function play()
+	{
+	         var source = document.getElementById('myaudio');
+	         source.src = "{{ baseUrl }}{{name}}.mp3";        
+	}
+</script>

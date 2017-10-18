@@ -19,7 +19,7 @@ lib/
 lib64/
 parts/
 sdist/
-var/
+/var/
 wheels/
 *.egg-info/
 .installed.cfg
@@ -99,3 +99,13 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# sqlite files
+*.sqlite3
+
+# migrations directory
+migrations/
+
+/static/*.mp3
+/static/*.wav
+/static/*.png
