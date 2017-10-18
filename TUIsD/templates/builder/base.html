@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>TUIsD</title>
+
+  <!-- Global stylesheets -->
+  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
+
+  <!-- /global stylesheets -->
+
+  <!-- Core JS files -->
+  <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <!-- /core JS files -->
+
+</head>
+
+<body>
+<div>
+  <!-- Main navbar -->
+  {% block navbar %}
+        
+  {% endblock navbar %}
+  <!-- /main navbar -->
+
+
+
+  <!-- Page container -->
+  <div class="page-container">
+    <!-- Page content -->
+    <div class="page-content">
+      <!-- Main sidebar -->
+      {% block sidebar %}
+        {% include "builder/sidebar.html" %}
+      {% endblock sidebar %}
+      <!-- /main sidebar -->
+
+
+      <!-- Main content -->
+      <div class="content-wrapper">
+          {% block content %}
+          {% endblock content %}
+      </div>
+          <!-- Footer -->
+          {% block footer %}
+          {% endblock footer %}
+          <!-- /footer -->
+
+
+
+      </div>
+      <!-- /main content -->
+    </div>
+    <!-- /page content -->
+  </div>
+  <!-- /page container -->
+
+  {% block custom_script %}
+  {% endblock custom_script %}
+
+
+</body>
+</html>
