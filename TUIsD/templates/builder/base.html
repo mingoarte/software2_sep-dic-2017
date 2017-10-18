@@ -10,6 +10,7 @@
   <!-- Global stylesheets -->
   <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
 
   <!-- /global stylesheets -->
 
@@ -29,7 +30,6 @@
   <!-- /main navbar -->
 
 
-
   <!-- Page container -->
   <div class="page-container">
     <!-- Page content -->
@@ -38,11 +38,15 @@
       {% block sidebar %}
         {% include "builder/sidebar.html" %}
       {% endblock sidebar %}
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="sidebar" >
+            
+                    
+      </div>
       <!-- /main sidebar -->
 
 
       <!-- Main content -->
-      <div class="content-wrapper">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" id="content" >
           {% block content %}
           {% endblock content %}
       </div>
