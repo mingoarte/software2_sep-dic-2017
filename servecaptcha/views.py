@@ -91,7 +91,7 @@ def generate_captcha(request, public_key: str):
 		captcha = GeneratedCaptcha(keypair=keypair, answer=respuesta_captcha)
 		captcha.save()
 
-		response = HttpResponse(content="{}".format(respuesta_captcha))
+		response = HttpResponse({"respuesta_captcha": respuesta_captcha, "captcha_id": captcha_id})
 
 	else:
 		# Especificamos los métodos que acepta el endpoint.
