@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from uidesigner.audio_captcha import CaptchaAuditivo
 from captcha.image import ImageCaptcha
+from .models import KeyPair, GeneratedCaptcha
 import random
+
 
 
 def serveCaptchaImage(request):
@@ -22,6 +24,29 @@ def serveCaptchaAudio(request):
     response = HttpResponse(data, content_type="audio/wav")
     return response
 
+def generate_apikey(request):
+	""" Función del endpoint para la generación de una APIKEY a través del método GET.
+
+		Argumentos:
+			request: Django request.
+
+		Retorna:
+			Un HTTP response OK con la llave pública del APIKEY. Error si algún
+			campo no es correcto. 
+	"""
+	if request.method == 'GET':
+		apikey = KeyPair()
+		apikey.save()
+
+		response = HttpResponse(content="{}".format(apikey.public_key))
+	
+	else:
+		# Especificamos los métodos que acepta el endpoint.
+		response = HttpResponseNotAllowed(content="Sólo se permite el método GET.", permitted_methods=["GET"])
+
+	return response
+
+
 def generate_captcha(request, public_key: str):
 	""" Función del endpoint para la generación del CAPTCHA.
 	
@@ -38,7 +63,28 @@ def generate_captcha(request, public_key: str):
 			Un HTTP response OK con la respuesta correcta del CAPTCHA, error si algún
 			campo no es correcto.
 	"""
-	pass
+	if request.method == 'GET':
+		# Como las llaves públicas son únicas, podemos utilizar el método get para 
+		# obtener de la BD la única instancia que debe haber, sin embargo, 
+		# este método puede lanzar una excepción si no se encuentra la llave pública.
+		try:
+			keypair = KeyPair.objects.get(public_key=public_key)
+		except KeyPair.DoesNotExist:
+			# return HttpResponseNotAllowed(content=["POST"])
+			raise Http404("Llave pública no existe.") 
+
+		respuesta_captcha = str(random.randint(0,999999))
+
+		captcha = GeneratedCaptcha(keypair=keypair, answer=respuesta_captcha)
+		captcha.save()
+
+		response = HttpResponse(content="{}".format(respuesta_captcha))
+
+	else:
+		# Especificamos los métodos que acepta el endpoint.
+		response = HttpResponseNotAllowed(content="Sólo se permite el método GET.", permitted_methods=["GET"])
+
+	return response
 
 def validate_captcha(request):
 	""" Funcíón del endpoint para la validación del CAPTCHA.
