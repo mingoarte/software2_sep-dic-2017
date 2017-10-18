@@ -1,24 +1,34 @@
 # Documentación sobre los endpoints provistos.
 En el presente documento se detallará las características y operaciones realizadas por cada endpoint provisto para el manejo de los captchas.
 
+## Generación de un APIKEY.
+- Acceso: método GET.
+- URL: /servecaptcha/generate_apikey/
+
+- Entrada: Ninguna
+
+- Acciones:
+	- Crea un APIKEY para el diseñador.
+
+- Retorna: la clave pública del APIKEY.
+
 ## Generación de un CAPTCHA.
 - Acceso: método GET.
-- URL: /generate_captcha/public_keys
+- URL: /servecaptcha/generate_captcha/public_key/
 
 - Entrada: 
-	- Llave pública del CAPTCHA.
+	- Llave pública del CAPTCHA en public_key
 
 - Acciones:
 	- Buscar el APIKEY asociado a la llave pública.
-	- Generar imagen de CAPTCHA.
-	- Generar sonido de CAPTCHA.
-	- Generar un CAPTCHA asociando el texto de la imagen como respuesta y el APIKEY.
+	- Generar aleatoriamente una respuesta.
+	- Generar un CAPTCHA asociando la respuesta con el APIKEY.
 
 - Retorna: Respuesta correcta del CAPTCHA creado en la BD.
 
 ## Validación de un CAPTCHA.
 - Acceso: método POST.
-- URL: /validate_captcha/
+- URL: /servecaptcha/validate_captcha/
 
 - Entrada:
 	- Respuesta del usuario.

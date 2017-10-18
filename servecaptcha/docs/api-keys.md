@@ -15,7 +15,7 @@ EL objeto Key-Pair tiene las siguientes variables:
 Para nosotros el APIKEY se refiere a la tupla (PublicK, PrivateK), donde en la primera posición se tiene la llave pública que se le da al usuario al momento de generar una en el sistema, en la seguna posición se tiene la llave privada que es mantenida en el servidor y sirve para validar la llave pública entregada al usuario.
 
 Ambas llaves tienen las siguientes propiedades:
-- Longitud máxima: 64 caracteres.
+- Longitud: 64 caracteres.
 - Son únicas.
 - Si no se entrega una llave pública/privada en el constructor, el sistema crea una utilizando la función `alphanumeric` de `random_string.py`.
 
