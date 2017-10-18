@@ -4,18 +4,19 @@
 
 {% block content %}
 
-
-<div>
-  <div class="row">
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4">
-      		<p>Hola {{ usuario }}</p>
-          <button type="button" class="ventana" data-dismiss="modal">MODAL</button>
-      
-    </div>
-    <div class="col-lg-4"></div>
-    
+<div class="builder content">
+	<div class="row">
+    	<div class="col-lg-12">
+  			<h1>Bienvenido</h1>
+	     	<div class="row block-row">
+	      		<h3 class="text-row">Este es su manejador de contenido para diseñar el templates de su preferencia</h>
+	      		<h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>	
+	     	</div>
+  		</div>
+ 	</div>
   </div>
+
+  
 
   <div id="nuevo_campo" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -24,10 +25,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Escriba el nuevo campo que desea agregar</h4>
+          <h4 class="modal-title">Seleccione el nuevo campo que desea agregar</h4>
         </div>
         <div class="modal-body">
-          <input id="newEntry" type="text" name="newEntry">
+          <button id="encuesta" class="btn btn-primary" >Encuesta</button>
         </div>
         <div class="modal-footer"> 
           <button id="aceptarNewEntry" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
@@ -46,5 +47,9 @@
   		$("#nuevo_campo").modal('toggle');
   		$("#nuevo_campo").modal('show');
   	});
+
+    $(".pattern").on('click', function() {
+      $(".builder").append("<div class='row block'><div class='col-lg-12 '><div class='col-lg-8'><h3>Encuesta</h3><ul><li>Pregunta 1</li><li>Pregunta 2</li><li>Pregunta 3</li></ul></div><div class='col-lg-4'><button class='btn btn-primary'>Configurar</button><button class='btn btn-primary'>Clonar</button><button class='btn btn-danger'>Eliminar</button></div></div></div>")
+    });
   </script>
 {% endblock custom_script %}
