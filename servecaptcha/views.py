@@ -94,7 +94,7 @@ def generate_captcha(request, public_key: str):
             longitud_captcha = 6
             respuesta_captcha = random_string.alphanumeric(longitud_captcha)
 
-            captcha = GeneratedCaptcha(keypair=keypair, answer=respuesta_captcha)
+            captcha = GeneratedCaptcha(keypair=keypair, answer=123456)
             captcha.save()
 
             data = {
