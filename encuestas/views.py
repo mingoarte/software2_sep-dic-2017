@@ -8,7 +8,7 @@ from .forms import *
 
 
 def index(request):
-    latest_question_list = Pregunta.objects.order_by('-fecha_publ')[:5]
+    latest_question_list = Pregunta.objects.order_by('-fecha_publ')[:7]
     context = {
         'latest_question_list': latest_question_list,
     }
