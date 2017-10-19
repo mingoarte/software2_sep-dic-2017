@@ -1,14 +1,41 @@
 {% extends "tuisd/base.html" %}
 
 {% block content %}
-	<div  class="text-center">
+	<div class="text-center">
+		<h2>Integración del lado del cliente</h2>
+
+		<p>Clave pública:</p>
+
+		<p id="public_key">
+			<code>{{ public_key }}</code>
+		</p>
+
+		<h2>Integración del lado del servidor</h2>
+
+		<p>Clave privada:</p>
+		<p id="private_key">
+			<code>{{ private_key }}</code>
+		</p>
+
 		<p>Su código generado es:</p>
+		<div class="row">
+			<div class="col-4">
+				<h3>HTML</h3>
+				<pre class='generated-code'>{{ generated_html }}</pre>
+			</div>
+			<div class="col-4">
+				<h3>JS</h3>
+				<pre class='generated-code'>{{ generated_js }}</pre>
+			</div>
+			<div class="col-4">
+				<h3>CSS</h3>
+				<pre class='generated-code'>{{ generated_css }}</pre>
+			</div>
+		</div>
 	</div>
+
 {% endblock %}
 
 {% block ayuda %}
   Ayuda de código generado
 {% endblock %}
-
-
-

@@ -1,0 +1,15 @@
+.generated-code {
+  text-align: left;
+  padding: 1em;
+  background: #F9F9F9;
+  height: 20em;
+}
+
+.btn-generar-codigo {
+  color: #FFF;
+  font-weight: bold;
+  height: 56px; /* sticky footer height */
+  line-height: 56px;
+  padding-top: 0;
+  border-radius: 0;
+}
