@@ -10,7 +10,8 @@
 	<div class="row">
     	<div class="col-lg-12">
 
-  			<h1>Bienvenido</h1>
+  			<h1 id="title"></h1>
+        <input id="template_id" type="hidden" name="template_id">
 	     	<div class="row block-row">
 	      		<h3 class="text-row">Este es su manejador de contenido para diseñar el templates de su preferencia</h3>
 	      		<h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>	
@@ -31,10 +32,48 @@
           <h4 class="modal-title">Configuracion de Encuesta</h4>
         </div>
         <div class="modal-body">
-          
+          <form>
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
+                <input id="pregunta" type="text" name="pregunta">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>
+                <input class=" tags-unete" id="opcion" type="text" name="opcion">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>
+                <input id="opcion" type="text" name="opcion">
+              </div>
+            <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
         </div>
+          </form>
         <div class="modal-footer"> 
           <button id="accept" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="new_template" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Nombre de la vista</h4>
+        </div>
+        <div class="modal-body">
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Escoja un nombre para su vista:</b></span>
+                <input id="template_name" type="text" name="template_name">
+              </div>
+        </div>
+        <div class="modal-footer"> 
+          <button id="accept_name_template" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -46,19 +85,55 @@
 
 {% block custom_script %}
   <script>
-  	$(document).on('click', "button.config", function() {
-  		$("#new_ask").modal('toggle');
-  		$("#new_ask").modal('show');
-  		console.log("no yo soy viejo pero tengo el webo como uno")
+    $(document).ready(function() {
+      $('#new_template').modal('show')
+    });
+
+    $('#accept_name_template').click(function(){
+      $('#title').text($('#template_name').val())
       $.ajax({
-          url : "{% url 'pollConfig' %}",
-          type : 'POST'
+          url : "{% url 'newTemplate' %}",
+          data :  {
+                      'name': $('#template_name').val()
+                        },
          
       })
       .done(function(data){
-          console.log(" pipi");
+        if(data){
+          alert("Se ha guardado el nombre del template.")
+          $('#template_id').val(data.id)
+          $('#new_template').modal('hide')
+        }
       });
+    })
+
+  	$(document).on('click', "button.config", function() {
+      $('#new_ask').modal('show')
+      
   	});
+
+    $('#accept').click(function(){
+      var opciones = [];
+      $("input[name='opcion']").each(function() {
+          opciones.push($(this).val());
+      });
+        console.log($('#pregunta').val())
+      $.ajax({
+          url : "{% url 'pollConfig' %}",
+          data :  {
+                            'pregunta': $('#pregunta').val(),
+                            'opciones': opciones,
+                            'template': $('#template_id').val()
+                        },
+         
+      })
+      .done(function(data){
+      });
+    })
+
+    $("#add_more").click(function(){
+      $("<div class='input-group'><span class='input-group-addon tags-unete' basic-addon1'><b>Opción:</b></span><input id='opcion' type='text' name='opcion'></div>").insertBefore(this)
+    })
 
 
     $(".pattern").on('click', function() {

@@ -1,7 +1,17 @@
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from builder.models import *
+from encuestas.models import *
 from builder.forms import *
+from encuestas.forms import *
+from django.forms import formset_factory
+from .forms import *
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.core import serializers
+
+
 
 # Create your views here.
 
@@ -10,10 +20,7 @@ class buildTemplate(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(buildTemplate, self).get_context_data(**kwargs)
-        context['generic'] = GenericForm()
-        context['generic2'] = GenericForm()
-        context['pregunta'] = AskForm()        
-        context['pregunta2'] = AskForm()        
+              
 
         return context
 
@@ -21,17 +28,30 @@ class buildTemplate(TemplateView):
     	return render(request, '/builder/build.html')
 
 def pollConfig(request):
-    print("ENTRO")
-    # amount = request.GET.get('amount', None)
-    # product_name = request.GET.get('name', None)
-    # unit_name = request.GET.get('unit', None)
-    # product = Product.objects.get(name=product_name)
-    # unit = UnitTable.objects.get(name=unit_name)
-    # convertRelation = ConversionTable.objects.get(product_id=product.pk, unit_id=unit.pk)
-    # data = {
-    #     'total': round(Decimal(amount) * product.selling_price * convertRelation.relation, 2),
-    #     'id': product.id,
-    #     'price': Decimal(round(product.selling_price * convertRelation.relation, 2)),
-    #     'unit': unit_name
-    # }
-    # return JsonResponse(data)
+    
+    question_text = request.GET.get('pregunta', None)
+    options = request.GET.getlist('opciones[]', None)
+    template_pk = request.GET.get('template', None)
+    print(template_pk)
+    template = Template.objects.get(pk=int(template_pk))
+
+    question = Pregunta.objects.create(texto_pregunta=question_text,template=template)
+    question_pk = question.pk
+    question.save()
+
+    question = Pregunta.objects.get(pk=question_pk)
+    for option in options:
+        Opcion.objects.create(pregunta=question, texto_opcion=option).save()
+    # data = json.dumps(data, cls=DjangoJSONEncoder)
+    # # json.simplejson.dumps(data)
+    # data = serializers.serialize('json', preguntaForm)
+    return JsonResponse(data={})
+
+
+def newTemplate(request):
+    
+    name = request.GET.get('name', None)
+    template = Template.objects.create(name=name)
+    pk = template.pk
+    template.save()
+    return JsonResponse(data={'id': str(pk)})

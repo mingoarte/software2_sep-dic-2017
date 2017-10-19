@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils import timezone
+from builder.models import *
 import datetime
 
 
 class Pregunta(models.Model):
     texto_pregunta = models.CharField('Pregunta:', max_length=200)
     fecha_publ = models.DateTimeField('fecha de publicación', null=True, default=timezone.now)
+    template = models.ForeignKey(Template, null=True)
 
     def es_reciente(self):
         return self.fecha_publ >= timezone.now() - datetime.timedelta(days=1)
