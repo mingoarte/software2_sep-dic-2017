@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'TUIsD.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'powersoft',
         'USER': 'powersoft',
         'PASSWORD': 'powersoft',
@@ -128,7 +128,6 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "TUIsD/static"),
 )
-print(STATICFILES_DIRS)
 
 STATIC_URL = '/static/'
 
