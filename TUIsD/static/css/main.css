@@ -10,3 +10,13 @@
     border-color: #79589f;
     margin-top: 20px;
 }
+.block-row {
+	border-style: solid;
+    border-radius: 50px;
+    background-color: #e3e7ed;
+    border-color: #79589f;
+    margin-top: 20px;
+}
+.text-row{
+	margin-left: 15px;
+}
