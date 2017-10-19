@@ -7,6 +7,7 @@ urlpatterns = [
 
     # List of URL's related to orders
     url(r'^build/$', buildTemplate.as_view(), name='build'),
+    url(r'^poll-config/$', views.pollConfig, name='pollConfig'),
     
 
 
