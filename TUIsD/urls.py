@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'^encuestas/', include('encuestas.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^builder/', include('builder.urls')),
+    url(r'^$', homeTemplate.as_view(), name = 'home'),
+    url(r'^ver_templates/', ver_templatesTemplate.as_view(), name = 'ver_templates'),
+    url(r'^revisar_template/(?P<templateID>[0-9]+)$',revisarTemplate.as_view(), name='revisar'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

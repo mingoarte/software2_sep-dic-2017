@@ -22,15 +22,5 @@ class Template(models.Model):
 class Pattern(models.Model):
 	name = models.CharField(max_length=128)
 
-
-
-# class Generic(models.Model):
-# 	name = models.CharField(max_length=128)
-# 	option1 = models.CharField(max_length=128, choices=(("Choice 1", "Choice 1"), ("Choice 2", "Choice 2")))
-# 	option2 = models.CharField(max_length=128, choices=(("Choice 2.1", "Choice 2.1"), ("Choice 2.2", "Choice 2.2")))
-
-
-# class Pregunta(models.Model):
-# 	ask = models.CharField(max_length=128)
-# 	answer = models.CharField(max_length=2, choices=(("si", "Si"), ("no", "No")))
-# 	encuesta = models.ForeignKey(Generic, related_name="preguntas", default=None)
+	def __str__(self):
+		return self.name

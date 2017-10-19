@@ -10,9 +10,7 @@ from django.forms import formset_factory
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.core import serializers
-
-
-
+from django.http import HttpResponseRedirect,HttpResponse
 # Create your views here.
 
 class buildTemplate(TemplateView):
@@ -25,7 +23,28 @@ class buildTemplate(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-    	return render(request, '/builder/build.html')
+        return render(request, '/builder/build.html')
+
+
+class homeTemplate(TemplateView):
+    template_name = 'home.html'
+
+class ver_templatesTemplate(TemplateView):
+    template_name = 'ver_templates.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ver_templatesTemplate, self).get_context_data(**kwargs) 
+        context['templates'] = Template.objects.all()
+        return context
+
+class revisarTemplate(TemplateView):
+    @staticmethod
+    def get(request,templateID):
+
+        template = Template.objects.get(id=templateID)
+        print(template)
+        return HttpResponse(template.html)
+
 
 def pollConfig(request):
     
@@ -49,9 +68,10 @@ def pollConfig(request):
 
 
 def newTemplate(request):
-    
     name = request.GET.get('name', None)
     template = Template.objects.create(name=name)
     pk = template.pk
     template.save()
     return JsonResponse(data={'id': str(pk)})
+
+
