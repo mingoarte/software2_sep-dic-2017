@@ -14,8 +14,6 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
 # Create your views here.
 class buildTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
@@ -28,6 +26,8 @@ class buildTemplate(LoginRequiredMixin,TemplateView):
 
     def post(self, request, *args, **kwargs):
     	return render(request, '/builder/build.html')
+
+
 
 class homeTemplate(TemplateView):
     template_name = 'home.html'
@@ -75,13 +75,11 @@ def pollConfig(request):
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
-    
     name = request.GET.get('name', None)
     template = Template.objects.create(name=name)
     pk = template.pk
     template.save()
     return JsonResponse(data={'id': str(pk)})
-
 
 class userTemplate(TemplateView):
     template_name = 'crear_usuario.html'
@@ -131,3 +129,4 @@ class loginTemplate(TemplateView):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
+

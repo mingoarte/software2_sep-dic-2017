@@ -6,16 +6,21 @@
 
 <div class="builder content">
 	<div class="row">
-    	<div class="col-lg-12">
-  			<h1>Bienvenido</h1>
-  			<h1 id="title"></h1>
-        <input id="template_id" type="hidden" name="template_id">
-	     	<div class="row block-row">
-	      		<h3 class="text-row">Este es su manejador de contenido para diseñar el templates de su preferencia</h>
-	      		<h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>	
-	     	</div>
-  		</div>
- 	</div>
+  	<div class="col-lg-12">
+			<h1 id="title"></h1>
+      <input id="template_id" type="hidden" name="template_id">
+      
+      <div id="welcome" class="panel panel-border panel-success">
+        <div class="panel-heading">
+          <h1 class="panel-title">Bienvenido</h1>
+        </div>
+        <div class="panel-body">
+          <h3 class="text-row">Este es su manejador de contenido para diseñar el templates de su preferencia</h3>
+          <h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>  
+        </div>
+      </div>
+
+    </div>
   </div>
 
   
@@ -31,6 +36,7 @@
         </div>
         <div class="modal-body">
           <form>
+              <input id="card-id" type="hidden" name="card-id">
               <div class="input-group">
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
                 <input id="pregunta" type="text" name="pregunta">
@@ -43,11 +49,11 @@
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>
                 <input id="opcion" type="text" name="opcion">
               </div>
-            <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
-        </div>
+              <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
           </form>
+        </div>
         <div class="modal-footer"> 
-          <button id="accept" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+          <button id="accept_encuesta" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -98,7 +104,6 @@
       })
       .done(function(data){
         if(data){
-          alert("Se ha guardado el nombre del template.")
           $('#template_id').val(data.id)
           $('#new_template').modal('hide')
         }
@@ -106,8 +111,9 @@
     })
 
   	$(document).on('click', "button.config", function() {
+      var  id = $(this).parent().parent().attr('id')
+      $('#card-id').val(id)
       $('#new_ask').modal('show')
-      
   	});
 
     $('#accept').click(function(){
@@ -133,9 +139,30 @@
       $("<div class='input-group'><span class='input-group-addon tags-unete' basic-addon1'><b>Opción:</b></span><input id='opcion' type='text' name='opcion'></div>").insertBefore(this)
     })
 
+    var i = 0
+    $(".pattern").on('click', function() {
+
+      $(".builder").append("<div id=card_"+i+" class='card-box'><div class='btn-group pull-right'><button type='button' class='btn btn-default waves-effect config'>Configurar</button><button type='button' class='btn btn-danger waves-effect'>Eliminar</button></div><h1 class='header-title m-b-30'>Encuesta</h1><div class='row'><div class='col-md-12 pattern-content' style='text-align: center;'></div></div></div>")
+      i = i + 1;
+    });
 
     $(".pattern").on('click', function() {
-      $(".builder").append("<div class='row block'><div class='col-lg-12 '><div class='col-lg-8'><h3>Encuesta</h3><ul><li>Pregunta 1</li><li>Pregunta 2</li><li>Pregunta 3</li></ul></div><div class='col-lg-4'><button id='config' class='config btn btn-primary'>Configurar</button><button class='btn btn-primary'>Clonar</button><button class='btn btn-danger'>Eliminar</button></div></div></div>")
+      $("#welcome").hide();
     });
+    // $(".pattern").on('click', function() {
+    //   $(".builder").append("<div class='row block'><div class='col-lg-12 '><div class='col-lg-8'><h3>Encuesta</h3><ul><li>Pregunta 1</li><li>Pregunta 2</li><li>Pregunta 3</li></ul></div><div class='col-lg-4'><button id='config' class='config btn btn-primary'>Configurar</button><button class='btn btn-primary'>Clonar</button><button class='btn btn-danger'>Eliminar</button></div></div></div>")
+    // });
+
+    // $("#accept_encuesta").on('click', function() {
+    //   console.log("Entro")
+    //   var content = $(this).parent().prev() .html();
+    //   console.log(content);
+    //   var id = "#" + $("#card-id").val();
+    //   console.log(id);
+    //   $(id).append(content);
+    //   $("input[name='opcion']").each(function() {
+    //        $(id).append($(this).val());
+    //   });
+    // });  
   </script>
 {% endblock custom_script %}
