@@ -79,28 +79,20 @@
         </div>
     </div>
 
-
-
     <script>
-
     $("document").ready(function(){
-
       $("#actualizarCaptcha").trigger("click");
     });
 
-
-
     $( "#reproducirAudio" ).click(function(){
-
       var captchaAudio = document.getElementById('audioCaptcha');
       captchaAudio.play();
     });
 
 
     $( "#actualizarCaptcha" ).click(function() {
-
       $.ajax({
-        url: '/servecaptcha/generate_captcha/9qLMKRTlXyizWUtjoDvNtGz5z6G4DuaZfHIrBPyJ1PyWS60pEz0qQHE6q2v0bWVc/',
+        url: '/servecaptcha/generate_captcha/demoPublicKey/',
         type: 'get',
         dataType: 'json',
         success: function(data) {
@@ -109,15 +101,9 @@
         failure: function(data) {
           alert("nada");
         }
-
       });
     });
     </script>
-
-
-
-
-
 
 {% endblock %}
 
