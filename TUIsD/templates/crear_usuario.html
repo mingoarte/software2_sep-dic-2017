@@ -10,7 +10,7 @@
       <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'home' %}">Home</a></li>
       {% if request.user.is_authenticated %}
       <li><a href="{% url 'build' %}">Diseño</a></li>
       <li><a href="{% url 'ver_templates' %}">Ver Templates</a></li>
@@ -20,12 +20,9 @@
       {% if request.user.is_authenticated %}
         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
       {% else %}
-
         <li><a href="{% url 'crear_usuario' %}"><span class="glyphicon glyphicon-user"></span>Crear Usuario</a></li>
-
         <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       {% endif %}
-
     </ul>
   </div>
 </nav>
@@ -36,7 +33,20 @@
 
   <div class = "col-lg-4"></div>
   <div class = "col-lg-4">
-    <img class="img-responsive" src="{% static 'img/TUIsD.png' %}"/>
+    <div class="container-fluid" style="background: #e7e7e7;padding-bottom: 10px;">
+      <h2 style="text-align: center;"> Creación de Usuario </h2>
+      <form action="" method="post">
+          {% csrf_token %}
+          {% for field in form%}
+            <div class="form-group">
+              {{field}}
+              {{field.errors}}
+            </div>
+          {% endfor %}
+
+        <button type="submit" class="btn btn-primary" style="float: right;">Crear</button>
+      </form>
+    </div>
   </div>
 <div class = "col-lg-4"></div>
 
