@@ -17,4 +17,7 @@ class buildTemplate(TemplateView):
 
 class homeTemplate(TemplateView):
 	template_name = 'home.html'
+
+class ver_templatesTemplate(TemplateView):
+	template_name = 'ver_templates.html'
 	

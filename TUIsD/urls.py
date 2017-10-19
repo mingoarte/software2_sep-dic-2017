@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^builder/', include('builder.urls')),
     url(r'^$', homeTemplate.as_view(), name = 'home'),
+    url(r'^ver_templates/', ver_templatesTemplate.as_view(), name = 'ver_templates'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
