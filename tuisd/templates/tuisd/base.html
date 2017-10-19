@@ -16,8 +16,13 @@
   <link href="{% static 'tuisd/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href="{% static 'tuisd/css/sb-admin.css' %}" rel="stylesheet">
+  <!-- TUIsD CSS -->
+  <link href="{% static 'tuisd/css/main.css' %}" rel="stylesheet">
   <!-- TUIsD Icon-->
   <link rel="icon" href="{% static 'tuisd/img/bird.png' %}">
+
+  <script src="{% static 'tuisd/js/jquery-3.2.1.min.js' %}"></script>
+  {% block head %}{% endblock %}
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -59,11 +64,13 @@
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
+      {% block footer %}
       <div class="container">
         <div class="text-center">
           <small>Copyright © JSWeCan 2017</small>
         </div>
       </div>
+      {% endblock %}
     </footer>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
