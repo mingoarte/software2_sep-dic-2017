@@ -13,18 +13,18 @@
             <div class="col">
             </div>
 
-            <div class="col-6">
+            <div class="col-4">
                 <div class="card bg-light mb-3">
                   <div class="card-body">
                       <form>
                         <div class="form-group">
-                          <label for="exampleInputEmail1">Email address</label>
-                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                          <label for="exampleInputEmail1">Correo electrónico</label>
+                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="pedro@perez.com">
+                          <small id="emailHelp" class="form-text text-muted"></small>
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputPassword1">Password</label>
-                          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                          <label for="exampleInputPassword1">Contraseña</label>
+                          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="contraseña">
                         </div>
 
                         <div class="form-group">
@@ -65,18 +65,18 @@
                           <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Captcha">
                         </div>
 
-                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <button type="submit" class="btn btn-secondary">Enviar</button>
                       </form>
                   </div>
                 </div>
             </div>
 
             <div class="col">
+                <br>
+                <a href="{% url 'showCaptchaCode' %}" class="btn btn-secondary" role="button">Ver código generado</a>
             </div>
           </div>
         </div>
-        <br>
-        <a href="{% url 'showCaptchaCode' %}" class="btn btn-primary" role="button">Ver código generado</a>
     </div>
 
 
