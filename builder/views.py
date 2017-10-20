@@ -33,17 +33,27 @@ class ver_templatesTemplate(TemplateView):
     template_name = 'ver_templates.html'
     
     def get_context_data(self, **kwargs):
-        context = super(ver_templatesTemplate, self).get_context_data(**kwargs) 
+        context = super(ver_templatesTemplate, self).get_context_data(**kwargs)
+
         context['templates'] = Template.objects.all()
         return context
 
 class revisarTemplate(TemplateView):
-    @staticmethod
-    def get(request,templateID):
+    template_name = 'index.html'
 
-        template = Template.objects.get(id=templateID)
-        print(template)
-        return HttpResponse(template.html)
+    def get(self, request, *args, **kwargs):
+
+        context = self.get_context_data(**kwargs)
+        
+        template = Template.objects.get(id=(kwargs['templateID']))
+        questions = Pregunta.objects.filter(template=template) 
+        patterns = []
+        for question in questions:
+            pattern = {'question': question,
+                        'options': Opcion.objects.filter(pregunta=question)}
+            patterns.append(pattern)
+        context['patterns'] = patterns
+        return self.render_to_response(context)
 
 
 def pollConfig(request):
@@ -51,10 +61,11 @@ def pollConfig(request):
     question_text = request.GET.get('pregunta', None)
     options = request.GET.getlist('opciones[]', None)
     template_pk = request.GET.get('template', None)
-    print(template_pk)
+    position = request.GET.get('position', None)
+    
     template = Template.objects.get(pk=int(template_pk))
-
-    question = Pregunta.objects.create(texto_pregunta=question_text,template=template)
+    print('')
+    question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
     question_pk = question.pk
     question.save()
 

@@ -1,0 +1,68 @@
+{% extends "base-home.html" %}
+
+{% load static %}
+<!-- Main navbar -->
+{% block navbar %}
+
+<nav class="navbar navbar-default" id ='navbar'>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'build' %}">Diseño</a></li>
+      <li class="active"><a href="#">Ver Templates</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span>Iniciar Sesión</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% endblock navbar %}
+<!-- /main navbar -->
+{% block content %}
+<div class="container">
+  {% for pattern in patterns%}
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center">
+                <h2 class="panel-title">{{ pattern.question.texto_pregunta }}</h2>
+            </div>
+            <div class="panel-body">
+                    {% if error_message %}
+                    <div class="row">
+                        <div class="alert alert-danger col-md-4 col-md-offset-4" role="alert">
+                            <p class="text-danger"><strong>{{ error_message }}</strong></p>
+                        </div>
+
+                    </div>
+                    {% endif %}
+                <form action="{% url 'encuestas:vote' pattern.question.id %}" method="post">
+                        {% csrf_token %}
+                        {% for choice in pattern.options %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+                            <label for="choice{{ forloop.counter }}">{{ choice.texto_opcion }}</label><br />
+                        {% endfor %}
+                        <div class="checkbox">
+                                <label>
+                                  <input id="check" type="checkbox" value="">
+                                  Estoy seguro de mi respuesta
+                                </label>
+                        </div>
+                        <input class="btn btn-primary" id="vote" type="submit" value="Votar" disabled="disabled"/>
+                </form>
+            </div>
+        </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+{% endblock content %}
+
+{% block custom_script %}
+
+{% endblock custom_script %}

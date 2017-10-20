@@ -37,6 +37,7 @@
         <div class="modal-body">
           <form>
               <input id="card-id" type="hidden" name="card-id">
+              <input id="position" type="hidden" name="position">
               <div class="input-group">
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
                 <input id="pregunta" type="text" name="pregunta">
@@ -113,10 +114,11 @@
   	$(document).on('click', "button.config", function() {
       var  id = $(this).parent().parent().attr('id')
       $('#card-id').val(id)
+      $('#position').val(id.split("_")[1])
       $('#new_ask').modal('show')
   	});
 
-    $('#accept').click(function(){
+    $('#accept_encuesta').click(function(){
       var opciones = [];
       $("input[name='opcion']").each(function() {
           opciones.push($(this).val());
@@ -127,7 +129,8 @@
           data :  {
                             'pregunta': $('#pregunta').val(),
                             'opciones': opciones,
-                            'template': $('#template_id').val()
+                            'template': $('#template_id').val(),
+                            'position': $('#position').val()
                         },
          
       })
@@ -142,8 +145,9 @@
     var i = 0
     $(".pattern").on('click', function() {
 
-      $(".builder").append("<div id=card_"+i+" class='card-box'><div class='btn-group pull-right'><button type='button' class='btn btn-default waves-effect config'>Configurar</button><button type='button' class='btn btn-danger waves-effect'>Eliminar</button></div><h1 class='header-title m-b-30'>Encuesta</h1><div class='row'><div class='col-md-12 pattern-content' style='text-align: center;'></div></div></div>")
+      $(".builder").append("<div id=card_"+i+" class='card-box'><div class='btn-group pull-right'><button type='button' class='btn btn-default waves-effect config'>Configurar</button><button type='button' class='btn btn-danger waves-effect'>Eliminar</button></div><h1 class='header-title m-b-30'>Encuesta</h1><div class='row'><div class='col-md-12 pattern-content' style='text-align: center;'></div></div><input type='hidden' name='card_position' value="+i+"></div>")
       i = i + 1;
+
     });
 
     $(".pattern").on('click', function() {
