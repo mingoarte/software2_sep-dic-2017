@@ -49,4 +49,12 @@ def generate_captcha_code_as_zip(request, public_key: str):
 
 
 def demoCaptcha(request):
+<<<<<<< HEAD
     return render(request, 'tuisd/captcha/demo.html')
+=======
+	template_vars = {'post': False, 'success': False}
+	if request.method == 'POST':
+		template_vars['post'] = True
+		params = request.POST
+	return render(request, 'tuisd/captcha/demo.html')
+>>>>>>> 5cfe571... Se agregaron nombres al form, el input es texto

@@ -15,6 +15,7 @@ $( "#actualizarCaptcha" ).click(function() {
     dataType: 'json',
     success: function(data) {
       $("#image_captcha").attr("src", "/servecaptcha/image/" + data.captcha_id);
+      $("#captcha-id").val(data.captcha_id)
     },
     failure: function(data) {
       alert("nada");

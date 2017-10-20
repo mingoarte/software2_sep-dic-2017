@@ -20,7 +20,8 @@
       <div class="col-4">
         <div class="card bg-light mb-3">
           <div class="card-body">
-            <form>
+            <form action="" method="post">
+              {% csrf_token %}
               <div class="form-group">
                 <label for="exampleInputEmail1">Correo electrónico</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="pedro@perez.com">
