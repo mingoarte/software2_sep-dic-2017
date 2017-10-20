@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.test.utils import setup_test_environment
 from django.urls import reverse
-import pdb
 
 setup_test_environment()
 
@@ -69,7 +68,7 @@ class GenerateApiKeyTest(TestCase):
         """
         Prueba para verificar que las llaves sean únicas para 10 mil llamadas.
 
-        La probabilidad de colición de dos placas, suponiendo que
+        La probabilidad de generar una llave x, suponiendo que
         cada caracter es independiente de otro y que se distribuyen de manera
         uniforme es: (1/62)^64. El intérprete de Python arroja que esta
         probabilidad es aproximada a 1.9361182207546088e-115
@@ -84,6 +83,3 @@ class GenerateApiKeyTest(TestCase):
             self.assertNotIn(member=data['private_key'], container=private_set)
             public_set.add(data['public_key'])
             private_set.add(data['private_key'])
-
-    def test_apikey_different(self):
-        pass
