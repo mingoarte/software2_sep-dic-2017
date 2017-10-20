@@ -9,13 +9,15 @@ $( "#reproducirAudio" ).click(function(){
 
 
 $( "#actualizarCaptcha" ).click(function() {
+  url = 'http://localhost:8000'
   $.ajax({
     url: '/servecaptcha/generate_captcha/{{public_key}}/',
     type: 'get',
     dataType: 'json',
     success: function(data) {
-      $("#image_captcha").attr("src", "/servecaptcha/image/" + data.captcha_id);
-      $("#captcha-id").val(data.captcha_id)
+      $("#image_captcha").attr("src", url + "/servecaptcha/image/" + data.captcha_id);
+      $("#captcha-id").val(data.captcha_id);
+      $("#audioCaptcha").attr("src", url + "/servecaptcha/audio/" + data.captcha_id);
     },
     failure: function(data) {
       alert("nada");

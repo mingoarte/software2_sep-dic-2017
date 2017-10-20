@@ -25,7 +25,7 @@ def serve_captcha_audio(request, captcha_id):
     except GeneratedCaptcha.DoesNotExist:
         raise Http404("Captcha no existe")
     with tempfile.TemporaryFile() as temp:
-        temp.write(CaptchaAuditivo().generate(captcha.answer))
+        temp.write(CaptchaAuditivo('audio-alphabet').generate(captcha.answer))
         temp.seek(0)
         response = HttpResponse(temp.read(), content_type='audio/wav')
     return response
