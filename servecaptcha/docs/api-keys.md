@@ -30,6 +30,6 @@ Cuando se realiza una petición de generación de un CAPTCHA, el endpoint crea u
 
 Estos objetos tienen las siguientes variables:
 - id: identificador numérico dentro del manejador de base de datos.
-- captcha_id: campo de caracteres que representa el identificador del captcha para el endpoint y que se enviará al diseñador al momento de generarlo.
+- captcha_id: campo de caracteres que representa el identificador del captcha para el endpoint y que se enviará al diseñador al momento de generarlo. Su longitud es de 64 caracteres, caracteres alfanuméricos.
 - keypair: Referencia a una instancia de Key-Pair que contiene el APIKEY del diseñador.
-- answer: la respuesta correcta para validar el CAPTCHA por parte del usuario final.
+- answer: la respuesta correcta para validar el CAPTCHA por parte del usuario final. Su longitud es de 6 caracteres y es de caracteres alfanuméricos.
