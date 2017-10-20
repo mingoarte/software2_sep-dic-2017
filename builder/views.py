@@ -74,12 +74,14 @@ def pollConfig(request):
     if question.count():
         print("ENTRO")
         question[0].texto_pregunta = question_text
-        options2 = Opcion.objects.filter(pregunta=question).delete()
+        options2 = Opcion.objects.filter(pregunta=question[0]).delete()
+        print(options2)
         # options2 = question[0].opcion_set.all()
         # print(options2)
         # for option in options2:
         #     option.delete()
 
+        print(options)
         for option in options:
             Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
 
@@ -94,7 +96,7 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
     
     options = Opcion.objects.filter(pregunta=question)
-    print (options)
+    # print (options)
     p1 = list(question.values('texto_pregunta', 'template', 'position'))
     p2 = list(options.values())
 

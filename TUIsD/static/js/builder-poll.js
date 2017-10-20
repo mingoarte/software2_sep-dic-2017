@@ -21,11 +21,11 @@ $(document).on('click', "button.config", function() {
   var  id = $(this).parent().parent().attr('id');
   var content = $("#" + id + " div .pattern-content").html();
   // console.log(content == "");
+  $("#new_ask div div .modal-body form").remove();
   if (content != "") {
 	  
-	  $("#new_ask div div .modal-body form").remove();
 	  $("#new_ask div div .modal-body").append(content);
-	  $("#new_ask div div .modal-body").append('<a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>');
+	  $("#new_ask div div .modal-body form").append('<a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>');
 
 
 
@@ -40,6 +40,26 @@ $(document).on('click', "button.config", function() {
     $("#new_ask div div .modal-body form div #opcion").each(function(index) {
     	$(this).val(tmp2[index]);
     });
+  }
+  else {
+	  $("#new_ask div div .modal-body").append('<form>' +
+  	    '<input id="card-id" type="hidden" name="card-id">' +
+  	    '<input id="position" type="hidden" name="position">' +
+  	    '<input id="created" type="hidden" name="created">' +
+  	    '<div class="input-group">' +
+  	      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>' +
+  	      '<input id="pregunta" type="text" name="pregunta">' +
+  	    '</div>' +
+  	    '<div class="input-group">' +
+  	      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
+  	      '<input class=" tags-unete" id="opcion" type="text" name="opcion">' +
+  	    '</div>' +
+  	    '<div class="input-group">' +
+  	      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
+  	      '<input id="opcion" type="text" name="opcion">' +
+  	    '</div>' +
+  	    '<a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>' +
+  	'</form>');
   }
 
   $('#card-id').val(id);

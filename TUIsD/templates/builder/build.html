@@ -112,7 +112,7 @@
     // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
     $('#accept_encuesta').click(function(){
       var opciones = [];
-      $("input[name='opcion']").each(function() {
+      $("#new_ask div div .modal-body form div input[name='opcion']").each(function() {
           opciones.push($(this).val());
       });
       console.log($('#pregunta').val());
