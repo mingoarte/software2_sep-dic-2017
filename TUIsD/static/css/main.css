@@ -24,3 +24,6 @@
     margin-top: 20px;
     margin-bottom: 30px;
 }
+ul.nav.navbar-nav>li>a:hover{
+    background-color: #e7e7e7;
+}
