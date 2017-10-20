@@ -62,20 +62,23 @@ def pollConfig(request):
     options = request.GET.getlist('opciones[]', None)
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    
+    created = request.GET.get('created', None)
+
     template = Template.objects.get(pk=int(template_pk))
     print('')
     question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
     question_pk = question.pk
     question.save()
 
-    question = Pregunta.objects.get(pk=question_pk)
+    question = Pregunta.objects.filter(pk=question_pk)
     for option in options:
-        Opcion.objects.create(pregunta=question, texto_opcion=option).save()
-    # data = json.dumps(data, cls=DjangoJSONEncoder)
-    # # json.simplejson.dumps(data)
-    # data = serializers.serialize('json', preguntaForm)
-    return JsonResponse(data={})
+        Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+    options = Opcion.objects.filter(pregunta=question)
+
+    p1 = list(question.values('texto_pregunta', 'template', 'position'))
+    p2 = list(options.values())
+
+    return JsonResponse(data={'question': p1, 'options': p2})
 
 
 def newTemplate(request):
