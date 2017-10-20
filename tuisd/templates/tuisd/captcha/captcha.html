@@ -17,6 +17,7 @@
             <button id="reproducirAudio" type="button" class="btn btn-secondary btn-dark" data-toggle="tooltip" data-placement="right" title="Audio">
                       <i class="fa fa-volume-up" aria-hidden="true"></i>
                   </button>
+                  <audio id='audioCaptcha' src="" preload='auto' type="audio/wav"></audio>
           </div>
 
           <div class="btn-separator"></div>
@@ -29,6 +30,7 @@
         </div>
       </div>
     </div>
-    <input type="password" class="form-control" id="captcha-answer" placeholder="captcha">
+    <input type="text" name="user_answer" class="form-control" id="captcha-answer" placeholder="captcha">
+    <input type="hidden" name="captcha_id" id="captcha-id" class="form-control">
   </div>
 </div>

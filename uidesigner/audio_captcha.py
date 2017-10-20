@@ -3,8 +3,8 @@ import random
 
 
 class CaptchaAuditivo(AudioCaptcha):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, alfabeto):
+        super().__init__(alfabeto)
 
     def create_background_noise(self, length, chars):
         noise = create_noise(length, 4)
