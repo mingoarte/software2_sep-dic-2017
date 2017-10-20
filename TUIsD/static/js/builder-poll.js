@@ -22,19 +22,34 @@ $(document).on('click', "button.config", function() {
   var content = $("#" + id + " div .pattern-content").html();
   // console.log(content == "");
   if (content != "") {
-  	console.log(content);
+	  
 	  $("#new_ask div div .modal-body form").remove();
 	  $("#new_ask div div .modal-body").append(content);
+	  $("#new_ask div div .modal-body").append('<a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>');
+
+
+
+	  var tmp = $("#" + id + " div .pattern-content form div #pregunta").val();
+	  $("#new_ask div div .modal-body form div #pregunta").val(tmp);
+
+	  var tmp2 = [];
+	  $("#" + id + " div .pattern-content form div #opcion").each(function(index) {
+	  	tmp2.push($(this).val())
+	  })
+
+    $("#new_ask div div .modal-body form div #opcion").each(function(index) {
+    	$(this).val(tmp2[index]);
+    });
   }
 
-  $('#card-id').val(id)
-  $('#position').val(id.split("_")[1])
-  $('#new_ask').modal('show')
+  $('#card-id').val(id);
+  $('#position').val(id.split("_")[1]);
+  $('#new_ask').modal('show');
 });
 
 
 // Permite agregar nuevas opciones a la encuesta
-$("#add_more").click(function(){
+$(document).on('click', "a#add_more", function(){
   $("<div class='input-group'>" + 
   	  "<span class='input-group-addon tags-unete' basic-addon1'>" + 
   	    "<b>Opción:</b>" + 
