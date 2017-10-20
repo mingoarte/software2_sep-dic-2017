@@ -46,20 +46,30 @@
                             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
                             <label for="choice{{ forloop.counter }}">{{ choice.texto_opcion }}</label><br />
                         {% endfor %}
-                        <div class="checkbox">
+                        <!-- <div >
                                 <label>
-                                  <input id="check" type="checkbox" value="">
+                                  <input class="check" type="checkbox" >
                                   Estoy seguro de mi respuesta
                                 </label>
-                        </div>
-                        <input class="btn btn-primary" id="vote" type="submit" value="Votar" disabled="disabled"/>
+                        </div> -->
+                        <input class="btn btn-primary" class="vote" type="submit" value="Votar" />
                 </form>
             </div>
         </div>
     </div>
   {% endfor %}
 </div>
+<script>
+$('.check').on('change', function() {
+    if (this.checked) {
+        $(this).closest('div.panel-body').find("input[class='vote']").prop('disabled', false);
+    } else {
+      alert("ENTRO")
+        $(this).closest('div.panel-body').find("input[class='vote']").prop('disabled', true);
+    }
+});
 
+</script>
 
 {% endblock content %}
 

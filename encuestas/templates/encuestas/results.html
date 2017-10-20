@@ -28,6 +28,13 @@
         </div>
     </div>
 
-<a style="margin-top: 10px;" href="{% url 'encuestas:index' %}" role="button" class="btn btn-primary">Regresar</a>
+<a style="margin-top: 10px;" href="#" onclick="goBack()" role="button" class="btn btn-primary">Regresar</a>
 </div>
+
+<script type="text/javascript">
+    
+function goBack() {
+    window.history.back();
+}
+</script>
 {% endblock %}

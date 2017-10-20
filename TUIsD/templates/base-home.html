@@ -9,6 +9,8 @@
 
   <!-- Global stylesheets -->
   <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css'%}">
   
@@ -27,11 +29,37 @@
 
 <body>
 <div>
-  <!-- Main navbar -->
-  {% block navbar %}
-        
-  {% endblock navbar %}
-  <!-- /main navbar -->
+<!-- Main navbar -->
+{% block navbar %}
+
+<nav class="navbar navbar-default" id ='navbar'>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li id="home"><a href="{% url 'home' %}">Home</a></li>
+      {% if request.user.is_authenticated %}
+      <li id="diseno"><a href="{% url 'build' %}">Diseño</a></li>
+      <li id="temp"><a href="{% url 'ver_templates' %}">Ver Templates</a></li>
+      {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {% if request.user.is_authenticated %}
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
+      {% else %}
+
+        <li id="crear_usuario"><a href="{% url 'crear_usuario' %}"><span class="glyphicon glyphicon-user"></span>Crear Usuario</a></li>
+
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      {% endif %}
+
+    </ul>
+  </div>
+</nav>
+
+{% endblock navbar %}
+<!-- /main navbar -->
 
 
   <!-- Page container -->

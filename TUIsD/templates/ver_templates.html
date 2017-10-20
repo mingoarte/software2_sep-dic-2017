@@ -1,37 +1,20 @@
 {% extends "base-home.html" %}
 
 {% load static %}
-<!-- Main navbar -->
-{% block navbar %}
-
-<nav class="navbar navbar-default" id ='navbar'>
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="{% url 'home' %}">Home</a></li>
-      <li><a href="{% url 'build' %}">Diseño</a></li>
-      <li class="active"><a href="#">Ver Templates</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="#"><span class="glyphicon glyphicon-user"></span>Iniciar Sesión</a></li>
-      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    </ul>
-  </div>
-</nav>
-
-{% endblock navbar %}
-<!-- /main navbar -->
 {% block content %}
 
 <div class="ver_template content">
   {% if not templates %}
   <div class="row">
       <div class="col-lg-12">
-        <h1>Templates guardados</h1>
-        <div class="row block-row">
-            <h3 class="text-row">Acá podrá elegir el template que quiera ver en acción.</h> 
+        <div id="welcome" class="panel panel-border panel-success">
+          <div class="panel-heading">
+            <h1>Templates guardados</h1>
+          </div>
+          <div class="panel-body">
+        <!-- <div class="row block-row" -->
+            <h3 class="text-row">Acá podrá elegir el template que quiera ver en acción.</h3>
+          </div> 
         </div>
       </div>
   </div>
@@ -55,7 +38,7 @@
           <tr>
             <td>{{tem.name}} </td>
             <td>{{tem.user}} </td>
-            <td>{{tem.created_at}} </td>
+            <td>{{tem.created_at}} </td>templates
             <td>{{tem.last_modified}} </td>  
             <td><a href="{% url 'revisar' tem.id %}" ><button href="{% url 'revisar' tem.id %}" type="button" class="btn btn-sm btn-sm" style="border-color: #79589f;background-color: #e3e7ed;">Ver</button></a></td>          
           </tr>
@@ -69,7 +52,11 @@
 
 
 {% endblock content %}
-
 {% block custom_script %}
+  <script>
+    $(document).ready(function() {
+      $('#temp').attr('class','active')
+    });
+  </script>
 
 {% endblock custom_script %}
