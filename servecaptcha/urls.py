@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^generate_apikey/$', views.generate_apikey, name="generate_apikey"),
     url(r'^generate_captcha/(?P<public_key>[a-zA-Z0-9]{1,64})/$', views.generate_captcha, name="generate_captcha"),
     url(r'^validate_captcha/$', views.validate_captcha, name="validate_captcha"),
-    url(r'^$', views.api_documentation),
+    url(r'^$', views.api_documentation, name="captcha_api_documentation"),
 
 ]
