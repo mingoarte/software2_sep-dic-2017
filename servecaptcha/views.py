@@ -7,7 +7,7 @@ from .models import KeyPair, GeneratedCaptcha
 from .utils import random_string
 import random
 import tempfile
-
+import markdown2
 
 def serve_captcha_image(request, captcha_id):
     try:
@@ -31,15 +31,11 @@ def serve_captcha_audio(request, captcha_id):
     return response
 
 
-def serveCaptcha(request):
-    name = random.randint(0,99999)
-
-    serveCaptchaAudio(request, name)
-    serveCaptchaImage(request, name)
-
-    return render(request, 'servecaptcha/index.html', {'name': name})
-    #response = HttpResponse(data, content_type="audio/wav")
-    #return response
+def api_documentation(request):
+    with open('servecaptcha/docs/endpoints.md') as f:
+        docs_md = f.read()
+    docs_html = markdown2.markdown(docs_md, extras=['fenced-code-blocks'])
+    return HttpResponse(docs_html)
 
 
 def generate_apikey(request):
