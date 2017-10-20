@@ -43,6 +43,28 @@
       </div>
     </div>
   </div>
+  {% if post %}
+  <div class="container">
+    <div class="row">
+      <div class="col-4">
+      </div>
+
+      <div class="col-4">
+        <div class="card bg-light mb-3">
+          <div class="card-body">
+            <p><strong>
+              {% if success %}
+              Eres humano!
+              {% else %}
+              Eres un bot!
+              {% endif %}
+            </strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 <script type="text/javascript">
