@@ -7,9 +7,13 @@ setup_test_environment()
 
 
 class GeneratedCaptchaTest(TestCase):
-    """ Clase de pruebas para el endpoint GenerateApiKeyTest
+    """ Clase de pruebas para el endpoint de generación de captchas.
     """
     def setUp(self):
+        """
+        Función que se encarga de generar un keypair válido para cada caso de
+        prueba.
+        """
         self._testing_apikey = KeyPair()
         self._testing_apikey.save()
 
@@ -53,7 +57,7 @@ class GeneratedCaptchaTest(TestCase):
         self.assertEqual(response_no_data.status_code, 405)
         self.assertEqual(response_with_data.status_code, 405)
 
-    def test_response_correct_input(self):
+    def test_response_correct_publickey(self):
         """
         Prueba para verificar que la respuesta cuando se entrega un ID válido
         sea que el error esté vacío y el captcha_id concuerde con un regex.
@@ -66,7 +70,7 @@ class GeneratedCaptchaTest(TestCase):
         self.assertRegex(text=data['captcha_id'],
                          expected_regex=captcha_id_regex)
 
-    def test_response_bad_input(self):
+    def test_response_bad_publickey(self):
         """
         Prueba para verificar que la respuesta cuando se entrega un ID invlálido
         sea que el error no esté vacío y el campo de captcha_id no esté.
@@ -75,7 +79,7 @@ class GeneratedCaptchaTest(TestCase):
         response = self.client.get(reverse('generate_captcha',
                                            kwargs={'public_key': wrong_key }))
         data = response.json()
-        self.assertNotEqual(data['error'], "")
+        self.assertEqual(data['error'], "APIKEY inexistente")
 
     def test_captchaid_length(self):
         """

@@ -6,7 +6,7 @@ setup_test_environment()
 
 
 class GenerateApiKeyTest(TestCase):
-    """ Clase de pruebas para el endpoint GenerateApiKeyTest
+    """ Clase de pruebas para el endpoint de generación de APIKEYs.
     """
     def test_get_method(self):
         """
