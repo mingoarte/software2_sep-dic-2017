@@ -3,7 +3,6 @@ $(".pattern").on('click', function() {
   $(".builder").append("<div id=card_"+i+" class='card-box'>" + 
   	                     "<div class='btn-group pull-right'>" + 
   	                       "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
-  	                       "<button type='button' class='btn btn-danger waves-effect eliminar-patron'>Eliminar</button>" + 
   	                     "</div>" + 
   	                     "<h1 class='header-title m-b-30'>Encuesta</h1>" + 
   	                     "<div class='row'>" + 
@@ -18,7 +17,16 @@ $(".pattern").on('click', function() {
 
 // Permite acceder a las configuraciones de la nueva encuesta del template
 $(document).on('click', "button.config", function() {
-  var  id = $(this).parent().parent().attr('id')
+
+  var  id = $(this).parent().parent().attr('id');
+  var content = $("#" + id + " div .pattern-content").html();
+  // console.log(content == "");
+  if (content != "") {
+  	console.log(content);
+	  $("#new_ask div div .modal-body form").remove();
+	  $("#new_ask div div .modal-body").append(content);
+  }
+
   $('#card-id').val(id)
   $('#position').val(id.split("_")[1])
   $('#new_ask').modal('show')

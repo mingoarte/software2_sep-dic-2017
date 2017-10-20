@@ -23,8 +23,6 @@
     </div>
   </div>
 
-  
-
   <div id="new_ask" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -125,7 +123,6 @@
                 'opciones': opciones,
                 'template': $('#template_id').val(),
                 'position': $('#position').val(),
-                'created' : $('#created').val(),
                },
        
       })
@@ -133,6 +130,7 @@
           var content = $("#accept_encuesta").parent().prev().html();
 
           var id = "#" + $("#card-id").val() + " div .pattern-content";
+          $(id).empty();
           $(id).append(content);
 
           $(id + " form div").remove(); 
