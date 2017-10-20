@@ -22,13 +22,38 @@
           <div class="btn-separator"></div>
 
           <div class="btn-group-vertical btn-group-sm mr-2" role="group" aria-label="Second group" style="width: 2em">
-            <button type="button" class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="right" title="Ayuda">
+            <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#exampleModal" data-toggle="tooltip" data-placement="right" title="Ayuda">
                       <i class="fa fa-fw fa-question-circle" aria-hidden="true"></i>
-                  </button>
+            </button>
           </div>
         </div>
       </div>
     </div>
     <input type="password" class="form-control" id="captcha-answer" placeholder="captcha">
+  </div>
+</div>
+
+
+<!-- Help Modal-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ayuda</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Introduzca el texto que aparece en la imágen.
+
+        <img id="image_captcha" class="card-img-top" src="" />
+
+        En el recuadro.
+
+        Así mismo, puede hacer uso de los siguientes botones:
+
+      </div>
+    </div>
   </div>
 </div>
