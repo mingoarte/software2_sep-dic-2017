@@ -20,3 +20,12 @@
 .text-row{
 	margin-left: 15px;
 }
+.container.sec-content {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+ul.nav.navbar-nav>li>a:hover{
+    background-color: #e7e7e7;
+}
+
+.panel-body{text-align: center;}
