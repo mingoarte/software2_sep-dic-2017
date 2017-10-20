@@ -21,6 +21,10 @@
 	<hr>
 
 	<section class="generated-code-container">
+    <a href="{% url 'generateCaptchaCodeZip' public_key=public_key %}" class="btn btn-primary btn-zip-generated-code" role="button">
+      <i class="fa fa-fw fa-file-archive-o"></i>
+      Descargar zip
+    </a>
 		<p>Para agregar el CAPTCHA a su página web necesita cargar <b>Bootstrap 4</b> y <b>jQuery 3.x</b>:</p>
 
 <pre class='list-requirements'>
@@ -33,15 +37,15 @@
 		<div class="row">
 			<div class="col-4">
 				<h3>HTML</h3>
-				<pre class='generated-code'>{{ generated_html }}</pre>
+				<pre class='generated-code'>{{ html }}</pre>
 			</div>
 			<div class="col-4">
 				<h3>JS</h3>
-				<pre class='generated-code'>{{ generated_js }}</pre>
+				<pre class='generated-code'>{{ js }}</pre>
 			</div>
 			<div class="col-4">
 				<h3>CSS</h3>
-				<pre class='generated-code'>{{ generated_css }}</pre>
+				<pre class='generated-code'>{{ css }}</pre>
 			</div>
 		</div>
 	</section>
