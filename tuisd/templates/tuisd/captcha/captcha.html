@@ -23,7 +23,7 @@
           <div class="btn-separator"></div>
 
           <div class="btn-group-vertical btn-group-sm mr-2" role="group" aria-label="Second group" style="width: 2em">
-            <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#exampleModal" data-toggle="tooltip" data-placement="right" title="Ayuda">
+            <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-id="image_captcha" data-target="#exampleModal" data-toggle="tooltip" data-placement="right" title="Ayuda">
                       <i class="fa fa-fw fa-question-circle" aria-hidden="true"></i>
             </button>
           </div>
@@ -47,13 +47,38 @@
         </button>
       </div>
       <div class="modal-body">
-        Introduzca el texto que aparece en la imágen.
+        <p>Introduzca el texto que aparece en la imágen en el recuadro del campo que dice <b>"captcha"</b> .</p>
+       
+        <p>Así mismo, puede hacer uso de los siguientes botones:</p>
 
-        <img id="image_captcha" class="card-img-top" src="" />
-
-        En el recuadro.
-
-        Así mismo, puede hacer uso de los siguientes botones:
+        <div class="row">
+          <div class="col-4">
+              <button type="button" class="btn btn-secondary btn-dark">
+                  <i  class="fa fa-refresh" aria-hidden="true"></i>
+              </button>
+          </div>
+          <div class="col-8">
+            <p><b>Botón para refrescar el Captcha.</b></p>
+          </div>
+          <div class="w-100"></div>
+          <div class="col-4">
+              <button  type="button" class="btn btn-secondary btn-dark" >
+                  <i class="fa fa-volume-up" aria-hidden="true"></i>
+              </button>
+          </div>
+          <div class="col-8">
+            <p><b>Botón para recibir ayuda auditiva.</b></p>
+          </div>
+          <div class="w-100"></div>
+          <div class="col-4">
+              <button type="button" class="btn btn-sm btn-dark">
+                  <i class="fa fa-fw fa-question-circle" aria-hidden="true"></i>
+              </button>
+          </div>
+          <div class="col-8">
+            <p><b>Botón para solicitar asistencia.</b></p>
+          </div>
+        </div>
 
       </div>
     </div>
