@@ -67,20 +67,34 @@ def pollConfig(request):
     options = request.GET.getlist('opciones[]', None)
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', None)
+    guardado = request.GET.get('guardado', None)
+
     
     template = Template.objects.get(pk=int(template_pk))
     print('')
-    question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
-    question_pk = question.pk
-    question.save()
+    print(guardado)
+    if request.GET.get('pregunta_pk')!='':
+        print("entre if")
+        question_pk = request.GET.get('pregunta_pk', None)
+        question = Pregunta.objects.filter(pk=question_pk)
+        question.update(texto_pregunta=question_text)
+        for option in options:
+            option.update(pregunta=question, texto_opcion=option)
 
-    question = Pregunta.objects.get(pk=question_pk)
-    for option in options:
-        Opcion.objects.create(pregunta=question, texto_opcion=option).save()
-    # data = json.dumps(data, cls=DjangoJSONEncoder)
-    # # json.simplejson.dumps(data)
-    # data = serializers.serialize('json', preguntaForm)
-    return JsonResponse(data={})
+    else:
+        print("entre else")
+
+        question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
+        question_pk = question.pk
+        question.save()
+
+        question = Pregunta.objects.get(pk=question_pk)
+        for option in options:
+            Opcion.objects.create(pregunta=question, texto_opcion=option).save()
+        # data = json.dumps(data, cls=DjangoJSONEncoder)
+        # # json.simplejson.dumps(data)
+        # data = serializers.serialize('json', preguntaForm)
+    return JsonResponse(data={'pregunta_pk':question})
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):

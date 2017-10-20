@@ -38,8 +38,11 @@
           <form>
               <input id="card-id" type="hidden" name="card-id">
               <input id="position" type="hidden" name="position">
+              <input id="guardado" type="hidden" name="guardado">
+
               <div class="input-group">
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
+                <input id="pk_pregunta" type="hidden" name="pk_pregunta">
                 <input id="pregunta" type="text" name="pregunta">
               </div>
               <div class="input-group">
@@ -130,11 +133,21 @@
                             'pregunta': $('#pregunta').val(),
                             'opciones': opciones,
                             'template': $('#template_id').val(),
-                            'position': $('#position').val()
+                            'position': $('#position').val(),
+                            'guardado': $('#guardado').val(),
+                            'pregunta_pk': $('#pregunta_pk').val()
+
+
                         },
          
       })
       .done(function(data){
+        if (data){
+          $('#guardado').val()=true;
+          $('#pk_pregunta').val()=data.pregunta_pk;
+
+      }
+
       });
     })
 
