@@ -103,9 +103,6 @@ ENV/
 # sqlite files
 *.sqlite3
 
-# migrations directory
-migrations/
-
 /static/*.mp3
 /static/*.wav
 /static/*.png
