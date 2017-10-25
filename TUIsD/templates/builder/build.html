@@ -108,8 +108,9 @@
       });
     });
 
-
-    //Funcion que permite eliminar los patrones del template.
+    // Si se elige la opcion de eliminar un patron, se hace
+    // un request a la aplicacion para eliminar dicho patron
+    // de la bd 
     $(document).on('click', "button.eliminar", function(){
       var  id = $(this).parent().parent().attr('id')
       $('#position').val(id.split("_")[1]);
@@ -128,10 +129,14 @@
 
     // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
     $('#accept_encuesta').click(function(){
+      // Declaracion de variables locales
+      // opciones -> Lista con las opciones de la encuesta que se quiere crear
       var opciones = [];
+      
       $("#new_ask div div .modal-body form div input[name='opcion']").each(function() {
           opciones.push($(this).val());
       });
+
       $.ajax({
         url : "{% url 'pollConfig' %}",
         data : {
@@ -143,22 +148,33 @@
        
       })
       .done(function(data){
+          // Declaracion de variables locales
+          // content -> El contenido extraido del modal de configuracion
+          // id -> El identificador del patron de interaccion que se esta
+          //       configurando
           var content = $("#accept_encuesta").parent().prev().html();
-
           var id = "#" + $("#card-id").val() + " div .pattern-content";
+
+          // Se vacia el contenedor del patron de interaccion y se rellena
+          // con la informacion del formulario del modal
           $(id).empty();
           $(id).append(content);
 
+          // Se eliminan las opciones y las preguntas, asi como el boton del contenido
+          // del patron de interaccion
           $(id + " form div").remove(); 
           $(id + " form a").remove();
 
+          // Se agrega el input de la pregunta y se llena con la informacion original de la
+          // pregunta 
           $(id + " form").append('<div class="input-group">' +
                                    '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>' +
                                    '<input id="pregunta" type="text" name="pregunta">' +
                                  '</div>');
-          
           $(id + " form div #pregunta").val(data.question[0].texto_pregunta);
           
+          // Se agregan los inputs de las opciones de la encuesta y se llenam con la informacion
+          // original de cada pregunta
           for (j = 0; j < data.options.length; j++) {
             $(id + " form").append('<div class="input-group">' +
                                      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
@@ -173,7 +189,5 @@
       });
     console.log(i)
     })
-
- 
   </script>
 {% endblock custom_script %}
