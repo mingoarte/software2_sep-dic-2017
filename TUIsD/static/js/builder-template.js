@@ -9,4 +9,3 @@ $(document).ready(function() {
 $(".pattern").on('click', function() {
   $("#welcome").hide();
 });
-
