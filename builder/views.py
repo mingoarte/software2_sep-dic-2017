@@ -111,6 +111,7 @@ def newTemplate(request):
     return JsonResponse(data={'id': str(pk)})
 
 
+@login_required(redirect_field_name='/')
 def eraseQuestion(request):
 
     template_id = request.GET.get('template', None)

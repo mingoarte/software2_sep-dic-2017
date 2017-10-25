@@ -1,5 +1,6 @@
 var i = 0
 $(".pattern").on('click', function() {
+  console.log(i)
   $(".builder").append("<div id=card_"+i+" class='card-box'>" + 
   	                     "<div class='btn-group pull-right'>" + 
                            "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
