@@ -110,6 +110,16 @@ def newTemplate(request):
     template.save()
     return JsonResponse(data={'id': str(pk)})
 
+
+def eraseQuestion(request):
+
+    template_id = request.GET.get('template', None)
+    position = request.GET.get('position', None)
+    template = Template.objects.get(id=int(template_id))
+    question = Pregunta.objects.get(template=template, position=int(position))
+    question.delete()
+    return JsonResponse(data={})
+
 class userTemplate(TemplateView):
     template_name = 'crear_usuario.html'
 

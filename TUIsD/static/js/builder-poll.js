@@ -2,7 +2,8 @@ var i = 0
 $(".pattern").on('click', function() {
   $(".builder").append("<div id=card_"+i+" class='card-box'>" + 
   	                     "<div class='btn-group pull-right'>" + 
-  	                       "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
+                           "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
+  	                       "<button type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" + 
   	                     "</div>" + 
   	                     "<h1 class='header-title m-b-30'>Encuesta</h1>" + 
   	                     "<div class='row'>" + 

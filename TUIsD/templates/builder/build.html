@@ -108,6 +108,20 @@
       });
     });
 
+    $(document).on('click', "button.eliminar", function(){
+      var  id = $(this).parent().parent().attr('id')
+      console.log(id)
+      $.ajax({
+          url : "{% url 'eraseQuestion' %}",
+          data :  {'template': $('#template_id').val(),
+                    'position': $('#position').val()},
+         
+      })
+      .done(function(data){
+        console.log($(this).parent().attr("id"))
+        });
+    });
+
 
     // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
     $('#accept_encuesta').click(function(){
