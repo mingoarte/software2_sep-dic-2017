@@ -33,10 +33,34 @@
           <h4 class="modal-title">Configuracion de Encuesta</h4>
         </div>
         <div class="modal-body">
-          <form>
+
+          <form class="forms" action="#" data-parsley-validate novalidate>
+            <input id="card-id" type="hidden" name="card-id">
+            <input id="position" type="hidden" name="position">
+            <div class="form-group">
+              <label for="pregunta">Pregunta</label>
+              <input type="text" name="pregunta" parsley-trigger="change" required 
+                     placeholder="Escriba la pregunta de la encuesta" class="form-control" id="pregunta">
+            </div>
+            <div class="form-group">
+              <label for="emailAddress">Opcion:</label>
+              <input type="text" name="opcion" parsley-trigger="change" required
+                     placeholder="Escriba la opcion" class="form-control" id="opcion">
+            </div>
+            <div class="form-group">
+              <label for="emailAddress">Opcion:</label>
+              <input type="text" name="opcion" parsley-trigger="change" required
+                     placeholder="Escriba la opcion" class="form-control" id="opcion">
+            </div>
+            <div class="form-group text-right m-b-0">
+              <button class="btn btn-primary waves-effect waves-light" type="submit">
+                Agregar otra opcion
+              </button>
+            </div>
+          </form>
+         <!--  <form>
               <input id="card-id" type="hidden" name="card-id">
               <input id="position" type="hidden" name="position">
-              <input id="created" type="hidden" name="created">
               <div class="input-group">
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
                 <input id="pregunta" type="text" name="pregunta">
@@ -50,7 +74,7 @@
                 <input id="opcion" type="text" name="opcion">
               </div>
               <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
-          </form>
+          </form> -->
         </div>
         <div class="modal-footer"> 
           <button id="accept_encuesta" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
@@ -71,10 +95,11 @@
           <h4 class="modal-title">Nombre de la vista</h4>
         </div>
         <div class="modal-body">
-              <div class="input-group">
-                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Escoja un nombre para su vista:</b></span>
-                <input id="template_name" type="text" name="template_name">
-              </div>
+          <div class="form-group">
+            <label for="template_name"><b>Escoja un nombre para su vista:</b></label>
+            <input type="text" name="template_name" parsley-trigger="change" required
+                   placeholder="Nombre del template" class="form-control" id="template_name">
+          </div>
         </div>
         <div class="modal-footer"> 
           <button id="accept_name_template" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
@@ -90,104 +115,4 @@
 {% block custom_script %}
   <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
-  <script>
-    // Una vez tenemos el nombre del template se hace request a la
-    // aplicacion para guardar el nuevo template en bd
-    $('#accept_name_template').click(function(){
-      $('#title').text($('#template_name').val())
-      $.ajax({
-          url : "{% url 'newTemplate' %}",
-          data :  {'name': $('#template_name').val()},
-         
-      })
-      .done(function(data){
-        if(data){
-          $('#template_id').val(data.id);
-          $('#new_template').modal('hide');
-        }
-      });
-    });
-
-    // Si se elige la opcion de eliminar un patron, se hace
-    // un request a la aplicacion para eliminar dicho patron
-    // de la bd 
-    $(document).on('click', "button.eliminar", function(){
-      var  id = $(this).parent().parent().attr('id')
-      $('#position').val(id.split("_")[1]);
-      $.ajax({
-          url : "{% url 'eraseQuestion' %}",
-          data :  {'template': $('#template_id').val(),
-                    'position': $('#position').val()},
-         
-      })
-      .done(function(data){
-        card = document.getElementById(id);
-        card.remove()
-        });
-    });
-
-
-    // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
-    $('#accept_encuesta').click(function(){
-      // Declaracion de variables locales
-      // opciones -> Lista con las opciones de la encuesta que se quiere crear
-      var opciones = [];
-      
-      $("#new_ask div div .modal-body form div input[name='opcion']").each(function() {
-          opciones.push($(this).val());
-      });
-
-      $.ajax({
-        url : "{% url 'pollConfig' %}",
-        data : {
-                'pregunta': $('#pregunta').val(),
-                'opciones': opciones,
-                'template': $('#template_id').val(),
-                'position': $('#position').val(),
-               },
-       
-      })
-      .done(function(data){
-          // Declaracion de variables locales
-          // content -> El contenido extraido del modal de configuracion
-          // id -> El identificador del patron de interaccion que se esta
-          //       configurando
-          var content = $("#accept_encuesta").parent().prev().html();
-          var id = "#" + $("#card-id").val() + " div .pattern-content";
-
-          // Se vacia el contenedor del patron de interaccion y se rellena
-          // con la informacion del formulario del modal
-          $(id).empty();
-          $(id).append(content);
-
-          // Se eliminan las opciones y las preguntas, asi como el boton del contenido
-          // del patron de interaccion
-          $(id + " form div").remove(); 
-          $(id + " form a").remove();
-
-          // Se agrega el input de la pregunta y se llena con la informacion original de la
-          // pregunta 
-          $(id + " form").append('<div class="input-group">' +
-                                   '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>' +
-                                   '<input id="pregunta" type="text" name="pregunta">' +
-                                 '</div>');
-          $(id + " form div #pregunta").val(data.question[0].texto_pregunta);
-          
-          // Se agregan los inputs de las opciones de la encuesta y se llenam con la informacion
-          // original de cada pregunta
-          for (j = 0; j < data.options.length; j++) {
-            $(id + " form").append('<div class="input-group">' +
-                                     '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
-                                     '<input class=" tags-unete" id="opcion" type="text" name="opcion">' +
-                                   '</div>');
-          }
-
-          $(id + " form div #opcion").each(function(index) {
-            $(this).val(data.options[index].texto_opcion);
-          })
-
-      });
-    console.log(i)
-    })
-  </script>
 {% endblock custom_script %}
