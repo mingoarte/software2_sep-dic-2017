@@ -9,18 +9,38 @@
   	<div class="col-lg-12">
       <div class="row">
         <div class="col-lg-4">
-          <h1 id="title"></h1>
-          <input id="template_id" type="hidden" name="template_id">
+          {% if tem_id %}
+            <h1 id="title">{{tem_name}}</h1>
+            <input id="template_id" type="hidden" name="template_id" value="{{tem_id}}">
+          {% else %}
+            <input id="template_id" type="hidden" name="template_id" value="">
+            <h1 id="title"></h1>
+            
+          {% endif %}
+
         </div>
         <div class="col-lg-8">
+          {% if tem_id %}
 
-          <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
+          <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
           <!--button type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;" data-toggle="modal" data-target="" id="preview">Preview</button-->
-          <a type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;margin-right: 5px;" id="preview" href="">Preview</a>
+          <form id = "preview-form" action="/revisar_template/{{tem_id}}" method="get">
+            <input type="submit" value="Preview" 
+              name="type" id="frm1_submit" class = "btn btn-success pull-right " style="margin-top:20px; " />
+            </form>
+          <!--a type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;margin-right: 5px;" id="preview" href="">Preview</a-->
+          {% else %}
+            <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
+              <!--button type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;" data-toggle="modal" data-target="" id="preview">Preview</button-->
+              <form id = "preview-form" action="" method="get">
+                <input type="submit" value="Preview" 
+                  name="type" id="frm1_submit" class = "btn btn-success pull-right " style="display: none;margin-top:20px;"/>
+                </form>
+            {% endif %}
         </div>
       </div>
       
-      
+      {% if not tem_id %}
       <div id="welcome" class="panel panel-border panel-success">
         <div class="panel-heading">
           <h1 class="panel-title">Bienvenido</h1>
@@ -30,6 +50,55 @@
           <h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>  
         </div>
       </div>
+      {% else %}
+        {% for pattern in patterns %}
+        <div id="card_{{pattern.question.position|slugify}}" class="card-box">
+          <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default waves-effect config">Configurar</button>
+            <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
+          </div>
+          <h1 class="header-title m-b-30">Encuesta</h1>
+          <div class="row">
+            <div class="col-md-12 pattern-content" style="text-align: center;">
+
+          
+         <!--  <form>
+              <input id="card-id" type="hidden" name="card-id">
+              <input id="position" type="hidden" name="position">
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
+                <input id="pregunta" type="text" name="pregunta">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>
+                <input class=" tags-unete" id="opcion" type="text" name="opcion">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>
+                <input id="opcion" type="text" name="opcion">
+              </div>
+              <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
+          </form> -->
+              <form data-parsley-validate="" novalidate="">
+                <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.question.position|slugify }}">
+                <input id="position" type="hidden" name="position" value="{{pattern.question.position|slugify }}">
+                <div class="form-group">
+                  <label for="pregunta">Pregunta</label>
+                    <input type="text" name="pregunta" parsley-trigger="change" required="" placeholder="{{pattern.question.texto_pregunta}}" class="form-control" id="pregunta">
+                  </div>
+                  {% for choice in pattern.options %}
+                  <div class="form-group">
+                  <label for="opcion">Opcion:</label>
+                    <input type="text" name="opcion" parsley-trigger="change" required="" placeholder="{{ choice.texto_opcion }}" class="form-control" id="opcion">
+                  </div>
+                  {% endfor %}
+                </form>
+              </div>
+            </div>
+            <input type="hidden" name="card_position" value="{{pattern.question.position|slugify}}">
+          </div>
+        {% endfor %}
+      {% endif %}
 
     </div>
   </div>
@@ -44,10 +113,34 @@
           <h4 class="modal-title">Configuracion de Encuesta</h4>
         </div>
         <div class="modal-body">
-          <form>
+
+          <form class="forms" action="#" data-parsley-validate novalidate>
+            <input id="card-id" type="hidden" name="card-id">
+            <input id="position" type="hidden" name="position">
+            <div class="form-group">
+              <label for="pregunta">Pregunta</label>
+              <input type="text" name="pregunta" parsley-trigger="change" required 
+                     placeholder="Escriba la pregunta de la encuesta" class="form-control" id="pregunta">
+            </div>
+            <div class="form-group">
+              <label for="emailAddress">Opcion:</label>
+              <input type="text" name="opcion" parsley-trigger="change" required
+                     placeholder="Escriba la opcion" class="form-control" id="opcion">
+            </div>
+            <div class="form-group">
+              <label for="emailAddress">Opcion:</label>
+              <input type="text" name="opcion" parsley-trigger="change" required
+                     placeholder="Escriba la opcion" class="form-control" id="opcion">
+            </div>
+            <div class="form-group text-right m-b-0">
+              <button class="btn btn-primary waves-effect waves-light" type="submit">
+                Agregar otra opcion
+              </button>
+            </div>
+          </form>
+         <!--  <form>
               <input id="card-id" type="hidden" name="card-id">
               <input id="position" type="hidden" name="position">
-              <input id="created" type="hidden" name="created">
               <div class="input-group">
                 <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>
                 <input id="pregunta" type="text" name="pregunta">
@@ -61,7 +154,7 @@
                 <input id="opcion" type="text" name="opcion">
               </div>
               <a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>
-          </form>
+          </form> -->
         </div>
         <div class="modal-footer"> 
           <button id="accept_encuesta" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
@@ -71,7 +164,7 @@
     </div>
   </div>
 </div>
-
+{% if not tem_id %}
 <div id="new_template" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -82,10 +175,11 @@
           <h4 class="modal-title">Nombre de la vista</h4>
         </div>
         <div class="modal-body">
-              <div class="input-group">
-                <span class="input-group-addon tags-unete" id=" basic-addon1"><b>Escoja un nombre para su vista:</b></span>
-                <input id="template_name" type="text" name="template_name">
-              </div>
+          <div class="form-group">
+            <label for="template_name"><b>Escoja un nombre para su vista:</b></label>
+            <input type="text" name="template_name" parsley-trigger="change" required
+                   placeholder="Nombre del template" class="form-control" id="template_name">
+          </div>
         </div>
         <div class="modal-footer"> 
           <button id="accept_name_template" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
@@ -95,114 +189,11 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 {% endblock content %}
 
 {% block custom_script %}
   <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
-  <script>
-    // Una vez tenemos el nombre del template se hace request a la
-    // aplicacion para guardar el nuevo template en bd
-    $('#accept_name_template').click(function(){
-      $('#title').text($('#template_name').val())
-      $.ajax({
-          url : "{% url 'newTemplate' %}",
-          data :  {'name': $('#template_name').val()},
-         
-      })
-      .done(function(data){
-        if(data){
-          $('#template_id').val(data.id);
-          $('#new_template').modal('hide');
-        }
-      });
-    });
-
-    // Si se elige la opcion de eliminar un patron, se hace
-    // un request a la aplicacion para eliminar dicho patron
-    // de la bd 
-    $(document).on('click', "button.eliminar", function(){
-      var  id = $(this).parent().parent().attr('id')
-      $('#position').val(id.split("_")[1]);
-      $.ajax({
-          url : "{% url 'eraseQuestion' %}",
-          data :  {'template': $('#template_id').val(),
-                    'position': $('#position').val()},
-         
-      })
-      .done(function(data){
-        card = document.getElementById(id);
-        card.remove()
-        });
-    });
-
-
-    // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
-    $('#accept_encuesta').click(function(){
-      // Declaracion de variables locales
-      // opciones -> Lista con las opciones de la encuesta que se quiere crear
-      var opciones = [];
-      
-      $("#new_ask div div .modal-body form div input[name='opcion']").each(function() {
-          opciones.push($(this).val());
-      });
-
-      $.ajax({
-        url : "{% url 'pollConfig' %}",
-        data : {
-                'pregunta': $('#pregunta').val(),
-                'opciones': opciones,
-                'template': $('#template_id').val(),
-                'position': $('#position').val(),
-               },
-       
-      })
-      .done(function(data){
-          // Declaracion de variables locales
-          // content -> El contenido extraido del modal de configuracion
-          // id -> El identificador del patron de interaccion que se esta
-          //       configurando
-          var content = $("#accept_encuesta").parent().prev().html();
-          var id = "#" + $("#card-id").val() + " div .pattern-content";
-
-          // Se vacia el contenedor del patron de interaccion y se rellena
-          // con la informacion del formulario del modal
-          $(id).empty();
-          $(id).append(content);
-
-          // Se eliminan las opciones y las preguntas, asi como el boton del contenido
-          // del patron de interaccion
-          $(id + " form div").remove(); 
-          $(id + " form a").remove();
-
-          // Se agrega el input de la pregunta y se llena con la informacion original de la
-          // pregunta 
-          $(id + " form").append('<div class="input-group">' +
-                                   '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>' +
-                                   '<input id="pregunta" type="text" name="pregunta">' +
-                                 '</div>');
-          $(id + " form div #pregunta").val(data.question[0].texto_pregunta);
-          
-          // Se agregan los inputs de las opciones de la encuesta y se llenam con la informacion
-          // original de cada pregunta
-          for (j = 0; j < data.options.length; j++) {
-            $(id + " form").append('<div class="input-group">' +
-                                     '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
-                                     '<input class=" tags-unete" id="opcion" type="text" name="opcion">' +
-                                   '</div>');
-          }
-
-          $(id + " form div #opcion").each(function(index) {
-            $(this).val(data.options[index].texto_opcion);
-          })
-        $('#guardar').show();
-        var tem_id = $('#template_id').val().toString()
-        var link = "/revisar_template/"+ tem_id
-        $('#preview').attr('href',link) 
-        $('#preview').show();
-      });
-    console.log(i)
-    })
-  </script>
 {% endblock custom_script %}

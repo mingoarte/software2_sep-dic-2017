@@ -44,12 +44,22 @@ class ver_templatesTemplate(LoginRequiredMixin,TemplateView):
         return context
 
 class revisarTemplate(LoginRequiredMixin,TemplateView):
+    login_url = '/login/'
+    redirect_field_name = '/'
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
 
-        context = self.get_context_data(**kwargs)
+        context = self.get_context_data(**kwargs)    
         
+        if request.method == 'GET':
+            print("entre")
+            prev = request.GET.get('type')
+            if prev is not None:
+                context['page_name'] = prev
+            else:
+                context['page_name'] = 'revisar'
+                    
         template = Template.objects.get(id=(kwargs['templateID']))
         questions = Pregunta.objects.filter(template=template).order_by('position')
         patterns = []
@@ -58,7 +68,30 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
                         'options': Opcion.objects.filter(pregunta=question)}
             patterns.append(pattern)
         context['patterns'] = patterns
+        context['tem_id'] = kwargs['templateID']
+
         return self.render_to_response(context)
+
+class editarTemplate(LoginRequiredMixin,TemplateView):
+    login_url = '/login/'
+    redirect_field_name = '/'
+    template_name = 'builder/build.html'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)  
+        template = Template.objects.get(id=(kwargs['templateID']))
+        questions = Pregunta.objects.filter(template=template).order_by('position')
+        patterns = []
+        for question in questions:
+            pattern = {'question': question,
+                        'options': Opcion.objects.filter(pregunta=question)}
+            patterns.append(pattern)
+        context['patterns'] = patterns
+        context['tem_id'] = kwargs['templateID']
+        context['tem_name'] = template.name
+        #context['page_name'] = 'preview'
+        return self.render_to_response(context)
+
 
 @login_required(redirect_field_name='/')
 def pollConfig(request):
@@ -169,4 +202,6 @@ class loginTemplate(TemplateView):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+
 
