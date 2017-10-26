@@ -7,8 +7,19 @@
 <div class="builder content">
 	<div class="row">
   	<div class="col-lg-12">
-			<h1 id="title"></h1>
-      <input id="template_id" type="hidden" name="template_id">
+      <div class="row">
+        <div class="col-lg-4">
+          <h1 id="title"></h1>
+          <input id="template_id" type="hidden" name="template_id">
+        </div>
+        <div class="col-lg-8">
+
+          <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
+          <!--button type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;" data-toggle="modal" data-target="" id="preview">Preview</button-->
+          <a type="button" class="btn btn-success pull-right" style="display: none;margin-top: 20px;margin-right: 5px;" id="preview" href="">Preview</a>
+        </div>
+      </div>
+      
       
       <div id="welcome" class="panel panel-border panel-success">
         <div class="panel-heading">
@@ -185,7 +196,11 @@
           $(id + " form div #opcion").each(function(index) {
             $(this).val(data.options[index].texto_opcion);
           })
-
+        $('#guardar').show();
+        var tem_id = $('#template_id').val().toString()
+        var link = "/revisar_template/"+ tem_id
+        $('#preview').attr('href',link) 
+        $('#preview').show();
       });
     console.log(i)
     })
