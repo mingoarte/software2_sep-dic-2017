@@ -1,8 +1,10 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="assets/css/demo.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'formBuilder/css/demo.css' %}">
   <link rel="stylesheet" type="text/css" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.1/jquery.rateyo.min.css">
 
@@ -20,11 +22,11 @@
 		<pre><form action=""><code id="markup"></code></form></pre>
 
   </div>
-  <script src="assets/js/vendor.js"></script>
-  <script src="assets/js/form-builder.min.js"></script>
-  <script src="assets/js/form-render.min.js"></script>
+  <script src="{% static 'formBuilder/js/vendor.js' %}"></script>
+  <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
+  <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.1/jquery.rateyo.min.js"></script>
-  <script src="assets/js/demo.js"></script>
+  <script src="{% static 'formBuilder/js/demo.js' %}"></script>
 
 </body>
 
