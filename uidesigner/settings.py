@@ -59,7 +59,7 @@ ROOT_URLCONF = 'uidesigner.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['servecaptcha/templates'],
+        'DIRS': ['servecaptcha/templates', 'formBuilder/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
