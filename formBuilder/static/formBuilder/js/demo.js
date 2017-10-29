@@ -22,6 +22,13 @@ jQuery(function($) {
         type: 'starRating'
       },
       icon: '🌟'
+    },
+    {
+    label: 'Captcha',
+    attrs: {
+    type: 'captcha'
+    },
+    icon: 'C '
     }
   ];
 
@@ -54,7 +61,15 @@ jQuery(function($) {
           $(document.getElementById(fieldData.name)).rateYo({rating: 3.6});
         }
       };
-    }
+    },
+    captcha: function(fieldData) {
+    return {
+      field: '<span id="'+fieldData.name+'">',
+      onRender: function() {
+        document.getElementById(fieldData.name).innerHTML= "texto";
+      }
+    };
+  }
   };
 
   var inputSets = [{
@@ -136,19 +151,18 @@ jQuery(function($) {
       });
 
 
-			var escapeEl = document.createElement('textarea');
-			var code = document.getElementById('markup');
-			var escapeHTML = function(html) {
-				escapeEl.textContent = html;
-				return escapeEl.innerHTML;
-			};
-			var addLineBreaks = function(html) {
-				return html.replace(new RegExp('&gt; &lt;', 'g'), '&gt;\n&lt;').replace(new RegExp('&gt;&lt;', 'g'), '&gt;\n&lt;');
-			};
-			var $markup = $('<form action=""></form>');
-			console.log($markup[0]);
-			$markup.formRender({formData});
-			code.innerHTML = addLineBreaks(escapeHTML($markup[0].innerHTML));
+      var escapeEl = document.createElement('textarea');
+      var code = document.getElementById('markup');
+      var escapeHTML = function(html) {
+        escapeEl.textContent = html;
+        return escapeEl.innerHTML;
+      };
+      var addLineBreaks = function(html) {
+        return html.replace(new RegExp('&gt; &lt;', 'g'), '&gt;\n&lt;').replace(new RegExp('&gt;&lt;', 'g'), '&gt;\n&lt;');
+      };
+      var $markup = $('<div/>');
+      $markup.formRender({formData});
+      code.innerHTML = addLineBreaks(escapeHTML($markup[0].innerHTML));
       window.sessionStorage.setItem('formData', JSON.stringify(formData));
     },
     stickyControls: {
