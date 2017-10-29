@@ -18,7 +18,8 @@ from django.contrib import admin
 from servecaptcha import urls
 
 urlpatterns = [
-    url(r'^servecaptcha/', include('servecaptcha.urls')),
+	url(r'^formBuilder/', include('formBuilder.urls')),
+	url(r'^servecaptcha/', include('servecaptcha.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('tuisd.urls')),
 ]
