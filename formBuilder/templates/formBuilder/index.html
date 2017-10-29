@@ -20,6 +20,7 @@
 <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
 <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.1/jquery.rateyo.min.js"></script>
-<script src="{% static 'formBuilder/js/demo.js' %}"></script>
-{% endblock %}
+<script>
+    {% include 'formBuilder/demo.js' with captchahtml="<h1>hola</h1>" %}
+  </script>{% endblock %}
 
