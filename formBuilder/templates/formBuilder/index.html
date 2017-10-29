@@ -3,7 +3,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'formBuilder/css/demo.css' %}">
-<link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.1/jquery.rateyo.min.css">
+<link rel="stylesheet" href="{% static 'tuisd/captcha/css/style.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -18,9 +18,9 @@
 {% block scripts %}
 <script src="{% static 'formBuilder/js/vendor.js' %}"></script>
 <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
-<script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.1/jquery.rateyo.min.js"></script>
+<script src="{% static 'formBuilder/js/form-render.min.js' %}"></script
+>
 <script>
-    {% include 'formBuilder/demo.js' with captchahtml="<h1>hola</h1>" %}
+    {% include 'formBuilder/demo.js' with captchaHTML=captchaHTML %}
+    {% include 'tuisd/captcha/captcha.js' with public_key='demoPublicKey' %}
   </script>{% endblock %}
-

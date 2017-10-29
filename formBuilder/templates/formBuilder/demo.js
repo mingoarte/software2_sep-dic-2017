@@ -19,13 +19,6 @@ jQuery(function($) {
       ]
     },
     {
-      label: 'Star Rating',
-      attrs: {
-        type: 'starRating'
-      },
-      icon: '🌟'
-    },
-    {
     label: 'Captcha',
     attrs: {
     type: 'captcha'
@@ -56,22 +49,16 @@ jQuery(function($) {
   }];
 
   var templates = {
-    starRating: function(fieldData) {
+    captcha: function(fieldData) {
       return {
         field: '<span id="'+fieldData.name+'">',
         onRender: function() {
-          $(document.getElementById(fieldData.name)).rateYo({rating: 3.6});
+          escapedCaptchaHTML = new DOMParser().parseFromString(`{{escapedCaptchaHTML}}`, "text/html");
+          document.getElementById(fieldData.name).innerHTML= escapedCaptchaHTML.documentElement.textContent;
+          $("#actualizarCaptcha").trigger('click');
         }
       };
-    },
-    captcha: function(fieldData) {
-    return {
-      field: '<span id="'+fieldData.name+'">',
-      onRender: function() {
-        document.getElementById(fieldData.name).innerHTML= {{captchahtml}};
-      }
-    };
-  }
+    }
   };
 
   var inputSets = [{
