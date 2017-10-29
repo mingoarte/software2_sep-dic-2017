@@ -22,6 +22,13 @@ jQuery(function($) {
         type: 'starRating'
       },
       icon: '🌟'
+    },
+    {
+      label: 'Captcha',
+      attrs: {
+        type: 'captcha'
+      },
+      icon: 'C'
     }
   ];
 
@@ -54,7 +61,14 @@ jQuery(function($) {
           $(document.getElementById(fieldData.name)).rateYo({rating: 3.6});
         }
       };
-    }
+    },
+    captcha: function(fieldData) {
+    return {
+      field: '<span id="'+fieldData.name+'">',
+      onRender: function() {
+        document.getElementById(fieldData.name).innerHTML= "texto";
+      }
+    };
   };
 
   var inputSets = [{
