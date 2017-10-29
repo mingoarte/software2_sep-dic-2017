@@ -1,4 +1,6 @@
 jQuery(function($) {
+
+
   var fields = [
     {
       type: 'autocomplete',
@@ -140,6 +142,9 @@ jQuery(function($) {
   var disabledAttrs = ['placeholder'];
 
   var fbOptions = {
+		i18n: {
+			locale: 'es-ES'
+		},
     subtypes: {
       text: ['datetime-local']
     },
@@ -149,7 +154,6 @@ jQuery(function($) {
         formData: formData,
         templates: templates
       });
-
 
       var escapeEl = document.createElement('textarea');
       var code = document.getElementById('markup');
