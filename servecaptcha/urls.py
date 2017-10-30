@@ -4,6 +4,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
+    url(r'^captcha\.js$', views.captcha_js, name="captcha_js"),
     url(r'^image/(?P<captcha_id>[a-zA-Z0-9]{64})?$', views.serve_captcha_image),
     url(r'^audio/(?P<captcha_id>[a-zA-Z0-9]{64})?$', views.serve_captcha_audio),
     url(r'^generate_apikey/$', views.generate_apikey, name="generate_apikey"),

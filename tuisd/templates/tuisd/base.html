@@ -40,6 +40,15 @@
             <span class="nav-link-text">Captcha</span>
           </a>
         </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Captcha">
+          <a class="nav-link" href="{% url 'formBuilder:index' %}">
+            <i class="fa fa-fw fa-list"></i>
+            <span class="nav-link-text">Form</span>
+          </a>
+        </li>
+
+
       </ul>
       <ul class="navbar-nav sidenav-toggler">
         <li class="nav-item">
@@ -63,15 +72,15 @@
 
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <footer class="sticky-footer text-center">
-      {% block footer %}
+		{% block footer %}
+    <footer class="text-center">
       <div class="container">
         <div class="text-center">
           <small>Copyright © JSWeCan 2017</small>
         </div>
       </div>
-      {% endblock %}
     </footer>
+		{% endblock %}
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
@@ -98,6 +107,7 @@
     <script src="{% static 'tuisd/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'tuisd/js/sb-admin.min.js' %}"></script>
+		{% block scripts %}{% endblock %}
   </div>
 </body>
 

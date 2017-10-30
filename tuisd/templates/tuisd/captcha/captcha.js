@@ -1,14 +1,14 @@
-$("document").ready(function(){
-  $("#actualizarCaptcha").trigger("click");
+$(document).ready(function(){
+  $('#actualizarCaptcha').trigger("click");
 });
 
-$( "#reproducirAudio" ).click(function(){
+$(document).on('click', '#reproducirAudio', function() {
   var captchaAudio = document.getElementById('audioCaptcha');
   captchaAudio.play();
 });
 
 
-$( "#actualizarCaptcha" ).click(function() {
+$(document).on('click', '#actualizarCaptcha', function() {
   url = 'http://localhost:8000'
   $.ajax({
     url: '/servecaptcha/generate_captcha/{{public_key}}/',

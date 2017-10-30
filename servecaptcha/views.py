@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.html import escape
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from uidesigner.audio_captcha import CaptchaAuditivo
@@ -158,3 +160,7 @@ def validate_captcha(request):
     else:
         response = HttpResponseNotAllowed(content="Sólo se permite el método POST.", permitted_methods=["POST"])
     return response
+
+def captcha_js(request):
+    js = render_to_string('tuisd/captcha/captcha.js', { 'public_key': request.GET['public_key'] })
+    return HttpResponse(js)
