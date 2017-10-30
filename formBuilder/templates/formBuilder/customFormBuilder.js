@@ -3,6 +3,10 @@ function unescapeHTML(html) {
   return dom.documentElement.textContent;
 }
 
+function isCaptcha(formField) {
+  return ('type' in formField) && (formField.type == 'captcha');
+}
+
 var templates = {
   captcha: function(fieldData) {
     captchaHTML = unescapeHTML(`{{escapedCaptchaHTML}}`);
@@ -27,7 +31,6 @@ jQuery(function($) {
           formData: formData,
           templates: templates
         });
-
         var escapeEl = document.createElement('textarea');
         var code = document.getElementById('markup');
         var escapeHTML = function(html) {
@@ -40,10 +43,11 @@ jQuery(function($) {
         var $markup = $('<div/>');
         $markup.formRender({formData});
         var html = $markup[0].innerHTML;
+        var parsedData = JSON.parse(formData);
         $.get({
           url: '/servecaptcha/captcha.js',
           data: {
-            public_key: 'demoPublicKey'
+            public_key: encodeURIComponent(parsedData.find(isCaptcha).public_key)
           },
           success: function(captchaJS) {
             captchaJS = unescapeHTML(`&lt;script&gt;\n${captchaJS}\n&lt;/script&gt;`)
@@ -60,7 +64,15 @@ jQuery(function($) {
           type: 'captcha'
         },
         icon: 'C '
-      }]
+      }],
+      typeUserAttrs: {
+        captcha: {
+          public_key: {
+            label: 'Clave pública',
+            maxlength: '64'
+          }
+        }
+      }
     },
     formBuilder = $fbEditor.formBuilder(fbOptions);
 
