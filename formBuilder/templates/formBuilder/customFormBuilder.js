@@ -50,11 +50,11 @@ jQuery(function($) {
 
   var templates = {
     captcha: function(fieldData) {
+      escapedCaptchaHTML = new DOMParser().parseFromString(`{{escapedCaptchaHTML}}`, "text/html");
+      escapedCaptchaHTML = escapedCaptchaHTML.documentElement.textContent;
       return {
-        field: '<span id="'+fieldData.name+'">',
+        field: escapedCaptchaHTML,
         onRender: function() {
-          escapedCaptchaHTML = new DOMParser().parseFromString(`{{escapedCaptchaHTML}}`, "text/html");
-          document.getElementById(fieldData.name).innerHTML= escapedCaptchaHTML.documentElement.textContent;
           $("#actualizarCaptcha").trigger('click');
         }
       };

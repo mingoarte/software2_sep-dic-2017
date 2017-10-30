@@ -21,6 +21,6 @@
 <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script
 >
 <script>
-    {% include 'formBuilder/demo.js' with captchaHTML=captchaHTML %}
+    {% include 'formBuilder/customFormBuilder.js' with captchaHTML=captchaHTML %}
     {% include 'tuisd/captcha/captcha.js' with public_key='demoPublicKey' %}
   </script>{% endblock %}
