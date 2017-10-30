@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.utils.html import escape
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from uidesigner.audio_captcha import CaptchaAuditivo
