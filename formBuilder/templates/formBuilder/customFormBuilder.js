@@ -44,18 +44,22 @@ jQuery(function($) {
         $markup.formRender({formData});
         var html = $markup[0].innerHTML;
         var parsedData = JSON.parse(formData);
-        $.get({
-          url: '/servecaptcha/captcha.js',
-          data: {
-            public_key: encodeURIComponent(parsedData.find(isCaptcha).public_key)
-          },
-          success: function(captchaJS) {
-            captchaJS = unescapeHTML(`&lt;script&gt;\n${captchaJS}\n&lt;/script&gt;`)
-            html += captchaJS;
-            code.innerHTML = addLineBreaks(escapeHTML(html));
-          }
-        })
-        window.sessionStorage.setItem('formData', JSON.stringify(formData));
+        var captchaData = parsedData.find(isCaptcha)
+        if (captchaData) {
+          $.get({
+            url: '/servecaptcha/captcha.js',
+            data: {
+              public_key: encodeURIComponent(captchaData.public_key)
+            },
+            success: function(captchaJS) {
+              captchaJS = unescapeHTML(`&lt;script&gt;\n${captchaJS}\n&lt;/script&gt;`)
+              html += captchaJS;
+              code.innerHTML = addLineBreaks(escapeHTML(html));
+            }
+          });
+        } else {
+          code.innerHTML = addLineBreaks(escapeHTML(html));
+        }
       },
       templates: templates,
       fields: [{
