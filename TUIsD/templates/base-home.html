@@ -46,12 +46,12 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       {% if request.user.is_authenticated %}
-        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Cerrar Sesión </a></li>
       {% else %}
 
         <li id="crear_usuario"><a href="{% url 'crear_usuario' %}"><span class="glyphicon glyphicon-user"></span>Crear Usuario</a></li>
 
-        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Iniciar Sesión</a></li>
       {% endif %}
 
     </ul>

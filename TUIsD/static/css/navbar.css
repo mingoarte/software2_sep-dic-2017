@@ -1,7 +1,24 @@
- #navbar{
-  font-family: verdana;
-  font-size: 15px;
-  font-weight: 200;
-  background-color: #2e353d;
+ #navbar {
+  font-family: 'Karla', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #FF8141;
   color: #e1ffff;
+}
+
+.navbar-default .navbar-nav>.active>a {
+	color: #FFF;
+	background-color: #944E00;
+}
+
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:focus, 
+.navbar-default .navbar-nav>.active>a:hover {
+	color: #FFF;
+	background-color: #944E00;
+}
+
+ul.nav.navbar-nav>li>a:hover {
+	color: #FFF;
+	background-color: #944E00;
 }

@@ -218,8 +218,15 @@ $('#accept_encuesta').click(function(){
         $(this).val(data.options[index].texto_opcion);
       })
 
+      $('#guardar').show();
+        var tem_id = $('#template_id').val().toString()
+        var link = "/revisar_template/"+ tem_id
+        $('#preview').attr('href',link) 
+        $('#preview-form').attr('action',link) 
+        $('#frm1_submit').show();
+        $('#preview').show();
+
   });
-console.log(i)
 })
 
 // Una vez tenemos el nombre del template se hace request a la
