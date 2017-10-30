@@ -46,3 +46,7 @@ body > div {}
 .form-rendered #edit-form {
   display: block;
 }
+
+.captcha-field{
+  width: 50%;
+}
