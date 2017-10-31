@@ -117,27 +117,6 @@ $(document).on('click', "button#add_more", function(){
       '</div>').insertBefore($(this).parent())
 })
 
-function flush_poll_modal() {
-	$("#accept_encuesta").parent().prev().empty();
-	$("#accept_encuesta").parent().prev().append('<form>' +
-																							    '<input id="card-id" type="hidden" name="card-id">' + 
-																							    '<input id="position" type="hidden" name="position">' +
-																							    '<div class="input-group">' +
-																							      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Pregunta:</b></span>' +
-																							      '<input id="pregunta" type="text" name="pregunta">' +
-																							    '</div>' +
-																							    '<div class="input-group">' +
-																							      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
-																							      '<input class=" tags-unete" id="opcion" type="text" name="opcion">' +
-																							    '</div>' +
-																							    '<div class="input-group">' +
-																							      '<span class="input-group-addon tags-unete" id=" basic-addon1"><b>Opción:</b></span>' +
-																							      '<input id="opcion" type="text" name="opcion">' +
-																							    '</div>' +
-																							    '<a style="margin-top: 10px;" class="btn btn-primary btn-sm" id="add_more">+ Opción</a>' +
-																						   '</form>');
-}
-
 // Si se elige la opcion de eliminar un patron, se hace
 // un request a la aplicacion para eliminar dicho patron
 // de la bd 
@@ -165,11 +144,12 @@ $('#accept_encuesta').click(function(){
   $("#new_ask div div .modal-body form div input[name='opcion']").each(function() {
       opciones.push($(this).val());
   });
-
+  var pregunta = $("#new_ask div div .modal-body form div input[name='pregunta']").val()
+  console.log(pregunta)
   $.ajax({
     url : "../poll-config/",
     data : {
-            'pregunta': $('#pregunta').val(),
+            'pregunta': pregunta,
             'opciones': opciones,
             'template': $('#template_id').val(),
             'position': $('#position').val(),
@@ -183,6 +163,7 @@ $('#accept_encuesta').click(function(){
       //       configurando
       var content = $("#accept_encuesta").parent().prev().html();
       var id = "#" + $("#card-id").val() + " div .pattern-content";
+      console.log(id);
 
       // Se vacia el contenedor del patron de interaccion y se rellena
       // con la informacion del formulario del modal
@@ -219,12 +200,12 @@ $('#accept_encuesta').click(function(){
       })
 
       $('#guardar').show();
-        var tem_id = $('#template_id').val().toString()
-        var link = "/revisar_template/"+ tem_id
-        $('#preview').attr('href',link) 
-        $('#preview-form').attr('action',link) 
-        $('#frm1_submit').show();
-        $('#preview').show();
+      var tem_id = $('#template_id').val().toString()
+      var link = "/revisar_template/"+ tem_id
+      $('#preview').attr('href',link) 
+      $('#preview-form').attr('action',link) 
+      $('#frm1_submit').show();
+      $('#preview').show();
 
   });
 })

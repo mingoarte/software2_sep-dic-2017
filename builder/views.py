@@ -52,13 +52,13 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         context = self.get_context_data(**kwargs)    
         
-        if request.method == 'GET':
-            print("entre")
-            prev = request.GET.get('type')
-            if prev is not None:
-                context['page_name'] = prev
-            else:
-                context['page_name'] = 'revisar'
+        # if request.method == 'GET':
+        print("entre")
+        prev = request.GET.get('type')
+        if prev is not None:
+            context['page_name'] = prev
+        else:
+            context['page_name'] = 'revisar'
                     
         template = Template.objects.get(id=(kwargs['templateID']))
         questions = Pregunta.objects.filter(template=template).order_by('position')
@@ -86,6 +86,7 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
             pattern = {'question': question,
                         'options': Opcion.objects.filter(pregunta=question)}
             patterns.append(pattern)
+            context['position'] = question.position
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
@@ -102,8 +103,13 @@ def pollConfig(request):
     position = request.GET.get('position', None)
     created = request.GET.get('created', None)
 
+    print ("\n\n\n")
+    print (position)
+
     template = Template.objects.get(pk=int(template_pk))
     question = Pregunta.objects.filter(template=template, position=int(position))
+    print (question_text)
+    print ("\n\n\n")
     if question.count():
         print("ENTRO")
         question[0].texto_pregunta = question_text
