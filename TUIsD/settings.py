@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'encuestas.apps.EncuestasConfig'
+    'encuestas.apps.EncuestasConfig',
+    'faqs.apps.FaqsConfig'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "TUIsD/static"),
 )
-print(STATICFILES_DIRS)
+#print(STATICFILES_DIRS)
 
 STATIC_URL = '/static/'
 

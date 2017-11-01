@@ -24,6 +24,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^encuestas/', include('encuestas.urls')),
+    url(r'^faqs/', include('faqs.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^builder/', include('builder.urls')),
 ]
