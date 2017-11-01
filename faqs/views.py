@@ -17,7 +17,7 @@ def new(request):
 
     if request.method == 'POST':
         form_f = CategoriaForm(request.POST)
-        formset_p = FormSetPreguntas(request.POST)
+        formset_p = FormSetPreguntas(request.POST, form_kwargs={'empty_permitted': False})
 
         if form_f.is_valid() and formset_p.is_valid():
             # Revisar si el tema es vacio, no debo gurdarlo

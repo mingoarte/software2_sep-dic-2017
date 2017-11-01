@@ -23,8 +23,8 @@ class Categoria(models.Model):
 class Pregunta(models.Model):
     faq = models.ForeignKey(Faq, on_delete=models.CASCADE, null=True)
     tema = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
-    pregunta = models.CharField('Pregunta:', max_length=100, blank=False, null=False)
-    respuesta = models.TextField('Respuesta:', max_length=250, blank=False, null=False)
+    pregunta = models.CharField('Pregunta:', max_length=100, blank=False)
+    respuesta = models.TextField('Respuesta:', max_length=250, blank=False)
 
     class Meta:
             ordering = ["id"]
