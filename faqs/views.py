@@ -18,18 +18,25 @@ def new(request):
     if request.method == 'POST':
         form_f = CategoriaForm(request.POST)
         formset_p = FormSetPreguntas(request.POST)
-        
+
         if form_f.is_valid() and formset_p.is_valid():
             # Revisar si el tema es vacio, no debo gurdarlo
+            faq = Faq()
+            faq.save()
             if form_f.cleaned_data['nombre'] == "":    
                 for preg in formset_p:
+                    preg = preg.save(commit=False)
+                    preg.faq = faq.id 
                     preg.save()
                 return redirect('faqs:detail')
             else:
-                faq = form_f.save()
+                tema = form_f.save(commit=False)
+                tema.faq = faq.id
+                tema.save()
                 for preg in formset_p:
                     preg = preg.save(commit=False)
-                    preg.faq = get_object_or_404(Categoria, pk=faq.pk)
+                    preg.faq = faq.id
+                    preg.tema = get_object_or_404(Categoria, pk=tema.pk)
                     preg.save()
                 return redirect('faqs:detail')
     else:
