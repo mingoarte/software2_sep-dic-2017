@@ -10,7 +10,7 @@ class Faq(models.Model):
         return self.fecha_publ >= timezone.now() - datetime.timedelta(days=1)
 
 class Categoria(models.Model):
-    faq = models.ForeignKey(Faq, on_delete=models.CASCADE)
+    faq = models.ForeignKey(Faq, on_delete=models.CASCADE, null=True)
     nombre = models.CharField('Tema:', max_length=100, blank=True)
     fecha_publ = models.DateTimeField('fecha de creacion:', null=True, default=timezone.now)
 
@@ -21,7 +21,7 @@ class Categoria(models.Model):
         return self.nombre
 
 class Pregunta(models.Model):
-    faq = models.ForeignKey(Faq, on_delete=models.CASCADE)
+    faq = models.ForeignKey(Faq, on_delete=models.CASCADE, null=True)
     tema = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
     pregunta = models.CharField('Pregunta:', max_length=100, blank=False, null=False)
     respuesta = models.TextField('Respuesta:', max_length=250, blank=False, null=False)
