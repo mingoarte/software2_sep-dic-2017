@@ -26,16 +26,16 @@ def new(request):
             if form_f.cleaned_data['nombre'] == "":    
                 for preg in formset_p:
                     preg = preg.save(commit=False)
-                    preg.faq = faq.id 
+                    preg.faq = faq
                     preg.save()
                 return redirect('faqs:detail')
             else:
                 tema = form_f.save(commit=False)
-                tema.faq = faq.id
+                tema.faq = faq
                 tema.save()
                 for preg in formset_p:
                     preg = preg.save(commit=False)
-                    preg.faq = faq.id
+                    preg.faq = faq
                     preg.tema = get_object_or_404(Categoria, pk=tema.pk)
                     preg.save()
                 return redirect('faqs:detail')
@@ -45,7 +45,7 @@ def new(request):
     return render(request, 'faqs/new.html', {'form_f': form_f, 'form_p': formset_p})
 
 def detail(request):
-    sin_cat = Pregunta.objects.filter(faq=None)
+    sin_cat = Pregunta.objects.filter(tema=None)
     categorias = Categoria.objects.all().order_by("id")
     #preg_list = faq.pregunta_set.all().order_by("id")
     return render(request, 'faqs/detail.html', {'sin_cat': sin_cat, 'categorias': categorias})
