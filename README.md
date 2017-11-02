@@ -45,6 +45,7 @@ Se debe crear un usuario llamado `tuisd`, con clave `tuisd` y con el nombre de l
 sudo -u postgres psql
 create user tuisd with password 'tuisd';
 create database tuisd owner tuisd;
+alter user tuisd CREATEDB;
 ```
 
 (Luego deberiamos ponernos de acuerdo para hacer esto de una mejor manera, las claves no deberian estar en el repo)
