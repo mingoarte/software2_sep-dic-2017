@@ -15,7 +15,7 @@
           {% else %}
             <input id="template_id" type="hidden" name="template_id" value="">
             <h1 id="title"></h1>
-            
+
           {% endif %}
 
         </div>
@@ -24,19 +24,19 @@
 
           <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
           <form id="preview-form" action="/revisar_template/{{tem_id}}" method="get">
-            <input type="submit" value="Preview" 
+            <input type="submit" value="Preview"
               name="type" id="frm1_submit" class="btn btn-success pull-right" style="margin-top:20px;" />
           </form>
           {% else %}
             <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
               <form id = "preview-form" action="" method="get">
-                <input type="submit" value="Preview" 
+                <input type="submit" value="Preview"
                   name="type" id="frm1_submit" class = "btn btn-success pull-right " style="display: none;margin-top:20px;"/>
                 </form>
             {% endif %}
         </div>
       </div>
-      
+
       {% if not tem_id %}
       <div id="welcome" class="panel panel-border panel-success">
         <div class="panel-heading">
@@ -44,88 +44,23 @@
         </div>
         <div class="panel-body">
           <h3 class="text-row">Este es su manejador de contenido para diseñar el templates de su preferencia</h3>
-          <h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>  
+          <h3 class="text-row">En la sección de Patrones usted podrá seleccionar los patrones que desea agregar a su template</h3>
         </div>
       </div>
       {% else %}
-      {{patterns.last.position}}
         {% for pattern in patterns %}
-        <div id="card_{{pattern.question.position|slugify}}" class="card-box">
-          <div class="btn-group pull-right">
-            <button type="button" class="btn btn-default waves-effect config">Configurar</button>
-            <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
-          </div>
-          <h1 class="header-title m-b-30">Encuesta</h1>
-          <div class="row">
-            <div class="col-md-12 pattern-content" style="text-align: center;">
-              <form data-parsley-validate="" novalidate="">
-                <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.question.position|slugify }}">
-                <input id="position" type="hidden" name="position" value="{{pattern.question.position|slugify }}">
-                <div class="form-group">
-                  <label for="pregunta">Pregunta</label>
-                    <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.question.texto_pregunta}}" class="form-control" id="pregunta">
-                  </div>
-                  {% for choice in pattern.options %}
-                  <div class="form-group">
-                  <label for="opcion">Opcion:</label>
-                    <input type="text" id="opcion" name="opcion" parsley-trigger="change" required="" value="{{ choice.texto_opcion }}" class="form-control">
-                  </div>
-                  {% endfor %}
-                </form>
-              </div>
-            </div>
-            <input type="hidden" name="card_position" value="{{pattern.question.position|slugify}}">
-          </div>
+          {% with templates_patron='patrones/'|add:pattern.name %}
+            {% include templates_patron|add:'/build' %}
+          {% endwith %}
         {% endfor %}
       {% endif %}
 
     </div>
   </div>
 
-  <div id="new_ask" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Configuracion de Encuesta</h4>
-        </div>
-        <div class="modal-body">
-
-          <form class="forms" action="#" data-parsley-validate novalidate>
-            <input id="card-id" type="hidden" name="card-id">
-            <input id="position" type="hidden" name="position">
-            <div class="form-group">
-              <label for="pregunta">Pregunta</label>
-              <input type="text" name="pregunta" parsley-trigger="change" required 
-                     placeholder="Escriba la pregunta de la encuesta" class="form-control" id="pregunta">
-            </div>
-            <div class="form-group">
-              <label for="emailAddress">Opcion:</label>
-              <input type="text" name="opcion" parsley-trigger="change" required
-                     placeholder="Escriba la opcion" class="form-control" id="opcion">
-            </div>
-            <div class="form-group">
-              <label for="emailAddress">Opcion:</label>
-              <input type="text" name="opcion" parsley-trigger="change" required
-                     placeholder="Escriba la opcion" class="form-control" id="opcion">
-            </div>
-            <div class="form-group text-right m-b-0">
-              <button class="btn btn-primary waves-effect waves-light" type="submit">
-                Agregar otra opcion
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer"> 
-          <button id="accept_encuesta" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include 'patrones/encuesta/configurar-modal.html' %}
 </div>
+
 {% if not tem_id %}
 <div id="new_template" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -143,7 +78,7 @@
                    placeholder="Nombre del template" class="form-control" id="template_name">
           </div>
         </div>
-        <div class="modal-footer"> 
+        <div class="modal-footer">
           <button id="accept_name_template" type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
@@ -158,14 +93,4 @@
 {% block custom_script %}
   <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
-  <script type="text/javascript">
-    if ('{{position}}'){
-    var pos = '{{position}}'
-    
-    console.log(pos)
-    
-    i = parseInt(pos) + 1;
-      
-    }
-  </script>
 {% endblock custom_script %}
