@@ -51,6 +51,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         context = self.get_context_data(**kwargs)
         prev = request.GET.get('type')
+        print("KKKKKKKKKKKKKKKK")
 
         if prev is not None:
             context['page_name'] = prev
@@ -58,7 +59,8 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
             context['page_name'] = 'revisar'
 
         template = Template.objects.get(id=(kwargs['templateID']))
-
+        patterns = template.sorted_patterns()
+        print(patterns)
         context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
 
@@ -120,7 +122,7 @@ def pollConfig(request):
         for option in options:
             Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
 
-    options = Opcion.objects.filter(pregunta=question)
+    options = Opcion.objects.filter(pregunta=question).order_by('id')
     # print (options)
     p1 = list(question.values('texto_pregunta', 'template', 'position'))
     p2 = list(options.values())
