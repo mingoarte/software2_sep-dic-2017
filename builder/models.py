@@ -27,13 +27,17 @@ class Template(models.Model):
 		return []
 
 	def questions(self):
+		from encuestas.models import Pregunta, Opcion
+		return Pregunta.objects.filter(template=self)
+
+	def carousels(self):
 		patterns = []
-		questions = Pregunta.objects.filter(template=template)
-		for question in questions:
+		carousels = Carousel.objects.filter(template=template)
+		for carousel in carousels:
 			patterns.append({
-				'question': question,
-				'options': Opcion.objects.filter(pregunta=question),
-				'position': question.position
+				'carousel': carousel,
+				'content': Content.objects.filter(pregunta=carousel),
+				'position': carousel.position
 			})
 		return patterns
 

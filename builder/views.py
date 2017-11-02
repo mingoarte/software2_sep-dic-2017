@@ -4,8 +4,10 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from builder.models import *
 from encuestas.models import *
+from carrusel.models import *
 from builder.forms import *
 from encuestas.forms import *
+from carrusel.forms import *
 from django.forms import formset_factory
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -26,7 +28,7 @@ class buildTemplate(LoginRequiredMixin,TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-    	return render(request, '/builder/build.html')
+        return render(request, '/builder/build.html')
 
 class homeTemplate(TemplateView):
     template_name = 'home.html'
@@ -126,6 +128,55 @@ def pollConfig(request):
     p2 = list(options.values())
 
     return JsonResponse(data={'question': p1, 'options': p2})
+
+@login_required(redirect_field_name='/')
+def carouselConfig(request):
+    user = request.user
+    carousel = {
+        'title': request.GET.get('title', None),
+        'count': request.GET.get('count', None),
+        'timer': request.GET.get('timer', None),
+        'auto': request.GET.get('auto', None),
+        'circular': request.GET.get('circular', None),
+        'contents': request.GET.getlist('contents[]', None)
+    }
+    template_pk = request.GET.get('template', None)
+    position = request.GET.get('position', '0')
+    created = request.GET.get('created', None)
+
+    #print("carousel", carousel)
+    #print("position", position)   
+
+    template = Template.objects.get(pk=int(template_pk))
+    obj = Carousel.objects.filter(template=template, position=int(position))
+    if obj.count():
+        obj[0].title = carousel['title']
+        obj[0].timer = carousel['timer']
+        obj[0].auto = carousel['auto']
+        obj[0].circular = carousel['circular']
+        '''options2 = Opcion.objects.filter(pregunta=question[0]).delete()
+
+        print(options)
+        for option in options:
+            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+        '''
+        obj[0].save()
+    else:
+        obj = Carousel.objects.create(title=carousel['title'], count=carousel['count'], 
+            timer=carousel['timer'], template=template, position=int(position))
+        obj_pk = obj.pk
+        obj.save()
+        obj = Carousel.objects.filter(pk=obj_pk)
+
+        for content in carousel['contents']:
+            Content.objects.create(carousel=obj, description=content['description'], image=content['image']).save()
+    
+    contents = Content.objects.filter(carousel=obj)
+    print(contents)
+    p1 = list(obj.values('title', 'count', 'timer', 'circular', 'template', 'position'))
+    p2 = list(contents.values())
+    return JsonResponse(data={'carousel': p1, 'content': p2})
+
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):

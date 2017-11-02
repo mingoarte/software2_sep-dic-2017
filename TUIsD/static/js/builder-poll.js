@@ -136,7 +136,7 @@ $(document).on('click', "button.eliminar", function(){
 });
 
 // Permite enviar request a la app para guardar en bd el nuevo patron que se creara
-$('#accept_encuesta').click(function(){
+$(document).on('click', "button.accept-encuesta", function() {
   // Declaracion de variables locales
   // opciones -> Lista con las opciones de la encuesta que se quiere crear
   var opciones = [];
@@ -161,7 +161,7 @@ $('#accept_encuesta').click(function(){
       // content -> El contenido extraido del modal de configuracion
       // id -> El identificador del patron de interaccion que se esta
       //       configurando
-      var content = $("#accept_encuesta").parent().prev().html();
+      var content = $(".accept-encuesta").parent().prev().html();
       var id = "#" + $("#card-id").val() + " div .pattern-content";
       console.log(id);
 
