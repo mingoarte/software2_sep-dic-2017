@@ -63,5 +63,11 @@ create database tuisd owner tuisd;
 Se deben efectuar las migraciones a la BD para crear las tablas de las distintas aplicaciones.
 ```bash
 cd software2_sep-dic-2017
-python manage.py makemigrations
+python manage.py makemigrations <nombre_app_django>
+python manage.py migrate
+```
+
+Si no hubo problemas al migrar, se procede a ejecutar el servidor.
+```bash
+python manage.py runserver localhost:8000
 ```
