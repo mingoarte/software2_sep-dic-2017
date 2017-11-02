@@ -14,7 +14,8 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-# Create your views here.
+
+
 class buildTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
     redirect_field_name = '/'
@@ -27,8 +28,6 @@ class buildTemplate(LoginRequiredMixin,TemplateView):
     def post(self, request, *args, **kwargs):
     	return render(request, '/builder/build.html')
 
-
-
 class homeTemplate(TemplateView):
     template_name = 'home.html'
 
@@ -36,7 +35,7 @@ class ver_templatesTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
     redirect_field_name = '/'
     template_name = 'ver_templates.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(ver_templatesTemplate, self).get_context_data(**kwargs)
 
@@ -50,24 +49,17 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        context = self.get_context_data(**kwargs)    
-        
-        # if request.method == 'GET':
-        print("entre")
+        context = self.get_context_data(**kwargs)
         prev = request.GET.get('type')
+
         if prev is not None:
             context['page_name'] = prev
         else:
             context['page_name'] = 'revisar'
-                    
+
         template = Template.objects.get(id=(kwargs['templateID']))
-        questions = Pregunta.objects.filter(template=template).order_by('position')
-        patterns = []
-        for question in questions:
-            pattern = {'question': question,
-                        'options': Opcion.objects.filter(pregunta=question)}
-            patterns.append(pattern)
-        context['patterns'] = patterns
+
+        context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
 
         return self.render_to_response(context)
@@ -78,15 +70,9 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
     template_name = 'builder/build.html'
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)  
+        context = self.get_context_data(**kwargs)
         template = Template.objects.get(id=(kwargs['templateID']))
-        questions = Pregunta.objects.filter(template=template).order_by('position')
-        patterns = []
-        for question in questions:
-            pattern = {'question': question,
-                        'options': Opcion.objects.filter(pregunta=question)}
-            patterns.append(pattern)
-            context['position'] = question.position
+        patterns = template.sorted_patterns()
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
@@ -133,7 +119,7 @@ def pollConfig(request):
         question = Pregunta.objects.filter(pk=question_pk)
         for option in options:
             Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
-    
+
     options = Opcion.objects.filter(pregunta=question)
     # print (options)
     p1 = list(question.values('texto_pregunta', 'template', 'position'))
@@ -203,11 +189,8 @@ class loginTemplate(TemplateView):
         else:
             form = registerForm()
 
-        return render(request, 'login.html',{'form': form}) 
+        return render(request, 'login.html',{'form': form})
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
-
-
-
