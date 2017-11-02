@@ -19,7 +19,7 @@ class Template(models.Model):
 		return self.name
 
 	def sorted_patterns(self):
-		patterns = self.questions() + self.forms()
+		patterns = list(self.questions()) + list(self.forms())
 		return sorted(patterns, key = lambda p: p.position)
 
 	def forms(self):
@@ -27,15 +27,8 @@ class Template(models.Model):
 		return []
 
 	def questions(self):
-		patterns = []
-		questions = Pregunta.objects.filter(template=template)
-		for question in questions:
-			patterns.append({
-				'question': question,
-				'options': Opcion.objects.filter(pregunta=question),
-				'position': question.position
-			})
-		return patterns
+		from encuestas.models import Pregunta, Opcion
+		return Pregunta.objects.filter(template=self)
 
 
 class Pattern(models.Model):
@@ -46,8 +39,9 @@ class Pattern(models.Model):
 
 # Los componentes que forman parte del template implementan este modelo abstracto
 class TemplateComponent(models.Model):
-    position = models.IntegerField(null=True)
-    template = models.ForeignKey(Template, null=True)
+	name = 'Nombre del patrón'
+	position = models.IntegerField(null=True)
+	template = models.ForeignKey(Template, null=True)
 
-    class Meta:
-        abstract = True
+	class Meta:
+		abstract = True
