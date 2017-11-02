@@ -1,3 +1,6 @@
+/* IMPORTANTE: Cuando se importe este script, debe definirse una variable captchaPublicKey,
+sino se usara 'demoPublicKey' por defecto */
+
 $(document).ready(function(){
   $('#actualizarCaptcha').trigger("click");
 });
@@ -11,7 +14,7 @@ $(document).on('click', '#reproducirAudio', function() {
 $(document).on('click', '#actualizarCaptcha', function() {
   url = 'http://localhost:8000'
   $.ajax({
-    url: '/servecaptcha/generate_captcha/{{public_key}}/',
+    url: '/servecaptcha/generate_captcha/' + (captchaPublicKey || 'demoPublicKey'),
     type: 'get',
     dataType: 'json',
     success: function(data) {
