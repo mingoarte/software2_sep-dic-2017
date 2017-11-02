@@ -18,9 +18,30 @@ class Template(models.Model):
 	def __str__(self):
 		return self.name
 
+	def sorted_patterns(self):
+		patterns = list(self.questions()) + list(self.forms())
+		return sorted(patterns, key = lambda p: p.position)
+
+	def forms(self):
+		# TODO: Obtener forms del template
+		return []
+
+	def questions(self):
+		from encuestas.models import Pregunta, Opcion
+		return Pregunta.objects.filter(template=self)
+
 
 class Pattern(models.Model):
 	name = models.CharField(max_length=128)
 
 	def __str__(self):
 		return self.name
+
+# Los componentes que forman parte del template implementan este modelo abstracto
+class TemplateComponent(models.Model):
+	name = 'Nombre del patrón'
+	position = models.IntegerField(null=True)
+	template = models.ForeignKey(Template, null=True)
+
+	class Meta:
+		abstract = True
