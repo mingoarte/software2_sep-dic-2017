@@ -48,9 +48,13 @@
         </div>
       </div>
       {% else %}
+				<script> var formsJSON = {}; </script>
         {% for pattern in patterns %}
           {% with templates_patron='patrones/'|add:pattern.name %}
             {% include templates_patron|add:'/build.html' %}
+						{% if pattern.name == 'formulario' %}
+							<script> formsJSON[{{pattern.position}}] = {{pattern.form_json|safe}}; </script>
+						{% endif %}
           {% endwith %}
         {% endfor %}
       {% endif %}
@@ -59,7 +63,8 @@
   </div>
 
   {% include 'patrones/encuesta/configurar-modal.html' %}
-	{% include 'patrones/captcha_pattern/configurar-modal.html' %}
+  {% include 'patrones/formulario/agregar-modal.html' %}
+  {% include 'patrones/captcha_pattern/configurar-modal.html' %}
 </div>
 
 {% if not tem_id %}
@@ -92,7 +97,12 @@
 {% endblock content %}
 
 {% block custom_script %}
-  <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/builder-captcha.js' %}"></script>
+
+<script>
+  {% include 'patrones/formulario/customFormBuilder.js' with captchaHTML=captchaHTML %}
+</script>
+<script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/builder-form.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/builder-captcha.js' %}"></script>
 {% endblock custom_script %}

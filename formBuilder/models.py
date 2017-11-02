@@ -1,3 +1,8 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
+from builder.models import TemplateComponent
 
-# Create your models here.
+class Formulario(TemplateComponent):
+    name = 'formulario'
+
+    form_json = JSONField(default=dict)

@@ -1,4 +1,4 @@
-<div id="card_{{pattern.question.position|slugify}}" class="card-box">
+<div id="card_{{pattern.position|slugify}}" class="card-box">
   <div class="btn-group pull-right">
     <button type="button" class="btn btn-default waves-effect config">Configurar</button>
     <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
@@ -7,13 +7,13 @@
   <div class="row">
     <div class="col-md-12 pattern-content" style="text-align: center;">
       <form data-parsley-validate="" novalidate="">
-        <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.question.position|slugify }}">
-        <input id="position" type="hidden" name="position" value="{{pattern.question.position|slugify }}">
+        <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.position|slugify }}">
+        <input id="position" type="hidden" name="position" value="{{pattern.position|slugify }}">
         <div class="form-group">
           <label for="pregunta">Pregunta</label>
-            <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.question.texto_pregunta}}" class="form-control" id="pregunta">
+            <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.texto_pregunta}}" class="form-control" id="pregunta">
           </div>
-          {% for choice in pattern.options %}
+          {% for choice in pattern.opcion_set %}
           <div class="form-group">
           <label for="opcion">Opcion:</label>
             <input type="text" id="opcion" name="opcion" parsley-trigger="change" required="" value="{{ choice.texto_opcion }}" class="form-control">
@@ -22,5 +22,5 @@
         </form>
       </div>
     </div>
-    <input type="hidden" name="card_position" value="{{pattern.question.position|slugify}}">
+    <input type="hidden" name="card_position" value="{{pattern.position|slugify}}">
   </div>
