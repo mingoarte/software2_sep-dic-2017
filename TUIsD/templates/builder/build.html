@@ -59,6 +59,7 @@
   </div>
 
   {% include 'patrones/encuesta/configurar-modal.html' %}
+	{% include 'patrones/captcha_pattern/configurar-modal.html' %}
 </div>
 
 {% if not tem_id %}
@@ -93,4 +94,5 @@
 {% block custom_script %}
   <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/builder-captcha.js' %}"></script>
 {% endblock custom_script %}
