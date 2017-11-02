@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'TUIsD.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'powersoft',
-        'USER': 'powersoft',
-        'PASSWORD': 'powersoft',
+        'NAME': 'tuisd',
+        'USER': 'tuisd',
+        'PASSWORD': 'tuisd',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
