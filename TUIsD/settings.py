@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'builder',
     'encuestas.apps.EncuestasConfig',
-    'servecaptcha.apps.ServecaptchaConfig',
+    'servecaptcha.apps.ServeCaptchaConfig',
+    'captcha_pattern.apps.CaptchaPatternConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,9 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth.decorators import login_required
 from builder.views import *
 from . import views
+
+# JSWeCan patterns
 
 urlpatterns = [
 
@@ -11,6 +13,7 @@ urlpatterns = [
     url(r'^poll-config/$', views.pollConfig, name='pollConfig'),
     url(r'^new-template/$', views.newTemplate, name='newTemplate'),
     url(r'^erase-question/$', views.eraseQuestion, name='eraseQuestion'),
+    url(r'^captcha/', include('captcha_pattern.urls')),
 
 
 
