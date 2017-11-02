@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from builder.models import *
 from encuestas.models import *
-from carrusel.models import *
+from carrusel.models import Carousel, Content
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
@@ -136,16 +136,15 @@ def carouselConfig(request):
         'title': request.GET.get('title', None),
         'count': request.GET.get('count', None),
         'timer': request.GET.get('timer', None),
-        'auto': request.GET.get('auto', None),
-        'circular': request.GET.get('circular', None),
-        'contents': request.GET.getlist('contents[]', None)
+        'auto': request.GET.get('auto', None).capitalize(),
+        'circular': request.GET.get('circular', None).capitalize(),
+        'descriptions': request.GET.getlist('descriptions[]', None),
+        'images': request.GET.getlist('images[]', None),
     }
+    #print(carousel)
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', '0')
     created = request.GET.get('created', None)
-
-    #print("carousel", carousel)
-    #print("position", position)   
 
     template = Template.objects.get(pk=int(template_pk))
     obj = Carousel.objects.filter(template=template, position=int(position))
@@ -163,19 +162,24 @@ def carouselConfig(request):
         obj[0].save()
     else:
         obj = Carousel.objects.create(title=carousel['title'], count=carousel['count'], 
-            timer=carousel['timer'], template=template, position=int(position))
+            timer=carousel['timer'], auto=carousel['auto'], circular=carousel['circular'], 
+            template=template, position=int(position))
         obj_pk = obj.pk
+        #print("Primary Key: ", obj_pk)
         obj.save()
         obj = Carousel.objects.filter(pk=obj_pk)
 
-        for content in carousel['contents']:
-            Content.objects.create(carousel=obj, description=content['description'], image=content['image']).save()
+        for index, elem in enumerate(carousel['descriptions']):
+            #print("Description: ", elem)
+            #print("Image: ", carousel['images'][index])
+            obj_content = Content.objects.create(carousel=obj[0], description=elem, 
+              image=carousel['images'][index], title=elem)
+            obj_content.save()
     
     contents = Content.objects.filter(carousel=obj)
-    print(contents)
     p1 = list(obj.values('title', 'count', 'timer', 'circular', 'template', 'position'))
-    p2 = list(contents.values())
-    return JsonResponse(data={'carousel': p1, 'content': p2})
+    p2 = list(contents.values('description', 'image'))
+    return JsonResponse(data={'carousel': p1, 'contents': p2})
 
 
 @login_required(redirect_field_name='/')
