@@ -11,16 +11,16 @@ import tempfile
 import requests
 
 def index(request):
-    return render(request, 'tuisd/index.html')
+    return render(request, 'captcha_pattern/index.html')
 
 def showCaptcha(request):
-    return render(request, 'tuisd/showCaptcha.html')
+    return render(request, 'captcha_pattern/showCaptcha.html')
 
 def showCaptchaCode(request):
     keypair = requests.get('http://127.0.0.1:8000/servecaptcha/generate_apikey').json()
-    html = render_to_string('tuisd/captcha/captcha.html', { 'public_key': keypair['public_key'] })
-    js = render_to_string('tuisd/captcha/captcha.js', { 'public_key': keypair['public_key'] })
-    with open('tuisd/static/tuisd/captcha/css/style.css') as f:
+    html = render_to_string('captcha_pattern/captcha/captcha.html', { 'public_key': keypair['public_key'] })
+    js = render_to_string('captcha_pattern/captcha/captcha.js', { 'public_key': keypair['public_key'] })
+    with open('captcha_pattern/static/captcha_pattern/captcha/css/style.css') as f:
         css = f.read()
 
     context = {
@@ -30,14 +30,14 @@ def showCaptchaCode(request):
         'js': escape(js),
         'css': escape(css),
     }
-    return render(request, 'tuisd/generatedCode.html', context)
+    return render(request, 'captcha_pattern/generatedCode.html', context)
 
 def generate_captcha_code_as_zip(request, public_key: str):
-    html = render_to_string('tuisd/captcha/captcha_with_includes.html', { 'public_key': public_key })
+    html = render_to_string('captcha_pattern/captcha/captcha_with_includes.html', { 'public_key': public_key })
 
     # Copio el contenido del zip base (con los recursos estaticos, CSS, JS) para
     # no modificar el archivo. ZipFile#writestr tiene side-effects
-    with open('tuisd/static/tuisd/captcha/zip/captcha_base.zip', 'rb') as f:
+    with open('captcha_pattern/static/captcha_pattern/captcha/zip/captcha_base.zip', 'rb') as f:
         captcha_zip = io.BytesIO(f.read())
 
     with ZipFile(captcha_zip, 'a') as zipfile:
@@ -64,4 +64,4 @@ def demoCaptcha(request):
             validation = requests.post(url, data=validation_data).json()
             if 'success' in validation and validation['success']:
                 template_vars['success'] = True
-    return render(request, 'tuisd/captcha/demo.html', template_vars)
+    return render(request, 'captcha_pattern/captcha/demo.html', template_vars)

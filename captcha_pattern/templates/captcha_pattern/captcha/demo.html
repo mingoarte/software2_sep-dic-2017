@@ -1,9 +1,9 @@
-{% extends "tuisd/base.html" %}
+{% extends "captcha_pattern/base.html" %}
 {% load static %}
 {% load staticfiles %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% static 'tuisd/captcha/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'captcha_pattern/captcha/css/style.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -34,7 +34,7 @@
 
               <div class="form-group">
                 <label for="exampleInputPassword1">Captcha</label>
-                {% include 'tuisd/captcha/captcha.html' %}
+                {% include 'captcha_pattern/captcha/captcha.html' %}
               </div>
               <button type="submit" class="btn btn-secondary btn-block">Enviar</button>
             </form>
@@ -68,7 +68,7 @@
 </div>
 
 <script type="text/javascript">
-  {% include 'tuisd/captcha/captcha.js' with public_key='demoPublicKey' %}
+  {% include 'captcha_pattern/captcha/captcha.js' with public_key='demoPublicKey' %}
 </script>
 
 {% endblock %}

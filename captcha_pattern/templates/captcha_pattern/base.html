@@ -11,17 +11,17 @@
   <meta name="author" content="">
   <title>TUIsD - JSWeCan</title>
   <!-- Bootstrap core CSS-->
-  <link href="{% static 'tuisd/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'captcha_pattern/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!-- Custom fonts for this template-->
-  <link href="{% static 'tuisd/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'captcha_pattern/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
-  <link href="{% static 'tuisd/css/sb-admin.css' %}" rel="stylesheet">
+  <link href="{% static 'captcha_pattern/css/sb-admin.css' %}" rel="stylesheet">
   <!-- TUIsD CSS -->
-  <link href="{% static 'tuisd/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'captcha_pattern/css/main.css' %}" rel="stylesheet">
   <!-- TUIsD Icon-->
-  <link rel="icon" href="{% static 'tuisd/img/bird.png' %}">
+  <link rel="icon" href="{% static 'captcha_pattern/img/bird.png' %}">
 
-  <script src="{% static 'tuisd/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'captcha_pattern/js/jquery-3.2.1.min.js' %}"></script>
   {% block head %}{% endblock %}
 </head>
 
@@ -41,12 +41,7 @@
           </a>
         </li>
 
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Captcha">
-          <a class="nav-link" href="{% url 'formBuilder:index' %}">
-            <i class="fa fa-fw fa-list"></i>
-            <span class="nav-link-text">Form</span>
-          </a>
-        </li>
+        
 
 
       </ul>
@@ -100,13 +95,13 @@
       </div>
     </div>
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'tuisd/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'tuisd/vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'tuisd/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'captcha_pattern/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'captcha_pattern/vendor/popper/popper.min.js' %}"></script>
+    <script src="{% static 'captcha_pattern/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- Core plugin JavaScript-->
-    <script src="{% static 'tuisd/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'captcha_pattern/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <!-- Custom scripts for all pages-->
-    <script src="{% static 'tuisd/js/sb-admin.min.js' %}"></script>
+    <script src="{% static 'captcha_pattern/js/sb-admin.min.js' %}"></script>
 		{% block scripts %}{% endblock %}
   </div>
 </body>
