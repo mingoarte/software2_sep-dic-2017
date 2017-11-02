@@ -6,9 +6,9 @@ El proyecto consistió en la implementación de diferentes patrones de interacci
 
 Cuatro equipos conformaron el desarrollo:
 - JSWeCan
-- PowerSoft
+- NineSoft
 - Phoenix
-- Otro equipo
+- PowerSoft
 
 ## Requisitos de la instalación en Linux
 El proyecto fue desarrollado utilizando Django como framework y PostgreSQL como manejador de base de datos relacionales.
@@ -31,14 +31,6 @@ cd software2_sep-dic-2017
 python3 -m venv env
 source env/bin/activate
 pip3 install -r requirements.txt
-```
-
-### [Probar solamente el constructor]
-```bash
-cd software2_sep-dic-2017
-python3 -m venv constructor
-source constructor/bin/activate
-pip3 install -r requirements_constructor.txt
 ```
 
 ## Configuración de la BD.
