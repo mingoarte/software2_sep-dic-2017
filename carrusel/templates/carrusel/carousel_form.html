@@ -1,0 +1,92 @@
+{% load widget_tweaks %}
+{% load static %}
+<div class="modal-dialog modal-lg" role="document">
+  <form action="{% url 'carousel-create' %}" method="post" id="carousel-create" class="form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Cerrar</span>
+        </button>
+        <h4 class="modal-title">Configurar Carrusel</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}">{{ form.title.label|capfirst }}</label>
+          {% render_field form.title class="form-control" placeholder="Ingrese un título" %}
+          {% for error in form.title.errors %}
+            <span class="help-block">{{ error }}</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.timer.id_for_label }}">{{ form.timer.label|capfirst }}</label>
+          {% render_field form.timer class="form-control" placeholder="Ingrese tiempo de transición" %}
+          {% for error in form.timer.errors %}
+            <span class="help-block">{{ error }}</span>
+          {% endfor %}
+        </div>
+        <div class="checkbox">
+          {% render_field form.auto %}
+          <label for="{{ form.auto.id_for_label }}">{{ form.auto.label|capfirst }}</label>
+        </div>
+        <div class="checkbox">
+          {% render_field form.circular %}
+          <label for="{{ form.circular.id_for_label }}">{{ form.circular.label|capfirst }}</label>
+        </div>
+      </div>
+
+      <table class="table">
+          {% for form in carousel_formset.forms %}
+              {% if forloop.first %}
+                  <thead>
+                  <tr>
+                      {% for field in form.visible_fields %}
+                          <th>{{ field.label|capfirst }}</th>
+                      {% endfor %}
+                  </tr>
+                  </thead>
+              {% endif %}
+              <tr class="formset_row">
+                  {% for field in form.visible_fields %}
+                      <td>
+                          {# Include the hidden fields in the form #}
+                          {% if forloop.first %}
+                              {% for hidden in form.hidden_fields %}
+                                  {{ hidden }}
+                              {% endfor %}
+                          {% endif %}
+                          {{ field.errors.as_ul }}
+                          {{ field }}
+                      </td>
+                  {% endfor %}
+              </tr>
+          {% endfor %}
+
+          {{ carousel_formset.management_form }}
+      </table>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <input type="submit" class="btn btn-primary" value="Guardar" />
+      </div>
+    </div><!-- /.modal-content -->
+  </form>
+</div><!-- /.modal-dialog -->
+
+<script src="{% static 'formset/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'Añadir elemento',
+        deleteText: 'Eliminar elemento',
+        prefix: 'content_set'
+    });
+</script>
+<script>
+  var form_options = { target: '#modal-carousel', success: function(response) {} };
+  $('#carousel-create').ajaxForm(form_options);
+</script>

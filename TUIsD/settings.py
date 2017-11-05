@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'builder',
     'encuestas.apps.EncuestasConfig',
-    'carrusel.apps.CarruselConfig'
+    'carrusel.apps.CarruselConfig',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [

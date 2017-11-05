@@ -1,0 +1,13 @@
+{% extends "base-home.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<p><a href="{% url 'carousel_create' %}">New</a></p>
+{% for carousel in carousel_list %}
+<h2><a href="{% url 'carousel_update' carousel.pk %}">{{ carousel.title }}</a></h2>
+    <p>{{ carousel.artist }}</p>
+{% endfor %}
+
+{% endblock content %}
