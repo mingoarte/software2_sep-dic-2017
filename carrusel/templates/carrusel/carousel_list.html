@@ -4,10 +4,9 @@
 
 {% block content %}
 
-<p><a href="{% url 'carousel_create' %}">New</a></p>
+<p><a href="{% url 'carousel-create' %}">New</a></p>
 {% for carousel in carousel_list %}
-<h2><a href="{% url 'carousel_update' carousel.pk %}">{{ carousel.title }}</a></h2>
-    <p>{{ carousel.artist }}</p>
+<h2><a href="{% url 'carousel-update' carousel.pk %}">{{ carousel.title }}</a></h2>
 {% endfor %}
 
 {% endblock content %}

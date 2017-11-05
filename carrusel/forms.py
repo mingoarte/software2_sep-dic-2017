@@ -5,12 +5,12 @@ from .models import Carousel, Content
 class CarouselForm(ModelForm):
     class Meta:
         model = Carousel
-        fields = ['title', 'timer', 'auto', 'circular']
+        fields = ['template', 'position', 'title', 'timer', 'auto', 'circular']
         labels = {
             'title': 'Título',
-            'timer': 'Tiempo de transcición',
+            'timer': 'Tiempo de transición',
             'auto': 'Transición automática',
-            'circular': 'Transcición circular'
+            'circular': 'Transición circular',
         }
 
 class ContentForm(ModelForm):
@@ -23,4 +23,5 @@ class ContentForm(ModelForm):
             'image': 'Imagen'
         }
 
-CarouselFormSet = inlineformset_factory(Carousel, Content, form=ContentForm, fields='__all__', extra=1)
+CarouselContentFormSet = inlineformset_factory(Carousel, Content, form=ContentForm, 
+                                               extra=2, can_delete=True)

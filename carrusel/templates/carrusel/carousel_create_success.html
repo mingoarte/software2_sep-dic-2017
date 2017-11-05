@@ -16,5 +16,13 @@
   // close the modal after 3 seconds
   setTimeout(function() {
     $('#modal-carousel').modal('hide');
-  }, 3000);
+  }, 2000);
+
+  $('#guardar').show();
+  var tem_id = $('#template_id').val().toString()
+  var link = "/revisar_template/"+ tem_id
+  $('#preview').attr('href', link) 
+  $('#preview-form').attr('action', link) 
+  $('#frm1_submit').show();
+  $('#preview').show();
 </script>

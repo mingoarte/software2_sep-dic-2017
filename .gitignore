@@ -1,4 +1,6 @@
 */migrations/*
 *.pyc
-tuisd/*
+tuisd/static/*
+!tuisd/static/js
+tuisd/media/*
 *.vscode

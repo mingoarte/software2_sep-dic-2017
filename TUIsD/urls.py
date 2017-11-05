@@ -20,17 +20,12 @@ from builder.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from carrusel.views import CarouselListView, CarouselCreateView, CarouselUpdateView
 
 urlpatterns = [
     url(r'^encuestas/', include('encuestas.urls')),
-    url(
-        regex='^create/$',
-        view=CarouselCreateView.as_view(),
-        name='carousel-create',
-    ),
     url(r'^admin/', admin.site.urls),
     url(r'^builder/', include('builder.urls')),
+    url(r'^', include('carrusel.urls')),
     url(r'^$', homeTemplate.as_view(), name='home'),
     url(r'^ver_templates/', ver_templatesTemplate.as_view(), name='ver_templates'),
     url(r'^revisar_template/(?P<templateID>[0-9]+)$', revisarTemplate.as_view(), name='revisar'),
