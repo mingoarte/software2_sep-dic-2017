@@ -2,10 +2,8 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.views.decorators.csrf import csrf_exempt
 from builder.models import *
 from encuestas.models import *
-from formBuilder.models import *
 from builder.forms import *
 from encuestas.forms import *
 from django.forms import formset_factory
@@ -16,7 +14,6 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.template.loader import render_to_string
 
 
 class buildTemplate(LoginRequiredMixin,TemplateView):
@@ -62,13 +59,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         template = Template.objects.get(id=(kwargs['templateID']))
 
-        # TODO: Refactorizar: DRY
-        patterns = template.sorted_patterns()
-        for pattern in patterns:
-            if pattern.name == 'formulario':
-                pattern.form_json = json.dumps(pattern.form_json)
-        context['patterns'] = patterns
-
+        context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
 
         return self.render_to_response(context)
@@ -81,38 +72,13 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         template = Template.objects.get(id=(kwargs['templateID']))
-
         patterns = template.sorted_patterns()
-        for pattern in patterns:
-            if pattern.name == 'formulario':
-                pattern.form_json = json.dumps(pattern.form_json)
         context['patterns'] = patterns
-
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
-        context['captchaHTML'] = render_to_string('patrones/captcha/captcha.html', { 'public_key':'demoPublicKey' })
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
 
-@login_required(redirect_field_name='/')
-@csrf_exempt
-def formConfig(request):
-    if request.method == 'POST':
-        user = request.user
-        form_json = json.loads(request.POST['form_json'])
-        template_id = int(request.POST['template'])
-
-        template = Template.objects.get(pk=template_id)
-        patterns = template.sorted_patterns()
-        position =  patterns[-1].position + 1 if len(patterns) else 0
-
-        form = Formulario.objects.filter(template=template, position=position)
-        if form.count():
-            form.form_json = form_json
-            form[0].save()
-        else:
-            form = Formulario.objects.create(form_json=form_json, template=template, position=position)
-        return JsonResponse(form.form_json, safe=False)
 
 @login_required(redirect_field_name='/')
 def pollConfig(request):
@@ -169,16 +135,6 @@ def newTemplate(request):
     template.save()
     return JsonResponse(data={'id': str(pk)})
 
-
-@login_required(redirect_field_name='/')
-def eraseFormulario(request):
-
-    template_id = request.GET.get('template', None)
-    position = request.GET.get('position', None)
-    template = Template.objects.get(id=int(template_id))
-    form = Formulario.objects.get(template=template, position=int(position))
-    form.delete()
-    return JsonResponse(data={})
 
 @login_required(redirect_field_name='/')
 def eraseQuestion(request):

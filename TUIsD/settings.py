@@ -38,9 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'builder',
-    'encuestas.apps.EncuestasConfig',
-    'formBuilder.apps.FormbuilderConfig',
-    'servecaptcha.apps.ServecaptchaConfig'
+    'encuestas.apps.EncuestasConfig'
 ]
 
 MIDDLEWARE = [
