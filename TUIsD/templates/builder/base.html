@@ -14,9 +14,8 @@
   <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css'%}">
-
+  
   <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/formulario.css' %}" rel="stylesheet" type="text/css">
 
 
   <!-- /global stylesheets -->
@@ -26,18 +25,13 @@
   <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   <!-- /core JS files -->
 
-  <!-- JSWeCan -->
-  <script src="{% static 'servecaptcha/js/captcha.js' %}"></script>
-  <script src="{% static 'formBuilder/js/jquery-ui.min.js' %}"></script>
-  <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
-  <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
 </head>
 
 <body>
 <div>
   <!-- Main navbar -->
   {% block navbar %}
-
+        
   {% endblock navbar %}
   <!-- /main navbar -->
 
@@ -51,8 +45,8 @@
         {% include "builder/sidebar.html" %}
       {% endblock sidebar %}
       <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="sidebar" >
-
-
+            
+                    
       </div>
       <!-- /main sidebar -->
 
