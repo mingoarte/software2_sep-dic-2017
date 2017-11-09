@@ -14,7 +14,7 @@
                 {% endif %}
             <form action="{% url 'encuestas:vote' pattern.id %}" method="post">
                     {% csrf_token %}
-                    {% for choice in pattern.opcion_set %}
+                    {% for choice in pattern.opcion_set.all %}
                         <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
                         <label for="choice{{ forloop.counter }}">{{ choice.texto_opcion }}</label><br />
                     {% endfor %}

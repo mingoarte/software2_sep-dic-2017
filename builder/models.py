@@ -23,8 +23,8 @@ class Template(models.Model):
 		return sorted(patterns, key = lambda p: p.position)
 
 	def forms(self):
-		# TODO: Obtener forms del template
-		return []
+		from formBuilder.models import Formulario
+		return Formulario.objects.filter(template=self)
 
 	def questions(self):
 		from encuestas.models import Pregunta, Opcion
