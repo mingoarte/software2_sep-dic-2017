@@ -5,6 +5,6 @@ $(document).ready(function() {
 
 // Una vez se agrega el primer patron al template, se elimina
 // el mensaje de bienvenida
-$(".pattern, .pattern-carousel").on('click', function() {
+$(".pattern, .pattern-carousel, .pattern-accordion").on('click', function() {
   $("#welcome").hide();
 });

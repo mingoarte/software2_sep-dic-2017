@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
+    'widget_tweaks',
     'builder',
     'encuestas.apps.EncuestasConfig',
     'carrusel.apps.CarruselConfig',
-    'widget_tweaks'
+    'accordion',
 ]
 
 MIDDLEWARE = [

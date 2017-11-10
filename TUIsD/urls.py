@@ -22,9 +22,10 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^encuestas/', include('encuestas.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^encuestas/', include('encuestas.urls')),
     url(r'^builder/', include('builder.urls')),
+    url(r'^acordeon/', include('accordion.urls', namespace='accordion')),
     url(r'^', include('carrusel.urls')),
     url(r'^$', homeTemplate.as_view(), name='home'),
     url(r'^ver_templates/', ver_templatesTemplate.as_view(), name='ver_templates'),
