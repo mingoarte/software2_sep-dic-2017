@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils import timezone
+from django.template.loader import render_to_string
 from builder.models import TemplateComponent
 import datetime
 
@@ -14,6 +15,12 @@ class Pregunta(TemplateComponent):
 
 	def es_reciente(self):
 		return self.fecha_publ >= timezone.now() - datetime.timedelta(days=1)
+
+	def render(self):
+		return render_to_string('patrones/encuesta/build.html', {"pattern": self})
+
+	def opciones(self):
+		return self.opcion_set.all()
 
 	def __str__(self):
 		return self.texto_pregunta

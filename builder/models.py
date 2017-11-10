@@ -7,7 +7,6 @@ import os
 def get_user_path(username):
 	return os.path.join('uploads/templates', username)
 
-
 class Template(models.Model):
 	# user = models.OneToOneField(User)
 	# html = models.FileField(upload_to="uploads/")
@@ -30,7 +29,6 @@ class Template(models.Model):
 		from encuestas.models import Pregunta, Opcion
 		return Pregunta.objects.filter(template=self)
 
-
 class Pattern(models.Model):
 	name = models.CharField(max_length=128)
 
@@ -42,6 +40,12 @@ class TemplateComponent(models.Model):
 	name = 'Nombre del patrón'
 	position = models.IntegerField(null=True)
 	template = models.ForeignKey(Template, null=True)
+
+	def render(self):
+		raise NotImplementedError("Debes implementar el metodo render para el patron {}".format(self))
+
+	def __str__(self):
+		return self.name
 
 	class Meta:
 		abstract = True
