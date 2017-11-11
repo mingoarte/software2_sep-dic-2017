@@ -7,7 +7,6 @@ import os
 def get_user_path(username):
 	return os.path.join('uploads/templates', username)
 
-
 class Template(models.Model):
 	# user = models.OneToOneField(User)
 	# html = models.FileField(upload_to="uploads/")
@@ -19,7 +18,7 @@ class Template(models.Model):
 		return self.name
 
 	def sorted_patterns(self):
-		patterns = self.questions() + self.forms()
+		patterns = list(self.questions()) + list(self.forms())
 		return sorted(patterns, key = lambda p: p.position)
 
 	def forms(self):
@@ -29,6 +28,7 @@ class Template(models.Model):
 	def questions(self):
 		from encuestas.models import Pregunta, Opcion
 		return Pregunta.objects.filter(template=self)
+<<<<<<< HEAD
 
 	def carousels(self):
 		patterns = []
@@ -41,6 +41,8 @@ class Template(models.Model):
 			})
 		return patterns
 
+=======
+>>>>>>> constructor-integracion
 
 class Pattern(models.Model):
 	name = models.CharField(max_length=128)
@@ -50,8 +52,15 @@ class Pattern(models.Model):
 
 # Los componentes que forman parte del template implementan este modelo abstracto
 class TemplateComponent(models.Model):
-    position = models.IntegerField(null=True)
-    template = models.ForeignKey(Template, null=True)
+	name = 'Nombre del patrón'
+	position = models.IntegerField(null=True)
+	template = models.ForeignKey(Template, null=True)
 
-    class Meta:
-        abstract = True
+	def render(self):
+		raise NotImplementedError("Debes implementar el metodo render para el patron {}".format(self))
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		abstract = True

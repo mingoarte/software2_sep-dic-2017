@@ -49,9 +49,7 @@
       </div>
       {% else %}
         {% for pattern in patterns %}
-          {% with templates_patron='patrones/'|add:pattern.name %}
-            {% include templates_patron|add:'/build' %}
-          {% endwith %}
+          {{ pattern.render }}
         {% endfor %}
       {% endif %}
 
