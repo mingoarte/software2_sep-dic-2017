@@ -1,12 +1,17 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from builder.models import TemplateComponent
+from django.template.loader import render_to_string
 
 class Carousel(TemplateComponent):
+    name = 'Carrusel'
     title = models.CharField(max_length=50)
     timer = models.IntegerField(blank=True, default=3, validators=[MinValueValidator(0)])
     auto = models.BooleanField(default=False)
     circular = models.BooleanField(default=True)
+
+    def render(self):
+        return render_to_string('patrones/carrusel/build.html', {"pattern": self})
 
     def __str__(self):
         return self.title

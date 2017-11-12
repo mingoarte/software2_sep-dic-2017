@@ -19,12 +19,12 @@ class CarouselContentCreateView(CreateView):
             context['carouselcontent'] = CarouselContentFormSet(self.request.POST, self.request.FILES)
         else:
             template_id = self.request.GET.get('template', None)
-            position = self.request.GET.get('position', None)
+            # position = self.request.GET.get('position', None)
             context['carouselcontent'] = CarouselContentFormSet()
             if template_id:
                 context['form'].initial['template'] = template_id
-            if position:
-                context['form'].initial['position'] = position
+            # if position:
+            #     context['form'].initial['position'] = position
         return context
 
     def form_valid(self, form):
