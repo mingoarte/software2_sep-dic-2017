@@ -17,7 +17,7 @@ class Template(models.Model):
         return self.name
 
     def sorted_patterns(self):
-        patterns = list(self.questions()) + list(self.forms())
+        patterns = list(self.questions()) + list(self.carousels()) + list(self.forms())
         return sorted(patterns, key=lambda p: p.position)
 
     def forms(self):
@@ -29,15 +29,8 @@ class Template(models.Model):
         return Pregunta.objects.filter(template=self)
 
     def carousels(self):
-        patterns = []
-        carousels = Carousel.objects.filter(template=template)
-        for carousel in carousels:
-            patterns.append({
-                'carousel': carousel,
-                'content': Content.objects.filter(pregunta=carousel),
-                'position': carousel.position
-            })
-        return patterns
+        from carrusel.models import Carousel
+        return Carousel.objects.filter(template=self)
 
 
 class Pattern(models.Model):

@@ -35,7 +35,7 @@ class CarouselContentCreateView(CreateView):
                 self.object = form.save()
                 carouselContent.instance = self.object
                 carouselContent.save()
-                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object})
+                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object, 'type': "create"})
             else:
                 return self.render_to_response(self.get_context_data(form=form))
         return super(CarouselContentCreateView, self).form_valid(form)
@@ -48,16 +48,16 @@ class CarouselContentUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(CarouselContentUpdateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            context['carouselcontent'] = CarouselContentFormSet(self.request.POST, instance=self.object)
+            context['carouselcontent'] = CarouselContentFormSet(self.request.POST, self.request.FILES, instance=self.object)
             context['carouselcontent'].full_clean()
         else:
             template_id = self.request.GET.get('template', None)
-            position = self.request.GET.get('position', None)
+            # position = self.request.GET.get('position', None)
             context['carouselcontent'] = CarouselContentFormSet(instance=self.object)
             if template_id:
                 context['form'].initial['template'] = template_id
-            if position:
-                context['form'].initial['position'] = position
+            # if position:
+            #     context['form'].initial['position'] = position
         return context
 
     def form_valid(self, form):
@@ -68,7 +68,7 @@ class CarouselContentUpdateView(UpdateView):
                 self.object = form.save()
                 carouselContent.instance = self.object
                 carouselContent.save()
-                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object})
+                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object, 'type': "update"})
             else:
                 return self.render_to_response(self.get_context_data(form=form))
         return super(CarouselContentUpdateView, self).form_valid(form)

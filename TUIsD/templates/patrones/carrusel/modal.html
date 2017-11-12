@@ -8,9 +8,9 @@ $('#modal-carousel').on('show.bs.modal', function (event) {
     // var input = $(event.relatedTarget).parent().siblings("input[name='card_position']")[0];
     // var position = $(input).val();
     var template_id = $('#template_id').val();
-
+    
     $.ajax({
-        url: "{% url 'carousel-create' %}",
+        url: event.relatedTarget.getAttribute("href"),
         context: document.body,
         data: {
             template: template_id,
