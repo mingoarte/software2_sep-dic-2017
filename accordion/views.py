@@ -5,17 +5,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.template.response import TemplateResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
+from builder.models import Template
 from .forms import AccordionForm
 from .models import *
 
 
 # View to create accordions
 def accordionCreate(request):
-
-    print("En el createeeeeeee niggaaaa")
     context = {}
 
     if request.method == 'POST':
@@ -23,8 +22,18 @@ def accordionCreate(request):
         context['accordionForm'] = form
 
         if form.is_valid():
+            template_id = request.POST.get('template')
+            position = request.POST.get('position')
+            print(request.POST)
+            print(template_id)
+            template = get_object_or_404(Template, id=template_id)
+
+
             panel_nro = form.cleaned_data['panels']
-            parent = form.save()
+            parent = form.save(
+                template=template,
+                position=position
+            )
 
             for i in range(0, panel_nro):
                 Accordion(
@@ -32,14 +41,12 @@ def accordionCreate(request):
                     parent=parent
                 ).save()
 
-            return HttpResponse(
-                content=json.dumps({"redirectTo": reverse('accordion:accordion-list')}),
-                content_type='application/json',
-                status=200
-            )
+            context['success'] = True
+
+            return render(request, 'create_accordion.html', context)
 
         # Error in form.
-        return HttpResponse(json.dumps(form.errors), status=400)
+        return render(request, 'create_accordion.html', context)
     else:
         context['accordionForm'] = AccordionForm()
 

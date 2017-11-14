@@ -13,10 +13,10 @@ $('#modal-accordion').on('show.bs.modal', function (event) {
         url: "{% url 'accordion:accordion-create' %}",
         method: 'GET',
         context: document.body,
-        /*data: {
+        data: {
             template: template_id,
             position: position,
-        }*/
+        }
     }).done(function(response) {
         modal.html(response);
     });

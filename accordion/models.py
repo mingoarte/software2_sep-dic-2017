@@ -2,32 +2,12 @@
 import uuid
 from django.contrib.auth.models import User
 from django.db import models
+from builder.models import TemplateComponent
 
 
 class BaseAccordionManager(models.Manager):
     def get_queryset(self):
         return super(BaseAccordionManager, self).get_queryset().filter(parent=None).order_by('id')
-
-
-# Abstracción de un proyecto creado por el usuario
-# Un proyecto puede contener distintos patrones / solo 1 de cada 1
-class Project(models.Model):
-    # Usuario creador/Editor del proyecto
-    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
-    # Nombre del proyecto
-    # Nota: Default solo aplica a filas anteriores al migrate
-    name = models.CharField(max_length=50, blank=False, default='proyecto')
-    # fecha_creacion = models.
-    # fecha_ultima_edicion = models.
-
-    # Acordion que esta editando el usuario
-    # Guardará la referencia al acordeon que cree el usuario
-    acordion = models.ForeignKey(
-        User,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='project_acordion'
-    )
 
 
 class AccordionAbstract(models.Model):
@@ -80,7 +60,7 @@ class AccordionAbstract(models.Model):
         abstract = True
 
 
-class Accordion(AccordionAbstract):
+class Accordion(AccordionAbstract, TemplateComponent):
     parent = models.ForeignKey(
         'self',
         null=True,

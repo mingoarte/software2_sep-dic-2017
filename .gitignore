@@ -2,5 +2,5 @@
 *.pyc
 tuisd/static/*
 !tuisd/static/js
-tuisd/media/*
+TUIsD/media/*
 *.vscode
