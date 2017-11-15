@@ -51,6 +51,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         context = self.get_context_data(**kwargs)
         prev = request.GET.get('type')
+        print("KKKKKKKKKKKKKKKK")
 
         if prev is not None:
             context['page_name'] = prev
@@ -58,7 +59,8 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
             context['page_name'] = 'revisar'
 
         template = Template.objects.get(id=(kwargs['templateID']))
-
+        patterns = template.sorted_patterns()
+        print(patterns)
         context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
 
@@ -73,6 +75,9 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context = self.get_context_data(**kwargs)
         template = Template.objects.get(id=(kwargs['templateID']))
         patterns = template.sorted_patterns()
+        components = TemplateComponent
+        for pattern in patterns:
+            print(pattern)
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
@@ -88,10 +93,9 @@ def pollConfig(request):
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', None)
     created = request.GET.get('created', None)
-
     template = Template.objects.get(pk=int(template_pk))
     component = TemplateComponent.objects.filter(position=int(position), template=template)
-    question = Pregunta.objects.filter(template_component=component).first()
+    question = Pregunta.objects.filter(template_component=component)
 
     if question:
         question.texto_pregunta = question_text
@@ -109,7 +113,11 @@ def pollConfig(request):
             print(option, question)
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
-    options = Opcion.objects.filter(pregunta=question)
+
+    options = Opcion.objects.filter(pregunta=question).order_by('id')
+    # print (options)
+    # p1 = list(question.values('texto_pregunta', 'template', 'position'))
+    # p2 = list(options.values())
 
     return JsonResponse(data={'question': model_to_dict(question), 'options': list(options.values())})
 
@@ -127,7 +135,8 @@ def eraseQuestion(request):
 
     template_id = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_pk))
+    print(template_id,position)
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_id))
     question = Pregunta.objects.get(template_component=component)
     question.delete()
     return JsonResponse(data={})

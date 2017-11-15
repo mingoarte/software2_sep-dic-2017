@@ -15,18 +15,18 @@ $(".forms").click(function() {
 $(".pattern").on('click', function() {
 
   // Toma el contenedor del constructor y le agrega una nueva caja que representa
-  // el nuevo patron escogido.
-  $(".builder").append("<div id=card_"+i+" class='card-box'>" +
-  	                     "<div class='btn-group pull-right'>" +
-                           "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" +
-  	                       "<button type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" +
-  	                     "</div>" +
-  	                     "<h1 class='header-title m-b-30'>Encuesta</h1>" +
-  	                     "<div class='row'>" +
-  	                       "<div class='col-md-12 pattern-content' style='text-align: center;'>" +
-  	                       "</div>" +
-  	                     "</div>" +
-  	                     "<input type='hidden' name='card_position' value="+i+">" +
+  // el nuevo patron escogido. 
+  $(".builder").append("<div id=card_"+i+" class='card-box'>" + 
+  	                     "<div class='btn-group pull-right'>" + 
+                           "<button data-position='' type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
+  	                       "<button data-position='' type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" + 
+  	                     "</div>" + 
+  	                     "<h1 class='header-title m-b-30'>Encuesta</h1>" + 
+  	                     "<div class='row'>" + 
+  	                       "<div class='col-md-12 pattern-content' style='text-align: left;'>" +
+  	                       "</div>" + 
+  	                     "</div>" + 
+  	                     "<input type='hidden' name='card_position' value="+i+">" + 
   	                   "</div>");
   i = i + 1;
 });
@@ -51,14 +51,17 @@ $(document).on('click', "button.config", function() {
     // Se agrega el contenido y el boton para agregar nuevas opciones
 	  $("#new_ask div div .modal-body").append(content);
 	  $("#new_ask div div .modal-body form").append(
+              '<div class="form-group text-right m-b-0">' +
               '<button id="add_more" class="btn btn-primary waves-effect waves-light" type="button">' +
-                'Agregar otra opcion' +
-              '</button>');
+              'Agregar otra opcion' +
+              '</button>' +
+              '</div>'); 
 
 
     // Se setean los nuevos datos de los input
 	  var tmp = $("#" + id + " div .pattern-content form div #pregunta").val();
-	  $("#new_ask div div .modal-body form div #pregunta").val(tmp);
+    $("#new_ask div div .modal-body form div #pregunta").val(tmp);
+	  $("#new_ask div div .modal-body form div #pregunta").attr("readonly", false);
 
 	  var tmp2 = [];
 	  $("#" + id + " div .pattern-content form div #opcion").each(function(index) {
@@ -66,7 +69,8 @@ $(document).on('click', "button.config", function() {
 	  })
 
     $("#new_ask div div .modal-body form div #opcion").each(function(index) {
-    	$(this).val(tmp2[index]);
+      $(this).val(tmp2[index]);
+    	$(this).attr("readonly", false);
     });
   }
   // Si el contenido de configuracion estaba vacio, indica que se necesitaba crear
@@ -181,7 +185,7 @@ $('#accept_encuesta').click(function(){
                                '<label for="pregunta">Pregunta</label>' +
                                '<input type="text" name="pregunta" parsley-trigger="change" required ' +
                                       'placeholder="Escriba la pregunta de la encuesta" class="form-control" ' +
-                                      'id="pregunta">' +
+                                      'id="pregunta" readonly>' +
                              '</div>');
       $(id + " form div #pregunta").val(data.question.texto_pregunta);
 
@@ -191,7 +195,7 @@ $('#accept_encuesta').click(function(){
         $(id + " form").append('<div class="form-group">' +
                                  '<label for="opcion">Opcion:</label>' +
                                  '<input type="text" name="opcion" parsley-trigger="change" required ' +
-                                        'placeholder="Escriba la opcion" class="form-control" id="opcion">' +
+                                        'placeholder="Escriba la opcion" class="form-control" id="opcion" readonly>' +
                                '</div>');
       }
 
