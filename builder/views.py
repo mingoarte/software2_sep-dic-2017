@@ -6,7 +6,7 @@ from builder.models import *
 from encuestas.models import *
 from builder.forms import *
 from encuestas.forms import *
-from django.forms import formset_factory
+from django.forms import formset_factory, model_to_dict
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.core import serializers
@@ -89,43 +89,29 @@ def pollConfig(request):
     position = request.GET.get('position', None)
     created = request.GET.get('created', None)
 
-    print ("\n\n\n")
-    print (position)
-
     template = Template.objects.get(pk=int(template_pk))
-    question = Pregunta.objects.filter(template=template, position=int(position))
-    print (question_text)
-    print ("\n\n\n")
-    if question.count():
-        print("ENTRO")
-        question[0].texto_pregunta = question_text
-        options2 = Opcion.objects.filter(pregunta=question[0]).delete()
-        print(options2)
-        # options2 = question[0].opcion_set.all()
-        # print(options2)
-        # for option in options2:
-        #     option.delete()
+    component = TemplateComponent.objects.filter(position=int(position), template=template)
+    question = Pregunta.objects.filter(template_component=component).first()
 
-        print(options)
+    if question:
+        question.texto_pregunta = question_text
+        Opcion.objects.filter(pregunta=question).delete()
+
         for option in options:
-            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+            Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
-        question[0].save()
+        question.save()
     else:
-        question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
-        question_pk = question.pk
+        question = Pregunta.objects.create_pattern(texto_pregunta=question_text, position=int(position), template=template)
         question.save()
 
-        question = Pregunta.objects.filter(pk=question_pk)
         for option in options:
-            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+            print(option, question)
+            Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
     options = Opcion.objects.filter(pregunta=question)
-    # print (options)
-    p1 = list(question.values('texto_pregunta', 'template', 'position'))
-    p2 = list(options.values())
 
-    return JsonResponse(data={'question': p1, 'options': p2})
+    return JsonResponse(data={'question': model_to_dict(question), 'options': list(options.values())})
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
@@ -141,8 +127,8 @@ def eraseQuestion(request):
 
     template_id = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    template = Template.objects.get(id=int(template_id))
-    question = Pregunta.objects.get(template=template, position=int(position))
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_pk))
+    question = Pregunta.objects.get(template_component=component)
     question.delete()
     return JsonResponse(data={})
 

@@ -3,11 +3,11 @@
 from django.db import models
 from django.utils import timezone
 from django.template.loader import render_to_string
-from builder.models import TemplateComponent
+from builder.models import Pattern
 import datetime
 
 
-class Pregunta(TemplateComponent):
+class Pregunta(Pattern):
 	name = 'encuesta'
 
 	texto_pregunta = models.CharField('Pregunta:', max_length=200)
