@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from builder.models import *
 from encuestas.models import *
 from formBuilder.models import *
+from captcha_pattern.models import *
 from builder.forms import *
 from encuestas.forms import *
 from django.forms import formset_factory
@@ -113,6 +114,24 @@ def formConfig(request):
         else:
             form = Formulario.objects.create(form_json=form_json, template=template, position=position)
         return JsonResponse(form.form_json, safe=False)
+
+@login_required(redirect_field_name='/')
+@csrf_exempt
+def captchaConfig(request):
+    if request.method == 'POST':
+        user = request.user
+        template_id = int(request.POST['template'])
+        template = Template.objects.get(pk=template_id)
+        patterns = template.sorted_patterns()
+        position =  patterns[-1].position + 1 if len(patterns) else 0
+
+        captcha = Captcha.objects.filter(template=template, position=position)
+        print(template_id, position)
+        if captcha.count():
+            captcha[0].save()
+        else:
+            captcha = Captcha.objects.create(template=template, position=position)
+        return JsonResponse({}, safe=False)
 
 @login_required(redirect_field_name='/')
 def pollConfig(request):

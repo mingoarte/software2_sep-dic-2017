@@ -30,6 +30,10 @@ class Template(models.Model):
 		from encuestas.models import Pregunta, Opcion
 		return Pregunta.objects.filter(template=self)
 
+	def captchas(self):
+		from captcha_pattern.models import Captcha
+		return Captcha.objects.filter(template=self)
+
 
 class Pattern(models.Model):
 	name = models.CharField(max_length=128)
