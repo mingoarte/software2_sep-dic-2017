@@ -113,18 +113,55 @@ def formConfig(request):
 def captchaConfig(request):
     if request.method == 'POST':
         user = request.user
-        template_id = int(request.POST['template'])
-        template = Template.objects.get(pk=template_id)
-        patterns = template.sorted_patterns()
-        position =  patterns[-1].position + 1 if len(patterns) else 0
 
-        captcha = Captcha.objects.filter(template=template, position=position)
-        print(template_id, position)
-        if captcha.count():
-            captcha[0].save()
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position',None)
+        public_key = request.POST.get('public_key', None)
+        private_key = request.POST.get('private_key', None)
+
+        print("{} - {}\n {}\n - {}".format(template_id, position, public_key, private_key))
+        # Ya el template existe
+        if position != '':
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(position=int(position), template=template)
+            captcha = Captcha.objects.filter(template_component=component)
+            captcha.public_key = public_key
+            captcha.private_key = private_key
+            captcha.save()
+
+            return JsonResponse(data={'captcha': model_to_dict(captcha),})
+
         else:
-            captcha = Captcha.objects.create(template=template, position=position)
-        return JsonResponse({}, safe=False)
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            captcha = Captcha.objects.create_pattern(public_key = public_key,
+                                                     private_key = private_key,
+                                                     position = position,
+                                                     template = template)
+            captcha.save()
+
+            return JsonResponse(data={'captcha': model_to_dict(captcha),
+                                      'position': captcha.template_component.get().position})
+        #     patterns = template.sorted_patterns()
+        #     position =  patterns[-1].position + 1 if len(patterns) else 0
+        #
+        # captcha = Captcha.objects.filter(template=template, position=position)
+        # print(template_id, position)
+        # if captcha.count():
+        #     captcha[0].save()
+        # else:
+        #     captcha = Captcha.objects.create(template=template, position=position)
+        # return JsonResponse({}, safe=False)
 
 @login_required(redirect_field_name='/')
 def pollConfig(request):
@@ -147,7 +184,7 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
         question.save()
-        return JsonResponse(data={'question': model_to_dict(question), 
+        return JsonResponse(data={'question': model_to_dict(question),
                             'options': list(options.values())})
     else:
         template = Template.objects.get(id=int(template_pk))
@@ -166,7 +203,7 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
         options = Opcion.objects.filter(pregunta=question).order_by('id')
 
-        return JsonResponse(data={'question': model_to_dict(question), 
+        return JsonResponse(data={'question': model_to_dict(question),
                             'options': list(options.values()),
                             'position': question.template_component.get().position})
 
@@ -207,7 +244,7 @@ def createPoll(request):
         position += 1
     else:
         position = 0
-    
+
     return JsonResponse(data={'position':position,})
 
 class userTemplate(TemplateView):

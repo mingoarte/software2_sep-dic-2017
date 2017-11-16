@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^erase-question/$', views.eraseQuestion, name='eraseQuestion'),
     url(r'^create-poll/$', views.createPoll, name='createPoll'),
     url(r'^captcha/', include('captcha_pattern.urls')),
-    url(r'^erase-formulario/$', views.eraseFormulario, name='eraseFormulario'),
 
 
 
