@@ -1,9 +1,3 @@
-// Declaracion de variables globales
-// i -> Lleva la cuenta de los patrones de interaccion creados en el template para
-//      crear los id's de los contenedores de los mismos.
-var i = 0
-
-// Prevenimos el comportamiento por default del form de hacer post
 $(".forms").click(function() {
   event.preventDefault();
 });
@@ -12,23 +6,38 @@ $(".forms").click(function() {
 // Tambien modifica la variable global i.
 // NOTA: Por ahora esta funcion esta hecha para que solamente cree encuestas
 // dado que es el unico patron de interaccion disponible
-$(".pattern").on('click', function() {
+$(".pattern-encuesta").on('click', function() {
+  // Elimina la configuracion que estaba seteada en el modal de configuracion
+  $("#new_ask div div .modal-body form").remove();
 
-  // Toma el contenedor del constructor y le agrega una nueva caja que representa
-  // el nuevo patron escogido. 
-  $(".builder").append("<div id=card_"+i+" class='card-box'>" + 
-  	                     "<div class='btn-group pull-right'>" + 
-                           "<button data-position='' type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
-  	                       "<button data-position='' type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" + 
-  	                     "</div>" + 
-  	                     "<h1 class='header-title m-b-30'>Encuesta</h1>" + 
-  	                     "<div class='row'>" + 
-  	                       "<div class='col-md-12 pattern-content' style='text-align: left;'>" +
-  	                       "</div>" + 
-  	                     "</div>" + 
-  	                     "<input type='hidden' name='card_position' value="+i+">" + 
-  	                   "</div>");
-  i = i + 1;
+  $("#new_ask div div .modal-body").append(
+          '<form data-parsley-validate novalidate>' +
+            '<input id="card-id" type="hidden" name="card-id">' +
+            '<input id="position" type="hidden" name="position">' +
+            '<div class="form-group">' +
+              '<label for="pregunta">Pregunta</label>' +
+              '<input type="text" name="pregunta" parsley-trigger="change" required ' +
+                     'placeholder="Escriba la pregunta de la encuesta" class="form-control" id="pregunta">' +
+            '</div>' +
+            '<div class="form-group">' +
+              '<label for="opcion">Opcion:</label>' +
+              '<input type="text" name="opcion" parsley-trigger="change" required ' +
+                     'placeholder="Escriba la opcion" class="form-control" id="opcion">' +
+            '</div>' +
+            '<div class="form-group">' +
+              '<label for="opcion">Opcion:</label>' +
+              '<input type="text" name="opcion" parsley-trigger="change" required ' +
+                     'placeholder="Escriba la opcion" class="form-control" id="opcion">' +
+            '</div>' +
+            '<div class="form-group text-right m-b-0">' +
+              '<button id="add_more" class="btn btn-primary waves-effect waves-light" type="button">' +
+                'Agregar otra opcion' +
+              '</button>' +
+            '</div>' +
+          '</form>');
+
+  $('#new_ask').modal('show');
+  
 });
 
 // Permite acceder a las configuraciones de la nueva encuesta del template
@@ -165,8 +174,28 @@ $('#accept_encuesta').click(function(){
       // content -> El contenido extraido del modal de configuracion
       // id -> El identificador del patron de interaccion que se esta
       //       configurando
+      console.log(data)
+      if (data.position != null){
+        // Toma el contenedor del constructor y le agrega una nueva caja que representa
+        // el nuevo patron escogido. 
+        $(".builder").append(
+          "<div id=card_"+data.position+" class='card-box'>" + 
+            "<div class='btn-group pull-right'>" + 
+             "<button data-position="+data.position+" type='button' class='btn btn-default waves-effect config'>Configurar</button>" + 
+             "<button data-position="+data.position+" type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" + 
+            "</div>" + 
+            "<h1 class='header-title m-b-30'>Encuesta</h1>" + 
+            "<div class='row'>" + 
+             "<div class='col-md-12 pattern-content' style='text-align: left;'>" +
+             "</div>" + 
+            "</div>" + 
+            "<input type='hidden' name='card_position' value="+data.position+">" + 
+          "</div>");
+      }else{
+
+      }
       var content = $("#accept_encuesta").parent().prev().html();
-      var id = "#" + $("#card-id").val() + " div .pattern-content";
+      var id = "#card_" + data.position + " div .pattern-content";
       console.log(id);
 
       // Se vacia el contenedor del patron de interaccion y se rellena

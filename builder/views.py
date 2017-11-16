@@ -77,7 +77,7 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         patterns = template.sorted_patterns()
         components = TemplateComponent
         for pattern in patterns:
-            print(pattern)
+            print(pattern.template_component.get().position)
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
@@ -92,12 +92,12 @@ def pollConfig(request):
     options = request.GET.getlist('opciones[]', None)
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    created = request.GET.get('created', None)
-    template = Template.objects.get(pk=int(template_pk))
-    component = TemplateComponent.objects.filter(position=int(position), template=template)
-    question = Pregunta.objects.filter(template_component=component)
 
-    if question:
+
+    if position != '':
+        template = Template.objects.get(pk=int(template_pk))
+        component = TemplateComponent.objects.filter(position=int(position), template=template)
+        question = Pregunta.objects.filter(template_component=component)
         question.texto_pregunta = question_text
         Opcion.objects.filter(pregunta=question).delete()
 
@@ -105,21 +105,34 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
         question.save()
+        return JsonResponse(data={'question': model_to_dict(question), 
+                            'options': list(options.values())})
     else:
-        question = Pregunta.objects.create_pattern(texto_pregunta=question_text, position=int(position), template=template)
+        template = Template.objects.get(id=int(template_pk))
+        patterns = template.sorted_patterns()
+
+        if patterns:
+            position = patterns[-1].template_component.get().position
+            position += 1
+        else:
+            position = 0
+
+        question = Pregunta.objects.create_pattern(texto_pregunta=question_text, position=position, template=template)
         question.save()
 
         for option in options:
-            print(option, question)
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
+        options = Opcion.objects.filter(pregunta=question).order_by('id')
+
+        return JsonResponse(data={'question': model_to_dict(question), 
+                            'options': list(options.values()),
+                            'position': question.template_component.get().position})
 
 
-    options = Opcion.objects.filter(pregunta=question).order_by('id')
     # print (options)
     # p1 = list(question.values('texto_pregunta', 'template', 'position'))
     # p2 = list(options.values())
 
-    return JsonResponse(data={'question': model_to_dict(question), 'options': list(options.values())})
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
@@ -140,6 +153,20 @@ def eraseQuestion(request):
     question = Pregunta.objects.get(template_component=component)
     question.delete()
     return JsonResponse(data={})
+
+@login_required(redirect_field_name='/')
+def createPoll(request):
+    template_id = request.GET.get('template', None)
+    template = Template.objects.get(id=int(template_id))
+    patterns = template.sorted_patterns()
+
+    if patterns:
+        position = patterns.last().get().position
+        position += 1
+    else:
+        position = 0
+    
+    return JsonResponse(data={'position':position,})
 
 class userTemplate(TemplateView):
     template_name = 'crear_usuario.html'
