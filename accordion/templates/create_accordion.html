@@ -39,11 +39,18 @@
 <!-- End accordion content modal -->
 
 <script>
-  var form_options = { 
-    target: '#modal-accordion', 
-    success: function(response) {
-      console.log(response);
-    },
-  };
-  $('#accordion-create-form').ajaxForm(form_options);
+    var template = '{{template_id}}'
+    var position = '{{position}}'
+
+    var form_options = { 
+        target: '#modal-accordion',
+        data:{
+            template: template,
+            position: position,
+        },
+        success: function(response) {
+            console.log(response);
+        },
+    };
+    $('#accordion-create-form').ajaxForm(form_options);
 </script>

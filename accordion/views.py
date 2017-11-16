@@ -24,16 +24,13 @@ def accordionCreate(request):
         if form.is_valid():
             template_id = request.POST.get('template')
             position = request.POST.get('position')
-            print(request.POST)
-            print(template_id)
             template = get_object_or_404(Template, id=template_id)
 
-
             panel_nro = form.cleaned_data['panels']
-            parent = form.save(
-                template=template,
-                position=position
-            )
+            parent = form.save(commit=False)
+            parent.template = template
+            parent.position = position
+            parent.save()
 
             for i in range(0, panel_nro):
                 Accordion(
@@ -49,6 +46,8 @@ def accordionCreate(request):
         return render(request, 'create_accordion.html', context)
     else:
         context['accordionForm'] = AccordionForm()
+        context['template_id'] = request.GET.get('template')
+        context['position'] = request.GET.get('position')
 
     return render(request, 'create_accordion.html', context)
 

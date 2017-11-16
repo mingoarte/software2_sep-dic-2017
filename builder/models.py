@@ -20,6 +20,7 @@ class Template(models.Model):
 
 	def sorted_patterns(self):
 		patterns = self.questions() + self.forms()
+		# patterns += self.accordions()
 		return sorted(patterns, key = lambda p: p.position)
 
 	def forms(self):
@@ -29,6 +30,10 @@ class Template(models.Model):
 	def questions(self):
 		from encuestas.models import Pregunta, Opcion
 		return Pregunta.objects.filter(template=self)
+
+	def accordions(self):
+		from accordion.models import Accordion
+		return Accordion.objects.filter(template=self.id)
 
 	def carousels(self):
 		patterns = []
