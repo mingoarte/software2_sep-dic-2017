@@ -10,30 +10,27 @@
       <div class="row">
         <div class="col-lg-4">
           {% if tem_id %}
-            <h1 id="title">{{tem_name}}</h1>
-            <input id="template_id" type="hidden" name="template_id" value="{{tem_id}}">
+          <h1 id="title">{{tem_name}}</h1>
+          <input id="template_id" type="hidden" name="template_id" value="{{tem_id}}">
           {% else %}
-            <input id="template_id" type="hidden" name="template_id" value="">
-            <h1 id="title"></h1>
-
+          <input id="template_id" type="hidden" name="template_id" value="">
+          <h1 id="title"></h1>
           {% endif %}
-
         </div>
         <div class="col-lg-8">
           {% if tem_id %}
-
           <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
           <form id="preview-form" action="/revisar_template/{{tem_id}}" method="get">
             <input type="submit" value="Preview"
               name="type" id="frm1_submit" class="btn btn-success pull-right" style="margin-top:20px;" />
           </form>
           {% else %}
-            <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
-              <form id = "preview-form" action="" method="get">
-                <input type="submit" value="Preview"
-                  name="type" id="frm1_submit" class = "btn btn-success pull-right " style="display: none;margin-top:20px;"/>
-                </form>
-            {% endif %}
+          <a type="button" class="btn btn-primary pull-right" style="display: none;margin-top: 20px;" id="guardar" href="{% url 'home' %}">Guardar</a>
+          <form id = "preview-form" action="" method="get">
+            <input type="submit" value="Preview"
+              name="type" id="frm1_submit" class = "btn btn-success pull-right " style="display: none;margin-top:20px;"/>
+          </form>
+          {% endif %}
         </div>
       </div>
 
