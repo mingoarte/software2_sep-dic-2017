@@ -17,7 +17,7 @@ class Pregunta(Pattern):
 		return self.fecha_publ >= timezone.now() - datetime.timedelta(days=1)
 
 	def render(self):
-		return render_to_string('patrones/encuesta/build.html', {"pattern": self})
+		return render_to_string('patrones/encuesta/view.html', {"pattern": self})
 
 	def opciones(self):
 		return self.opcion_set.all()

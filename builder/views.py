@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from builder.models import *
 from encuestas.models import *
+from faqs.models import *
 from builder.forms import *
 from encuestas.forms import *
 from django.forms import formset_factory, model_to_dict
@@ -132,6 +133,46 @@ def pollConfig(request):
     # print (options)
     # p1 = list(question.values('texto_pregunta', 'template', 'position'))
     # p2 = list(options.values())
+
+
+
+@login_required(redirect_field_name='/')
+def faqConfig(request):
+    user = request.user
+    category = request.GET.get('categoria', None)
+    questions = request.GET.getlist('preguntas[]', None)
+    answers = request.GET.getlist('respuestas[]', None)
+    print(questions,answers)
+    template_pk = request.GET.get('template', None)
+    position = request.GET.get('position', None)
+
+
+    if position != '':
+        pass
+        #Configure
+    else:
+        template = Template.objects.get(id=int(template_pk))
+        patterns = template.sorted_patterns()
+
+        if patterns:
+            position = patterns[-1].template_component.get().position
+            position += 1
+        else:
+            position = 0
+
+        faq = Faq.objects.create_pattern(position=position, template=template)
+        faq.save()
+        print(faq)
+
+        if category != '':
+            category = Categoria.objects.create(faq=faq,nombre=category).save()
+        for i,question in enumerate(questions):
+            PreguntaFaq.objects.create(faq=faq, tema=category, pregunta=question, respuesta=answers[i]).save()
+        questions = PreguntaFaq.objects.filter(faq=faq).order_by('id')
+        return JsonResponse(data={'faq': model_to_dict(faq), 
+                            'questions': list(questions.values()),
+                            'position': faq.template_component.get().position})
+
 
 
 @login_required(redirect_field_name='/')
