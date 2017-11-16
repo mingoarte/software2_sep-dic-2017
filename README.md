@@ -66,23 +66,31 @@ Si no hubo problemas al migrar, se procede a ejecutar el servidor.
 python manage.py runserver localhost:8000
 ```
 
-# Cómo crear un nuevo patrón?
-Para crear un nuevo patrón debes definir su modelo, que implementa el modelo abstracto Patron y defina un método render que devuelva el HTML que corresponde a ese patrón.
-Ejemplo:
+## Cómo crear un nuevo patrón?
+Para crear un nuevo patrón debes definir su modelo, que implementa el modelo abstracto Patron y definir algunos métodos que especifican como se renderiza el patrón, su formulario de configuración, y qué va en el card del builder.
 
 ```python
 from builder.models import Patron
 class MiPatron(Patron):
     # ... mis atributos
 
-    # Este método devuelve el html que corresponde a la visualización del patrón
+    # Importante, este nombre es utilizado alrededor de la aplicacion, y debe ser consistente con el nombre de patron que utilizas en JS para las funciones que se describen mas adelante
+    name = "nombre del patron en minusculas"
+
+    # Este método devuelve el html que corresponde al patrón
     def render(self):
+        pass
+    # Este método devuelve el html que corresponde al formulario de configuración del patrón
+    def render_config_modal(self):
+        pass
+    # Este método devuelve el html que corresponde a la visualización del patrón en el constructor
+    def render_card(self):
         pass
 ```
 
 Para crear una nueva instancia de un patrón, puedes utilizar el método create_pattern, que recibe los atributos de MiPatron, así como `template` y `position` para crear el TemplateComponent automaticamente. Este método devuelve la instancia creada.
 
-El método render edevuelve el html que se debe mostrar en el card. Por consistencia
+El método render devuelve el html que se debe mostrar en el card. Por consistencia
 este archivo debe estar localizado en `TUIsD/templates/patrones/<nombre_patron>/build.html`.
 
 ## Inclusión en la barra lateral izquierda.
@@ -90,12 +98,12 @@ La barra izquierda se encuentra en `TUIsD/templates/builder/sidebar.html`. Para
 agregar un patrón a esta barra debe incluirse lo siguiente dentro de la lista
 con id `products` y poniendo como ejemplo el captcha:
 ```html
-    <li class="pattern-captcha config"><a href="#">CAPTCHA</a></li>
+    <li class="pattern-captcha config" data-pattern-name="captcha"><a href="#">CAPTCHA</a></li>
 ```
 
 De manera abstracta:
 ```html
-    <li class="pattern-{nombre_patrón} config"><a href="#">{nombre_patrón}</a></li>
+    <li class="pattern-{nombre_patrón} config" data-pattern-name="{nombre_patrón}"><a href="#">{nombre_patrón}</a></li>
 ```
 
 Lo siguiente que debe incluirse son las funciones en JS que permitan configurar
@@ -140,3 +148,28 @@ por consistencia, este request se hace al view `../erase-<nombre_patrón>/`.
 
 Los datos obligatorios que debe tener esta llamada es `template` y `position`,
 que representan el id del template y la posición, respectivamente.
+
+
+En cuánto al JS, los botones de configurar y eliminar son genéricos, no tienes que modificar su comportamiento para cada patrón. Lo que debes implementar, además de cualquier JS particular de tu modal de configuración, es una función que devuelva un JSON con la url y data para hacer la llamada ajax a tu endpoint que guarda/crea tu patron. Ejemplo:
+
+```javascript
+function sendMiPatronData() {
+  var x = "Dato que recibe miRuta sobre MiPatron"
+  var y = "Dato que recibe miRuta sobre MiPatron"
+
+  return {
+    url: "/miRuta",
+    data: {
+      'x': x,
+      'y': 
+     }
+  }
+}
+```
+
+Para guiarte, puedes tomar como referencia el patron Encuesta.
+
+
+# Bugs conocidos
+- A veces al agregar un patron se agrega dos veces.
+- Al editar una encuesta se crea una nueva (views.pollConfig)

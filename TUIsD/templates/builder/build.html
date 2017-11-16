@@ -49,15 +49,16 @@
       </div>
       {% else %}
         {% for pattern in patterns %}
-          {{ pattern.render }}
+          {{ pattern.render_card }}
         {% endfor %}
       {% endif %}
 
     </div>
   </div>
-
-  {% include 'patrones/encuesta/configurar-modal.html' %}
-	{% include 'patrones/captcha_pattern/configurar-modal.html' %}
+  <div id="new_ask" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    </div>
+  </div>
 </div>
 
 {% if not tem_id %}
@@ -93,4 +94,5 @@
   <script type="text/javascript" src="{% static 'js/builder-template.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/builder-poll.js' %}"></script>
 	<script type="text/javascript" src="{% static 'js/builder-captcha.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/builder.js' %}"></script>
 {% endblock custom_script %}
