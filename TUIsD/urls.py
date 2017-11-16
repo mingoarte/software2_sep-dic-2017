@@ -32,12 +32,13 @@ urlpatterns = [
     url(r'^crear_usuario/', userTemplate.as_view(), name = 'crear_usuario'),
     url(r'^login/', loginTemplate.as_view(), name = 'login'),
     url(r'^logout/', logout_view , name = 'logout'),
+    url(r'^servecaptcha/', include('servecaptcha.urls'))
 ]
 
 # JSWeCan patterns and services.
-urlpatterns += [
-    url(r'^servecaptcha/', include('servecaptcha.urls'))
-]
+# urlpatterns += [
+#     url(r'^servecaptcha/', include('servecaptcha.urls'))
+# ]
 
 urlpatterns += staticfiles_urlpatterns()
 
