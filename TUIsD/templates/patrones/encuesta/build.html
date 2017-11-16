@@ -1,7 +1,7 @@
 <div id="card_{{pattern.position|slugify}}" class="card-box">
   <div class="btn-group pull-right">
-    <button type="button" class="btn btn-default waves-effect config">Configurar</button>
-    <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
+    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-default waves-effect config">Configurar</button>
+    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-danger waves-effect eliminar">Eliminar</button>
   </div>
   <h1 class="header-title m-b-30">Encuesta</h1>
   <div class="row">
