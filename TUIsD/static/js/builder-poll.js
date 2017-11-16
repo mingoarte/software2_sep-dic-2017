@@ -241,21 +241,4 @@ $(document).on('click', "button.accept-encuesta", function() {
       $('#preview').show();
 
   });
-})
-
-// Una vez tenemos el nombre del template se hace request a la
-// aplicacion para guardar el nuevo template en bd
-$('#accept_name_template').click(function(){
-  $('#title').text($('#template_name').val())
-  $.ajax({
-      url : "../new-template/",
-      data :  {'name': $('#template_name').val()},
-
-  })
-  .done(function(data){
-    if(data){
-      $('#template_id').val(data.id);
-      $('#new_template').modal('hide');
-    }
-  });
 });
