@@ -66,7 +66,7 @@ Si no hubo problemas al migrar, se procede a ejecutar el servidor.
 python manage.py runserver localhost:8000
 ```
 
-## Cómo crear un nuevo patrón?
+# Cómo crear un nuevo patrón?
 Para crear un nuevo patrón debes definir su modelo, que implementa el modelo abstracto Patron y defina un método render que devuelva el HTML que corresponde a ese patrón.
 Ejemplo:
 
@@ -80,6 +80,56 @@ class MiPatron(Patron):
         pass
 ```
 
-Para crear una nueva instancia de un patrón, puedes utilizar el método create_pattern, que recibe los atributos de MiPatron, así como `template` y `position` para crear el TemplateComponent automaticamente. Este método devuelve la instancia creada
+Para crear una nueva instancia de un patrón, puedes utilizar el método create_pattern, que recibe los atributos de MiPatron, así como `template` y `position` para crear el TemplateComponent automaticamente. Este método devuelve la instancia creada.
 
+El método render edevuelve el html que se debe mostrar en el card. Por consistencia
+este archivo debe estar localizado en `TUIsD/templates/patrones/<nombre_patron>/build.html`.
 
+## Inclusión en la barra lateral izquierda.
+La barra izquierda se encuentra en `TUIsD/templates/builder/sidebar.html`. Para
+agregar un patrón a esta barra debe incluirse lo siguiente dentro de la lista
+con id `products` y poniendo como ejemplo el captcha:
+```html
+    <li class="pattern-captcha config"><a href="#">CAPTCHA</a></li>
+```
+
+De manera abstracta:
+```html
+    <li class="pattern-{nombre_patrón} config"><a href="#">{nombre_patrón}</a></li>
+```
+
+Lo siguiente que debe incluirse son las funciones en JS que permitan configurar
+el patrón, específicamente, deben agregarse al bloque `custom_scripts` que está
+en `TUIsD/templates/builder/build.html` el archivo JS que abre la configuración
+del patrón con un modal, como ejemplo captcha:
+```html
+<script type="text/javascript" src="{% static 'js/builder-captcha.js' %}"></script>
+```
+
+Por consistencia en el proyecto, estos builder deben localizarse SIEMPRE en
+`TUIsD/static/js/`.
+
+Por último, en `TUIsD/templates/builder/build.html` debe incluirse justo antes
+de cerrar el div de `builder_content` el archivo en html que contiene la
+configuración del modal. Este archivo contiene todo el código en HTML que le
+será incluido al modal cuando se haga clic en el patrón en la barra lateral o
+al darle clic al botón de configurar. Por ejemplo:
+```html
+{% include 'patrones/captcha_pattern/configurar-modal.html' %}
+```
+
+Por consistencia en el proyecto, este archivo debe llamarse SIEMPRE en
+`TUIsD/templates/patrones/<nombre_patrón>/configurar-modal.html`
+
+## Aceptar las configuraciones hechas al patrón en el modal.
+Para poder enviar todo lo configurado en el modal a a la base de datos, debe
+configurarse el botón de `aceptar` del mismo para que tome las variables que
+necesite y las envíe.
+
+Esta función recibirá, si es la primera vez que se crea un patrón, la posición y
+debe ser debidamente añadida.
+
+Esta función debe estar en `builder-<nombre_patrón>.js`.
+Por consistencia, debe hacer un request a `../<nombre_patrón>-config/`. Como
+parte de los datos siempre deben ir `'template': $('#template_id').val()` y
+`position': $('#position').val(),`. Ade
