@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'builder',
     'encuestas.apps.EncuestasConfig',
     'carrusel.apps.CarruselConfig',
-    'widget_tweaks'
-    'faqs.apps.FaqsConfig'
+    'widget_tweaks',
+    'faqs.apps.FaqsConfig',
 ]
 
 MIDDLEWARE = [
