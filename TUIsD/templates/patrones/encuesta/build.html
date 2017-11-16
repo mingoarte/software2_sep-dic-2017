@@ -1,7 +1,7 @@
 <div id="card_{{pattern.position|slugify}}" class="card-box">
   <div class="btn-group pull-right">
-    <button type="button" class="btn btn-default waves-effect config">Configurar</button>
-    <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
+    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-default waves-effect config">Configurar</button>
+    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-danger waves-effect eliminar">Eliminar</button>
   </div>
   <h1 class="header-title m-b-30">Encuesta</h1>
   <div class="row">
@@ -13,7 +13,7 @@
           <label for="pregunta">Pregunta</label>
             <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.texto_pregunta}}" class="form-control" id="pregunta">
           </div>
-          {% for choice in pattern.opcion_set %}
+          {% for choice in pattern.opciones %}
           <div class="form-group">
           <label for="opcion">Opcion:</label>
             <input type="text" id="opcion" name="opcion" parsley-trigger="change" required="" value="{{ choice.texto_opcion }}" class="form-control">
