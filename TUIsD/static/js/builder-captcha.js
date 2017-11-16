@@ -201,13 +201,13 @@ $('#accept_keys').click( function saveCaptchaToTemplate() {
 // Si se elige la opcion de eliminar un patron, se hace
 // un request a la aplicacion para eliminar dicho patron
 // de la bd
-$(document).on('click', "button.eliminar-captcha", function(){
+$(document).on('click', "button.eliminar", function(){
   var  id = $(this).parent().parent().attr('id')
-  $('#position').val(id.split("_")[1]);
+  var position = $(this).attr('data-position');
   $.ajax({
-      url : "../erase-question/",
+      url : "../erase-captcha/",
       data :  {'template': $('#template_id').val(),
-                'position': $('#position').val()},
+               'position': position},
 
   })
   .done(function(data){

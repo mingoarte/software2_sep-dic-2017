@@ -152,16 +152,17 @@ def captchaConfig(request):
 
             return JsonResponse(data={'captcha': model_to_dict(captcha),
                                       'position': captcha.template_component.get().position})
-        #     patterns = template.sorted_patterns()
-        #     position =  patterns[-1].position + 1 if len(patterns) else 0
-        #
-        # captcha = Captcha.objects.filter(template=template, position=position)
-        # print(template_id, position)
-        # if captcha.count():
-        #     captcha[0].save()
-        # else:
-        #     captcha = Captcha.objects.create(template=template, position=position)
-        # return JsonResponse({}, safe=False)
+
+@login_required(redirect_field_name='/')
+def eraseCaptcha(request):
+
+    template_id = request.GET.get('template', None)
+    position = request.GET.get('position', None)
+    print(template_id,position)
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_id))
+    captcha = Captcha.objects.get(template_component=component)
+    captcha.delete()
+    return JsonResponse(data={})
 
 @login_required(redirect_field_name='/')
 def pollConfig(request):
