@@ -122,15 +122,17 @@ def captchaConfig(request):
 
         print("{} - {}\n {}\n - {}".format(template_id, position, public_key, private_key))
         # Ya el template existe
-        if position != '':
+        if position is not None and position != '':
             template = Template.objects.get(pk=template_id)
             component = TemplateComponent.objects.filter(position=int(position), template=template)
-            captcha = Captcha.objects.filter(template_component=component)
+            captcha = Captcha.objects.filter(template_component=component)[0]
             captcha.public_key = public_key
             captcha.private_key = private_key
             captcha.save()
 
-            return JsonResponse(data={'captcha': model_to_dict(captcha),})
+            return JsonResponse(data={'captcha': model_to_dict(captcha),
+                                      'position': int(position),
+                                      'nuevo_patron': False,})
 
         else:
             # Se obtiene el template ID junto con los patrones para poder
@@ -151,7 +153,8 @@ def captchaConfig(request):
             captcha.save()
 
             return JsonResponse(data={'captcha': model_to_dict(captcha),
-                                      'position': captcha.template_component.get().position})
+                                      'position': captcha.template_component.get().position,
+                                      'nuevo_patron': True,})
 
 @login_required(redirect_field_name='/')
 def eraseCaptcha(request):
