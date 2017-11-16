@@ -1,19 +1,53 @@
-// $(".pattern-carousel").on('click', function() {
-//   var htmlString = "<div id=card_" + i + " class='card-box'>" + 
-//     "<div class='btn-group pull-right'>" + 
-//     "<button type='button' class='btn btn-default waves-effect' data-toggle='modal' data-target='#modal-carousel' href='{% url 'carousel-create' %}'>Configurar</button>" +
-//     //"<button type='button' class='btn btn-default waves-effect config-carousel'>Configurar</button>" + 
-//     "<button type='button' class='btn btn-danger waves-effect eliminar-carousel'>Eliminar</button>" + 
-//     "</div>" + 
-//     "<h1 class='header-title m-b-30'>Carrusel</h1>" + 
-//     "<div class='row'>" + 
-//     "<div class='col-md-12 pattern-content' style='text-align: center;'>" +
-//     "</div>" + 
-//     "</div>" + 
-//     "<input type='hidden' name='card_position' value=" + i + ">" + 
-//     "</div>"
+//Inicia ventana de configuración
+$(".pattern-carousel").on('click', function() {
+    var modal = $('#modal-carousel');
+    modal.modal('show');
+    
+    $.ajax({
+        url: $(this).attr("data-action"),
+        data: {
+          'template': $('#template_id').val(),
+          'position': ""
+        }
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
 
-//   $(".builder").append(htmlString);
+$(document).on('click', "button#eliminarCarousel", function() {
+  var position = $(this).attr('data-position');
+  var carousel_id = $(this).parent().parent().find("input[name='idCarousel']").val();
+  var id = $(this).parent().parent().attr('id')
 
-//   i++;
-// });
+  $.ajax({
+      url : $(this).attr('data-action'),
+      data :  {
+        'template': $('#template_id').val(),
+        'position': position
+      },
+  })
+  .done(function(data) {
+    card = document.getElementById(id);
+    card.remove()
+  });
+});
+
+$(document).on('click', "button#modificarCarousel", function() {
+  var position = $(this).attr('data-position');
+  var carousel_id = $(this).parent().parent().find("input[name='idCarousel']").val();
+  var modal = $('#modal-carousel');
+  
+  $.ajax({
+    url: $(this).attr('data-action') + carousel_id,
+    data: {
+      'template': $('#template_id').val(),
+      'position': position
+    }
+  }).done(function(res) {
+    modal.modal('show');
+    modal.html(res);
+  });
+
+  $('#card-id').val(position);
+  $('#position').val(position);
+});
