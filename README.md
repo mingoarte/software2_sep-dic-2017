@@ -132,4 +132,11 @@ debe ser debidamente añadida.
 Esta función debe estar en `builder-<nombre_patrón>.js`.
 Por consistencia, debe hacer un request a `../<nombre_patrón>-config/`. Como
 parte de los datos siempre deben ir `'template': $('#template_id').val()` y
-`position': $('#position').val(),`. Ade
+`position': $('#position').val(),`.
+
+## Para configurar el botón de elimado de un patrón.
+Para eliminar un patrón, debe definirse una vista en `builder/urls.py` y `builder/views.py`,
+por consistencia, este request se hace al view `../erase-<nombre_patrón>/`.
+
+Los datos obligatorios que debe tener esta llamada es `template` y `position`,
+que representan el id del template y la posición, respectivamente.
