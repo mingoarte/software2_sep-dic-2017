@@ -14,7 +14,8 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.csrf import csrf_exempt
 
 class buildTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
@@ -84,17 +85,18 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
 
-
+@csrf_exempt
 @login_required(redirect_field_name='/')
 def pollConfig(request):
+    print(request.POST.get('template', None))
     user = request.user
-    question_text = request.GET.get('pregunta', None)
-    options = request.GET.getlist('opciones[]', None)
-    template_pk = request.GET.get('template', None)
-    position = request.GET.get('position', None)
+    question_text = request.POST.get('pregunta', None)
+    options = request.POST.getlist('opciones[]', None)
+    template_pk = request.POST.get('template', None)
+    position = request.POST.get('position', None)
 
 
-    if position != '':
+    if position != None:
         template = Template.objects.get(pk=int(template_pk))
         component = TemplateComponent.objects.filter(position=int(position), template=template)
         question = Pregunta.objects.filter(template_component=component)
@@ -124,9 +126,13 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
         options = Opcion.objects.filter(pregunta=question).order_by('id')
 
-        return JsonResponse(data={'question': model_to_dict(question), 
-                            'options': list(options.values()),
-                            'position': question.template_component.get().position})
+        component = question.template_component.get()
+        return JsonResponse(
+            data={
+                'position': component.position,
+                'html': question.render_card()
+            }
+        )
 
 
     # print (options)
@@ -216,3 +222,27 @@ class loginTemplate(TemplateView):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+@login_required(redirect_field_name='/')
+def configModal(request):
+    print(request.GET)
+    if 'pattern-name' in request.GET:
+        # Si se esta agregando un nuevo patron, se crea una instancia dummy y se llama a render_config_form de esta
+        # (con sus campos vacios)
+        pattern_name = request.GET['pattern-name']
+        # workaround porque el modelo no se llama igual que el patron
+        if pattern_name == 'encuesta':
+            pattern_name = 'pregunta'
+        ct = ContentType.objects.get(model=pattern_name)
+        pattern_class = ct.model_class()
+        pattern = pattern_class()
+    # Si se esta editando un patron ya existente se pasa el template_component id y se saca el patron de ahi
+    elif 'template-component-id' in request.GET:
+        pattern = TemplateComponent.objects.get(id=request.GET['template-component-id']).pattern.get()
+    return HttpResponse(pattern.render_config_modal(), request)
+
+@login_required(redirect_field_name='/')
+def deletePattern(request):
+    component = TemplateComponent.objects.get(pk=request.GET['template-component-id'])
+    deleted = component.delete()
+    return JsonResponse(data={'deleted': deleted})

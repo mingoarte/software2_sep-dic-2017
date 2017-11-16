@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^new-template/$', views.newTemplate, name='newTemplate'),
     url(r'^erase-question/$', views.eraseQuestion, name='eraseQuestion'),
     url(r'^create-poll/$', views.createPoll, name='createPoll'),
+    url(r'^config-modal/$', views.configModal, name='configModal'),
+    url(r'^delete-pattern/$', views.deletePattern, name='deletePattern'),
 
 
 
