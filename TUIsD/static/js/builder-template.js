@@ -9,3 +9,12 @@ $(document).ready(function() {
 $(".pattern").on('click', function() {
   $("#welcome").hide();
 });
+
+
+// Se bloquea el modal del nombre del template para evitar que
+// desaparezca al hacer click fuera de el o presionando la te-
+// cla ESC. 
+$('#new_template').modal({
+  backdrop: 'static',
+  keyboard: false
+});
