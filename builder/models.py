@@ -23,7 +23,7 @@ class Template(models.Model):
 
     def sorted_patterns(self):
         components = TemplateComponent.objects.filter(template=self).order_by('position').all()
-        patterns = list(map(lambda c: c.pattern.get(), components))
+        patterns = list(map(lambda c: c.content_object, components))
         return patterns
 
 class TemplateComponent(models.Model):
