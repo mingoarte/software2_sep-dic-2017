@@ -135,11 +135,11 @@ $(document).on('click', "button#add_more", function(){
 // de la bd
 $(document).on('click', "button.eliminar", function(){
   var  id = $(this).parent().parent().attr('id')
-  $('#position').val(id.split("_")[1]);
+  var position = $(this).attr('data-position');
   $.ajax({
       url : "../erase-question/",
       data :  {'template': $('#template_id').val(),
-                'position': $('#position').val()},
+                'position': position},
 
   })
   .done(function(data){
