@@ -23,7 +23,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^encuestas/', include('encuestas.urls')),
+    url(r'^encuestas/', include('encuestas.urls', namespace='encuestas')),
     url(r'^builder/', include('builder.urls')),
     url(r'^acordeon/', include('accordion.urls', namespace='accordion')),
     url(r'^', include('carrusel.urls')),

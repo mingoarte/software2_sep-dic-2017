@@ -42,6 +42,7 @@
     </div>
   {% endif %}
   {% for pattern in patterns%}
+    {% comment %}
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading" style="text-align:center">
@@ -73,6 +74,8 @@
             </div>
         </div>
     </div>
+    {% endcomment %}
+    {{ pattern.render_to_html }}
   {% endfor %}
 </div>
 <script>

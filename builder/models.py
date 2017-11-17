@@ -1,3 +1,4 @@
+from itertools import chain
 from django.db import models
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -19,8 +20,13 @@ class Template(models.Model):
 		return self.name
 
 	def sorted_patterns(self):
-		patterns = self.questions() + self.forms()
-		# patterns += self.accordions()
+		patterns = list(
+			chain(
+				self.questions(),
+				self.forms(),
+				self.accordions(),
+			)
+		)
 		return sorted(patterns, key = lambda p: p.position)
 
 	def forms(self):

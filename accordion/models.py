@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
+from django.template.response import SimpleTemplateResponse
+from django.http import HttpResponse
+from django.template import loader
 from django.contrib.auth.models import User
 from django.db import models
 from builder.models import TemplateComponent
@@ -82,3 +85,13 @@ class Accordion(AccordionAbstract, TemplateComponent):
     def get_child_panels(self):
         panels = Accordion.all_objects.filter(parent=self.id).order_by('id')
         return panels
+
+    def render_to_html(self):
+        context = {}
+        context['accordion'] = self
+        response = SimpleTemplateResponse(
+            template='accordion_preview_integrated.html',
+            context=context
+        )
+
+        return response.rendered_content

@@ -12,7 +12,4 @@ urlpatterns = [
     url(r'^carousel-config/$', views.carouselConfig, name='carouselConfig'),
     url(r'^new-template/$', views.newTemplate, name='newTemplate'),
     url(r'^erase-question/$', views.eraseQuestion, name='eraseQuestion'),
-
-
-
 ]
