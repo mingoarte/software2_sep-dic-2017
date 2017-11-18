@@ -1,8 +1,10 @@
-<div id="carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
-  {{pattern}}
+<div 
+  id="carousel" class="carousel slide" data-ride="carousel" 
+  data-interval="{% widthratio pattern.timer 1 1000 %}" data-wrap="{{ pattern.circular|lower }}"
+>
   <!-- Indicators -->
-  <ol class="carousel-indicators"></ol>
-  {% for content in carousel.content%}
+  <ol class="carousel-indicators">
+  {% for content in pattern.content_set.values %}
     {% if forloop.counter0 == 0%}
     <li data-target="#carousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
     {% else %}
@@ -13,13 +15,13 @@
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
-    {% for content in carousel.content%}
-      {% if forloop.counter0 == 0%}
+    {% for content in pattern.content_set.all %}
+      {% if forloop.counter0 == 0 %}
       <div class="item active">
       {% else %}
       <div class="item">
       {% endif %}
-      <img src="{{ content.image }}" alt="{{ content.title }}">
+      <img src="{{ content.image.url }}" alt="{{ content.title }}" style="width:100%">
       <div class="carousel-caption">
         <h3>{{ content.title }}</h3>
         <p>{{ content.description }}</p>

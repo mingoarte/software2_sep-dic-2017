@@ -10,7 +10,6 @@ from .forms import CarouselForm
 from .models import Carousel, Content
 
 def CarouselConfig(request, pk=None):
-    print("POST:", request.POST, "GET:", request.GET)
     if request.method == "POST":
         template_id = request.POST.get("template", None)
         position = request.POST.get("position", None)
