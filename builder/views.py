@@ -99,15 +99,23 @@ def formConfig(request):
 
         template = Template.objects.get(pk=template_id)
         patterns = template.sorted_patterns()
-        position =  patterns[-1].position + 1 if len(patterns) else 0
+        if len(patterns):
+            position = patterns[-1].template_component.get().position + 1
+        else:
+            position = 0
 
-        form = Formulario.objects.filter(template=template, position=position)
-        if form.count():
+        component = TemplateComponent.objects.filter(template=template, position=position).first()
+        if component:
+            form = component.pattern.get()
             form.form_json = form_json
             form[0].save()
         else:
-            form = Formulario.objects.create(form_json=form_json, template=template, position=position)
-        return JsonResponse(form.form_json, safe=False)
+            form = Formulario.objects.create_pattern(form_json=form_json, template=template, position=position)
+        return JsonResponse({
+            "html": form.render_card(),
+            "position": form.template_component.get().position,
+            "form_json": form_json
+        })
 
 @login_required(redirect_field_name='/')
 @csrf_exempt

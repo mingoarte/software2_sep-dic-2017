@@ -8,6 +8,24 @@ $(document).on('click', "button#add-option", function(e){
       '</div>').insertBefore($(this).parent())
 })
 
+function sendPollData() {
+  // Declaracion de variables locales
+  // opciones -> Lista con las opciones de la encuesta que se quiere crear
+  var opciones = [];
+  $("#new_ask input[name='opcion']").each(function() {
+      opciones.push($(this).val());
+  });
+  var pregunta = $("#new_ask input[name='pregunta']").val()
+
+  return {
+    url: "../poll-config/",
+    data: {
+      'pregunta': pregunta,
+      'opciones': opciones
+    }
+  }
+}
+
 function afterLoadPollConfigModal() {
   // Agregar dos opciones por defecto al cargar el modal
   $('#add-option').click();

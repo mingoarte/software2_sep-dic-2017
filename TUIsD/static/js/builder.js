@@ -3,6 +3,7 @@ function sendPatternData(patternName) {
   // para crear/guardar tu patron.
   ajaxOptsPatterns = {
     'encuesta': sendPollData,
+    'formulario': sendFormData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -16,13 +17,27 @@ function sendPatternData(patternName) {
 function afterLoadPatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal INICIAL (no al editar)
   patternFuncs = {
-    'encuesta': afterLoadPollConfigModal
+    'encuesta': afterLoadPollConfigModal,
+    'formulario': afterLoadFormConfigModal
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
   }
 }
+
+function afterSendPatternData(patternName, data) {
+  // Funcion opcional que se ejecuta luego de guardar satisfactoriamente tu patron.
+  // Recibe como argumento el objeto json data recibido como respuesta al guardar/crear
+  patternFuncs = {
+    'formulario': afterSendFormData
+  }
+
+  if (patternFuncs.hasOwnProperty(patternName)) {
+    patternFuncs[patternName](data);
+  }
+}
+
 
 $(".forms").click(function() {
   event.preventDefault();
@@ -100,8 +115,6 @@ $(document).on('click', 'button.accept-modal', function(e){
       }
    *
    */
-  // Evitar que el evento se dispare dos veces
-  e.stopPropagation();
 
   patternName = $('#new_ask').data('pattern-name');
   console.log("Enviando data del patron ", patternName);
@@ -126,7 +139,7 @@ $(document).on('click', 'button.accept-modal', function(e){
       $('#frm1_submit').show();
       $('#preview').show();
 
-      afterSendPatternData(patternName)
+      afterSendPatternData(patternName, data);
   });
 })
 

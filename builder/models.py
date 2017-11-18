@@ -25,7 +25,7 @@ class Template(models.Model):
 
     def sorted_patterns(self):
         components = TemplateComponent.objects.filter(template=self).order_by('position').all()
-        patterns = list(map(lambda c: c.pattern.get(), components))
+        patterns = list(map(lambda c: c.content_object, components))
         return patterns
 
 class TemplateComponent(models.Model):
@@ -41,6 +41,7 @@ class TemplateComponent(models.Model):
 class PatternManager(models.Manager):
     def create_pattern(self, *args, **kwargs):
         # Extraer template_id y position de los argumentos
+        print(args, kwargs)
         template = kwargs.pop('template', None)
         if template:
             template_id = template.id

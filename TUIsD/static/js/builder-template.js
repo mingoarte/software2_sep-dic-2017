@@ -1,7 +1,3 @@
-// VARIABLE GLOBAL: ID del componente que se esta editando en el momento
-var editingID = null;
-
-
 // Se muestra el modal inicial para crear nombre de template
 $(document).ready(function() {
   $('#new_template').modal('show');
