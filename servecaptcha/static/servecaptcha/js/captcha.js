@@ -14,7 +14,7 @@ $(document).on('click', '#reproducirAudio', function() {
 $(document).on('click', '#actualizarCaptcha', function() {
   url = 'http://localhost:8000'
   $.ajax({
-    url: '/servecaptcha/generate_captcha/' + (captchaPublicKey || 'demoPublicKey'),
+    url: '/servecaptcha/generate_captcha/' + $('.captcha-wrapper').data('public-key'),
     type: 'get',
     dataType: 'json',
     success: function(data) {

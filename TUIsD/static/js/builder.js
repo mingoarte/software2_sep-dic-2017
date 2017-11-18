@@ -4,6 +4,8 @@ function sendPatternData(patternName) {
   ajaxOptsPatterns = {
     'encuesta': sendPollData,
     'formulario': sendFormData,
+    'faq': sendFAQData,
+    'captcha': sendCaptchaData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -18,7 +20,9 @@ function afterLoadPatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal INICIAL (no al editar)
   patternFuncs = {
     'encuesta': afterLoadPollConfigModal,
-    'formulario': afterLoadFormConfigModal
+    'formulario': afterLoadFormConfigModal,
+    'faq': afterLoadFAQConfigModal,
+    'captcha': afterLoadCaptchaConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -46,19 +50,19 @@ $(".forms").click(function() {
 $(".pattern").on('click', function() {
   patternName = $(this).data('pattern-name');
   // Limpiar modal
-  $('#new_ask .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').html('');
   $.get({
     url: '/builder/config-modal',
     data: {
       "pattern-name": patternName
     },
     success: function (res) {
-      $('#new_ask .modal-dialog').html(res);
-      $('#new_ask').data('pattern-name', patternName);
+      $('#modal-configuracion .modal-dialog').html(res);
+      $('#modal-configuracion').data('pattern-name', patternName);
       afterLoadPatternConfigModal(patternName);
     }
   })
-  $('#new_ask').modal('show');
+  $('#modal-configuracion').modal('show');
 });
 
 // Permite acceder a las configuraciones de la nueva encuesta del template
@@ -69,22 +73,22 @@ $(document).on('click', "button.config", function() {
   position = patternContainer.data('position');
 
   // Settear nombre del patron, el id del componente y su posición en el modal para usarlo al momento de guardar los cambios
-  $('#new_ask').data('pattern-name', patternName);
+  $('#modal-configuracion').data('pattern-name', patternName);
   $('#new-ask').data('template-component-id', templateComponentID);
   $('#new-ask').data('position', position);
 
   // Limpiar modal
-  $('#new_ask .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').html('');
   $.get({
     url: '/builder/config-modal',
     data: {
       "template-component-id": templateComponentID
     },
     success: function (res) {
-      $('#new_ask .modal-dialog').html(res);
+      $('#modal-configuracion .modal-dialog').html(res);
     }
   })
-  $('#new_ask').modal('show');
+  $('#modal-configuracion').modal('show');
 });
 
 // Si se elige la opcion de eliminar un patron, se hace
@@ -116,7 +120,7 @@ $(document).on('click', 'button.accept-modal', function(e){
    *
    */
 
-  patternName = $('#new_ask').data('pattern-name');
+  patternName = $('#modal-configuracion').data('pattern-name');
   console.log("Enviando data del patron ", patternName);
 
   sendPatternData(patternName).done(function(data){

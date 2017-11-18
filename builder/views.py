@@ -134,7 +134,7 @@ def captchaConfig(request):
 
         print("{} - {}\n {}\n - {}".format(template_id, position, public_key, private_key))
         # Ya el template existe
-        if position != '':
+        if position is not None:
             template = Template.objects.get(pk=template_id)
             component = TemplateComponent.objects.filter(position=int(position), template=template)
             captcha = Captcha.objects.filter(template_component=component)
@@ -162,8 +162,10 @@ def captchaConfig(request):
                                                      template = template)
             captcha.save()
 
-            return JsonResponse(data={'captcha': model_to_dict(captcha),
-                                      'position': captcha.template_component.get().position})
+            return JsonResponse({
+                'position': captcha.template_component.get().position,
+                'html': captcha.render_card()
+            })
 
 @login_required(redirect_field_name='/')
 def eraseCaptcha(request):
@@ -231,18 +233,19 @@ def pollConfig(request):
     # p1 = list(question.values('texto_pregunta', 'template', 'position'))
     # p2 = list(options.values())
 
+@csrf_exempt
 @login_required(redirect_field_name='/')
 def faqConfig(request):
     user = request.user
-    category = request.GET.get('categoria', None)
-    questions = request.GET.getlist('preguntas[]', None)
-    answers = request.GET.getlist('respuestas[]', None)
+    category = request.POST.get('categoria', None)
+    questions = request.POST.getlist('preguntas[]', None)
+    answers = request.POST.getlist('respuestas[]', None)
     print(questions,answers)
-    template_pk = request.GET.get('template', None)
-    position = request.GET.get('position', None)
+    template_pk = request.POST.get('template', None)
+    position = request.POST.get('position', None)
 
 
-    if position != '':
+    if position is not None:
         pass
         #Configure
     else:
@@ -264,9 +267,11 @@ def faqConfig(request):
         for i,question in enumerate(questions):
             PreguntaFaq.objects.create(faq=faq, tema=category, pregunta=question, respuesta=answers[i]).save()
         questions = PreguntaFaq.objects.filter(faq=faq).order_by('id')
-        return JsonResponse(data={'faq': model_to_dict(faq), 
-                            'questions': list(questions.values()),
-                            'position': faq.template_component.get().position})
+        print(questions)
+        return JsonResponse({
+            'position': faq.template_component.get().position,
+            'html': faq.render_card()
+        })
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
@@ -366,7 +371,7 @@ def configModal(request):
         pattern = pattern_class()
     # Si se esta editando un patron ya existente se pasa el template_component id y se saca el patron de ahi
     elif 'template-component-id' in request.GET:
-        pattern = TemplateComponent.objects.get(id=request.GET['template-component-id']).pattern.get()
+        pattern = TemplateComponent.objects.get(id=request.GET['template-component-id']).content_object
     return HttpResponse(pattern.render_config_modal(), request)
 
 @login_required(redirect_field_name='/')
