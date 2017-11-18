@@ -2,10 +2,13 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 from builder.models import *
 from encuestas.models import *
 from carrusel.models import Carousel, Content
 from faqs.models import *
+from formBuilder.models import *
+from captcha_pattern.models import *
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
@@ -17,7 +20,9 @@ from django.contrib.auth import authenticate,login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.template.loader import render_to_string
+from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.csrf import csrf_exempt
 
 class buildTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
@@ -54,7 +59,6 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         context = self.get_context_data(**kwargs)
         prev = request.GET.get('type')
-        print("KKKKKKKKKKKKKKKK")
 
         if prev is not None:
             context['page_name'] = prev
@@ -84,31 +88,118 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
+        context['captchaHTML'] = render_to_string('patrones/captcha/captcha.html', { 'public_key':'demoPublicKey' })
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
 
+@login_required(redirect_field_name='/')
+@csrf_exempt
+def formConfig(request):
+    if request.method == 'POST':
+        user = request.user
+        form_json = json.loads(request.POST['form_json'])
+        template_id = int(request.POST['template'])
+
+        template = Template.objects.get(pk=template_id)
+        patterns = template.sorted_patterns()
+        if len(patterns):
+            position = patterns[-1].template_component.get().position + 1
+        else:
+            position = 0
+
+        component = TemplateComponent.objects.filter(template=template, position=position).first()
+        if component:
+            form = component.pattern.get()
+            form.form_json = form_json
+            form[0].save()
+        else:
+            form = Formulario.objects.create_pattern(form_json=form_json, template=template, position=position)
+        return JsonResponse({
+            "html": form.render_card(),
+            "position": form.template_component.get().position,
+            "form_json": form_json
+        })
 
 @login_required(redirect_field_name='/')
-def pollConfig(request):
-    user = request.user
-    question_text = request.GET.get('pregunta', None)
-    options = request.GET.getlist('opciones[]', None)
-    template_pk = request.GET.get('template', None)
+@csrf_exempt
+def captchaConfig(request):
+    if request.method == 'POST':
+        user = request.user
+
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position',None)
+        public_key = request.POST.get('public_key', None)
+        private_key = request.POST.get('private_key', None)
+
+        print("{} - {}\n {}\n - {}".format(template_id, position, public_key, private_key))
+        # Ya el template existe
+        if position != '':
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(position=int(position), template=template)
+            captcha = Captcha.objects.filter(template_component=component)
+            captcha.public_key = public_key
+            captcha.private_key = private_key
+            captcha.save()
+
+            return JsonResponse(data={'captcha': model_to_dict(captcha),})
+
+        else:
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            captcha = Captcha.objects.create_pattern(public_key = public_key,
+                                                     private_key = private_key,
+                                                     position = position,
+                                                     template = template)
+            captcha.save()
+
+            return JsonResponse(data={'captcha': model_to_dict(captcha),
+                                      'position': captcha.template_component.get().position})
+
+@login_required(redirect_field_name='/')
+def eraseCaptcha(request):
+
+    template_id = request.GET.get('template', None)
     position = request.GET.get('position', None)
+    print(template_id,position)
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_id))
+    captcha = Captcha.objects.get(template_component=component)
+    captcha.delete()
+    return JsonResponse(data={})
+
+@csrf_exempt
+@login_required(redirect_field_name='/')
+def pollConfig(request):
+    print(request.POST.get('template', None))
+    user = request.user
+    question_text = request.POST.get('pregunta', None)
+    options = request.POST.getlist('opciones[]', None)
+    template_pk = request.POST.get('template', None)
+    position = request.POST.get('position', None)
 
 
-    if position != '':
+    if position != None:
         template = Template.objects.get(pk=int(template_pk))
         component = TemplateComponent.objects.filter(position=int(position), template=template)
         question = Pregunta.objects.filter(template_component=component)
         question.texto_pregunta = question_text
         Opcion.objects.filter(pregunta=question).delete()
 
+        print(options)
         for option in options:
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
         question.save()
-        return JsonResponse(data={'question': model_to_dict(question), 
+        return JsonResponse(data={'question': model_to_dict(question),
                             'options': list(options.values())})
     else:
         template = Template.objects.get(id=int(template_pk))
@@ -127,9 +218,13 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
         options = Opcion.objects.filter(pregunta=question).order_by('id')
 
-        return JsonResponse(data={'question': model_to_dict(question), 
-                            'options': list(options.values()),
-                            'position': question.template_component.get().position})
+        component = question.template_component.get()
+        return JsonResponse(
+            data={
+                'position': component.position,
+                'html': question.render_card()
+            }
+        )
 
 
     # print (options)
@@ -204,7 +299,7 @@ def createPoll(request):
         position += 1
     else:
         position = 0
-    
+
     return JsonResponse(data={'position':position,})
 
 class userTemplate(TemplateView):
@@ -255,3 +350,27 @@ class loginTemplate(TemplateView):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+@login_required(redirect_field_name='/')
+def configModal(request):
+    print(request.GET)
+    if 'pattern-name' in request.GET:
+        # Si se esta agregando un nuevo patron, se crea una instancia dummy y se llama a render_config_form de esta
+        # (con sus campos vacios)
+        pattern_name = request.GET['pattern-name']
+        # workaround porque el modelo no se llama igual que el patron
+        if pattern_name == 'encuesta':
+            pattern_name = 'pregunta'
+        ct = ContentType.objects.get(model=pattern_name)
+        pattern_class = ct.model_class()
+        pattern = pattern_class()
+    # Si se esta editando un patron ya existente se pasa el template_component id y se saca el patron de ahi
+    elif 'template-component-id' in request.GET:
+        pattern = TemplateComponent.objects.get(id=request.GET['template-component-id']).pattern.get()
+    return HttpResponse(pattern.render_config_modal(), request)
+
+@login_required(redirect_field_name='/')
+def deletePattern(request):
+    component = TemplateComponent.objects.get(pk=request.GET['template-component-id'])
+    deleted = component.delete()
+    return JsonResponse(data={'deleted': deleted})
