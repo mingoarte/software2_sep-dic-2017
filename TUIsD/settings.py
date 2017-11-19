@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'carrusel.apps.CarruselConfig',
     'widget_tweaks',
     'faqs.apps.FaqsConfig',
+    'servecaptcha.apps.ServeCaptchaConfig',
+    'captcha_pattern.apps.CaptchaPatternConfig',
+    'formBuilder.apps.FormbuilderConfig',
 ]
 
 MIDDLEWARE = [
