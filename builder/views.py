@@ -228,11 +228,6 @@ def pollConfig(request):
             }
         )
 
-
-    # print (options)
-    # p1 = list(question.values('texto_pregunta', 'template', 'position'))
-    # p2 = list(options.values())
-
 @csrf_exempt
 @login_required(redirect_field_name='/')
 def faqConfig(request):
@@ -372,7 +367,7 @@ def configModal(request):
     # Si se esta editando un patron ya existente se pasa el template_component id y se saca el patron de ahi
     elif 'template-component-id' in request.GET:
         pattern = TemplateComponent.objects.get(id=request.GET['template-component-id']).content_object
-    return HttpResponse(pattern.render_config_modal(), request)
+    return HttpResponse(pattern.render_config_modal(request), request)
 
 @login_required(redirect_field_name='/')
 def deletePattern(request):

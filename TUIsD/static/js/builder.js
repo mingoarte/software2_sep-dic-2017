@@ -6,6 +6,7 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
+    //'carousel': sendCarouselData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -23,6 +24,7 @@ function afterLoadPatternConfigModal(patternName) {
     'formulario': afterLoadFormConfigModal,
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
+    'carousel': afterLoadCarouselConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -51,6 +53,7 @@ $(".pattern").on('click', function() {
   patternName = $(this).data('pattern-name');
   // Limpiar modal
   $('#modal-configuracion .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').removeClass("modal-lg");
   $.get({
     url: '/builder/config-modal',
     data: {
@@ -79,6 +82,7 @@ $(document).on('click', "button.config", function() {
 
   // Limpiar modal
   $('#modal-configuracion .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').removeClass("modal-lg");
   $.get({
     url: '/builder/config-modal',
     data: {
@@ -86,6 +90,7 @@ $(document).on('click', "button.config", function() {
     },
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
+      afterLoadPatternConfigModal(patternName);
     }
   })
   $('#modal-configuracion').modal('show');
