@@ -10,7 +10,9 @@ function sendPatternData(patternName) {
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
-  ajaxOpts.data.position = $('#modal-configuracion').data('position');
+  if ($('#modal-configuracion').data('position')) {
+   ajaxOpts.data.position = $('#modal-configuracion').data('position');
+  }
   ajaxOpts.method = 'POST';
 
   return $.ajax(ajaxOpts);
@@ -68,6 +70,7 @@ $(".pattern").on('click', function() {
 // Permite acceder a las configuraciones de la nueva encuesta del template
 $(document).on('click', "button.config", function() {
   patternContainer = $(this).parents('.pattern-container');
+  console.log(patternContainer);
   patternName = patternContainer.data('pattern-name');
   templateComponentID = patternContainer.data('template-component-id');
   position = patternContainer.data('position');
@@ -144,9 +147,9 @@ $(document).on('click', 'button.accept-modal', function(e){
       $('#preview').show();
 
       // Limpiar modal
-      $('#modal-configuracion').data('pattern-name', patternName);
-      $('#modal-configuracion').data('template-component-id', templateComponentID);
-      $('#modal-configuracion').data('position', position);
+      $('#modal-configuracion').data('pattern-name', '');
+      $('#modal-configuracion').data('template-component-id', '');
+      $('#modal-configuracion').data('position', '');
 
       afterSendPatternData(patternName, data);
   });

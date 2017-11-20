@@ -13,10 +13,10 @@
         <div class="form-group">
           <label for="public_key">Llave Pública</label>
           <input type="text" name="public_key" parsley-trigger="change" required readonly
-                 placeholder="Espere mientras generamos su llave pública." class="form-control" id="public_key">
+                 placeholder="Espere mientras generamos su llave pública." value="{{pattern.public_key}}" class="form-control" id="public_key">
           <label for="private_key">Llave Privada</label>
           <input type="text" name="private_key" parsley-trigger="change" required readonly
-                 placeholder="Espere mientras generamos su llave privada." class="form-control" id="private_key">
+                 placeholder="Espere mientras generamos su llave privada." value="{{pattern.private_key}}" class="form-control" id="private_key">
         </div>
       </form>
       <h4>Anote ambas claves y recuerde mantener su llave privada en un lugar secreto!</h4>

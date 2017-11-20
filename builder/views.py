@@ -128,21 +128,18 @@ def captchaConfig(request):
 
         # Extraemos las variables del form.
         template_id = int(request.POST.get('template', None))
-        position = request.POST.get('position',None)
+        position = request.POST.get('position', None)
         public_key = request.POST.get('public_key', None)
         private_key = request.POST.get('private_key', None)
 
         print("{} - {}\n {}\n - {}".format(template_id, position, public_key, private_key))
-        # Ya el template existe
-        if position is not None:
+        # Editando patron
+        if position != None:
             template = Template.objects.get(pk=template_id)
             component = TemplateComponent.objects.filter(position=int(position), template=template)
             captcha = Captcha.objects.filter(template_component=component)
             captcha.public_key = public_key
             captcha.private_key = private_key
-            captcha.save()
-
-            return JsonResponse(data={'captcha': model_to_dict(captcha),})
 
         else:
             # Se obtiene el template ID junto con los patrones para poder
@@ -160,12 +157,11 @@ def captchaConfig(request):
                                                      private_key = private_key,
                                                      position = position,
                                                      template = template)
-            captcha.save()
 
-            return JsonResponse({
-                'position': captcha.template_component.get().position,
-                'html': captcha.render_card()
-            })
+        return JsonResponse({
+            'position': captcha.template_component.get().position,
+            'html': captcha.render_card()
+        })
 
 @login_required(redirect_field_name='/')
 def eraseCaptcha(request):
@@ -354,7 +350,6 @@ def logout_view(request):
 
 @login_required(redirect_field_name='/')
 def configModal(request):
-    print(request.GET)
     if 'pattern-name' in request.GET:
         # Si se esta agregando un nuevo patron, se crea una instancia dummy y se llama a render_config_form de esta
         # (con sus campos vacios)
