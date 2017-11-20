@@ -181,7 +181,6 @@ def eraseCaptcha(request):
 @csrf_exempt
 @login_required(redirect_field_name='/')
 def pollConfig(request):
-    print(request.POST.get('template', None))
     user = request.user
     question_text = request.POST.get('pregunta', None)
     options = request.POST.getlist('opciones[]', None)
@@ -191,8 +190,8 @@ def pollConfig(request):
 
     if position != None:
         template = Template.objects.get(pk=int(template_pk))
-        component = TemplateComponent.objects.filter(position=int(position), template=template)
-        question = Pregunta.objects.filter(template_component=component)
+        component = TemplateComponent.objects.get(position=int(position), template=template)
+        question = Pregunta.objects.get(template_component=component)
         question.texto_pregunta = question_text
         Opcion.objects.filter(pregunta=question).delete()
 
@@ -201,8 +200,6 @@ def pollConfig(request):
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
         question.save()
-        return JsonResponse(data={'question': model_to_dict(question),
-                            'options': list(options.values())})
     else:
         template = Template.objects.get(id=int(template_pk))
         patterns = template.sorted_patterns()
@@ -214,19 +211,18 @@ def pollConfig(request):
             position = 0
 
         question = Pregunta.objects.create_pattern(texto_pregunta=question_text, position=position, template=template)
-        question.save()
 
         for option in options:
             Opcion.objects.create(pregunta=question, texto_opcion=option).save()
-        options = Opcion.objects.filter(pregunta=question).order_by('id')
 
-        component = question.template_component.get()
-        return JsonResponse(
-            data={
-                'position': component.position,
-                'html': question.render_card()
-            }
-        )
+    component = question.template_component.get()
+
+    return JsonResponse(
+        data={
+            'position': component.position,
+            'html': question.render_card()
+        }
+    )
 
 
     # print (options)

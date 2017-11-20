@@ -10,7 +10,7 @@ function sendPatternData(patternName) {
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
-  ajaxOpts.data.position = $('#new-ask').data('position');
+  ajaxOpts.data.position = $('#modal-configuracion').data('position');
   ajaxOpts.method = 'POST';
 
   return $.ajax(ajaxOpts);
@@ -74,8 +74,8 @@ $(document).on('click', "button.config", function() {
 
   // Settear nombre del patron, el id del componente y su posición en el modal para usarlo al momento de guardar los cambios
   $('#modal-configuracion').data('pattern-name', patternName);
-  $('#new-ask').data('template-component-id', templateComponentID);
-  $('#new-ask').data('position', position);
+  $('#modal-configuracion').data('template-component-id', templateComponentID);
+  $('#modal-configuracion').data('position', position);
 
   // Limpiar modal
   $('#modal-configuracion .modal-dialog').html('');
@@ -142,6 +142,11 @@ $(document).on('click', 'button.accept-modal', function(e){
       $('#preview-form').attr('action',link)
       $('#frm1_submit').show();
       $('#preview').show();
+
+      // Limpiar modal
+      $('#modal-configuracion').data('pattern-name', patternName);
+      $('#modal-configuracion').data('template-component-id', templateComponentID);
+      $('#modal-configuracion').data('position', position);
 
       afterSendPatternData(patternName, data);
   });

@@ -172,4 +172,4 @@ Para guiarte, puedes tomar como referencia el patron Encuesta.
 
 # Bugs conocidos
 - A veces al agregar un patron se agrega dos veces.
-- Al editar una encuesta se crea una nueva (views.pollConfig)
+- ~~Al editar una encuesta se crea una nueva (views.pollConfig)~~
