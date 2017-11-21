@@ -99,21 +99,22 @@ def formConfig(request):
         user = request.user
         form_json = json.loads(request.POST['form_json'])
         template_id = int(request.POST['template'])
-
-        template = Template.objects.get(pk=template_id)
-        patterns = template.sorted_patterns()
-        if len(patterns):
-            position = patterns[-1].template_component.get().position + 1
-        else:
-            position = 0
-
-        component = TemplateComponent.objects.filter(template=template, position=position).first()
-        if component:
-            form = component.pattern.get()
+        position = request.POST.get('position', None)
+        
+        if position != None:
+            component = TemplateComponent.objects.get(template_id=template_id, position=position)
+            form = component.content_object
             form.form_json = form_json
-            form[0].save()
+            form.save()
         else:
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+            if len(patterns):
+                position = patterns[-1].template_component.get().position + 1
+            else:
+                position = 0
             form = Formulario.objects.create_pattern(form_json=form_json, template=template, position=position)
+
         return JsonResponse({
             "html": form.render_card(),
             "position": form.template_component.get().position,
@@ -137,10 +138,10 @@ def captchaConfig(request):
         if position != None:
             template = Template.objects.get(pk=template_id)
             component = TemplateComponent.objects.filter(position=int(position), template=template)
-            captcha = Captcha.objects.filter(template_component=component)
+            captcha = Captcha.objects.get(template_component=component)
             captcha.public_key = public_key
             captcha.private_key = private_key
-
+            captcha.save()
         else:
             # Se obtiene el template ID junto con los patrones para poder
             # configurarle la posición a este patrón.

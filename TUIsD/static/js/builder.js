@@ -10,7 +10,7 @@ function sendPatternData(patternName) {
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
-  if ($('#modal-configuracion').data('position')) {
+  if ($('#modal-configuracion').data('position') !== undefined) {
    ajaxOpts.data.position = $('#modal-configuracion').data('position');
   }
   ajaxOpts.method = 'POST';
@@ -18,13 +18,24 @@ function sendPatternData(patternName) {
   return $.ajax(ajaxOpts);
 }
 
-function afterLoadPatternConfigModal(patternName) {
+function afterLoadCreatePatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal INICIAL (no al editar)
   patternFuncs = {
     'encuesta': afterLoadPollConfigModal,
     'formulario': afterLoadFormConfigModal,
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
+  }
+
+  if (patternFuncs.hasOwnProperty(patternName)) {
+    patternFuncs[patternName]();
+  }
+}
+
+function afterLoadEditPatternConfigModal(patternName) {
+  // Funcion que se ejecuta al cargar el modal de editar
+  patternFuncs = {
+    'formulario': afterLoadEditFormConfigModal
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -61,7 +72,7 @@ $(".pattern").on('click', function() {
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
       $('#modal-configuracion').data('pattern-name', patternName);
-      afterLoadPatternConfigModal(patternName);
+      afterLoadCreatePatternConfigModal(patternName);
     }
   })
   $('#modal-configuracion').modal('show');
@@ -89,6 +100,7 @@ $(document).on('click', "button.config", function() {
     },
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
+      afterLoadEditPatternConfigModal(patternName);
     }
   })
   $('#modal-configuracion').modal('show');
@@ -147,9 +159,7 @@ $(document).on('click', 'button.accept-modal', function(e){
       $('#preview').show();
 
       // Limpiar modal
-      $('#modal-configuracion').data('pattern-name', '');
-      $('#modal-configuracion').data('template-component-id', '');
-      $('#modal-configuracion').data('position', '');
+      $('#modal-configuracion').removeData()
 
       afterSendPatternData(patternName, data);
   });
