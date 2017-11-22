@@ -1,53 +1,33 @@
-//Inicia ventana de configuración
-$(".pattern-carousel").on('click', function() {
-    var modal = $('#modal-carousel');
-    modal.modal('show');
-    
-    $.ajax({
-        url: $(this).attr("data-action"),
-        data: {
-          'template': $('#template_id').val(),
-          'position': ""
-        }
-    }).done(function(response) {
-        modal.html(response);
-    });
-});
-
-$(document).on('click', "button#eliminarCarousel", function() {
-  var position = $(this).attr('data-position');
-  var carousel_id = $(this).parent().parent().find("input[name='idCarousel']").val();
-  var id = $(this).parent().parent().attr('id')
-
-  $.ajax({
-      url : $(this).attr('data-action'),
-      data :  {
-        'template': $('#template_id').val(),
-        'position': position
-      },
-  })
-  .done(function(data) {
-    card = document.getElementById(id);
-    card.remove()
+// Function executed after loading config modal for carousel pattern
+function afterLoadCarouselConfigModal() {
+  $('.formset_row').formset({
+    addText: 'Añadir elemento',
+    deleteText: 'Eliminar elemento',
+    prefix: 'content_set'
   });
-});
 
-$(document).on('click', "button#modificarCarousel", function() {
-  var position = $(this).attr('data-position');
-  var carousel_id = $(this).parent().parent().find("input[name='idCarousel']").val();
-  var modal = $('#modal-carousel');
-  
-  $.ajax({
-    url: $(this).attr('data-action') + carousel_id,
+  $('#modal-configuracion .modal-dialog').addClass("modal-lg");
+
+  return;
+}
+
+function sendCarouselData() {
+  return {
+    url: "../../carousel/configurar/",
+    data: $('form#carousel-create').serialize(),
+  }
+}
+
+$(document).on('click', "#accept-carousel", function () {
+  var form_options = { 
+    target: '#modal-configuracion .modal-dialog', 
     data: {
-      'template': $('#template_id').val(),
-      'position': position
-    }
-  }).done(function(res) {
-    modal.modal('show');
-    modal.html(res);
-  });
-
-  $('#card-id').val(position);
-  $('#position').val(position);
+      "template": $('#template_id').val(),
+      "position": $('#new-ask').data('position'),
+    },
+    success: function(responseText, statusText) {
+      console.log(responseText, statusText);
+    },
+  };
+  $('#carousel-create').ajaxForm(form_options);
 });
