@@ -37,7 +37,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
 function afterLoadEditPatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal de editar
   patternFuncs = {
-    'formulario': afterLoadEditFormConfigModal
+    'formulario': afterLoadEditFormConfigModal,
+    'carousel': afterLoadCarouselConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
