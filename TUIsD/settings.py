@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'servecaptcha.apps.ServeCaptchaConfig',
     'captcha_pattern.apps.CaptchaPatternConfig',
     'formBuilder.apps.FormbuilderConfig',
+    'navbar.apps.NavbarConfig',
 ]
 
 MIDDLEWARE = [
