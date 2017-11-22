@@ -15,7 +15,7 @@ class Formulario(Pattern):
     def render(self):
         return render_to_string('patrones/formulario/view.html', {"pattern": self})
 
-    def render_config_modal(self):
+    def render_config_modal(self, request):
         return render_to_string('patrones/formulario/configurar-modal.html', {"pattern": self})
 
     def render_card(self):
