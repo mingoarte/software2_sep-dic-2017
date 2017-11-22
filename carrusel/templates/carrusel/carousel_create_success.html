@@ -1,0 +1,51 @@
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        <span class="sr-only">Cerrar</span>
+      </button>
+      <h4 class="modal-title">Configurar Carrusel</h4>
+    </div>
+    <div class="modal-body">
+      <p class="alert alert-info">El carrusel fue configurado exitosamente!</p>
+      <input type="hidden" name="position" value="{{ position }}">
+      <input type="hidden" name="carousel-id" value="{{ carousel.id }}">
+    </div><!-- /.modal-body -->
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script>
+  // close the modal after 3 seconds
+  setTimeout(function() {
+    $('#modal-carousel').modal('hide');
+  }, 2000);
+
+  $( document ).ready(function() {
+    var position = $("div.modal-dialog.modal-lg .modal-content .modal-body input[name='position']").val();
+    var carousel_id = $("input[name='carousel-id']").val();
+
+    if (position) {
+      $(".builder").append(
+        "<div id=card_" + position + " class='card-box'>" + 
+        "<div class='btn-group pull-right'>" + 
+        "<button data-position=" + position + " data-action='{% url 'carousel-config' %}' type='button' class='btn btn-default waves-effect' id='modificarCarousel'>Configurar</button>" + 
+        "<button data-position=" + position + " data-action='{% url 'carousel-delete' %}' type='button' class='btn btn-danger waves-effect' id='eliminarCarousel'>Eliminar</button>" + 
+        "</div>" + 
+        "<h1 class='header-title m-b-30'>Carrusel</h1>" + 
+        "<div class='row'>" + 
+        "<div class='col-md-12 pattern-content' style='text-align: left;'></div>" + 
+        "</div>" + 
+        "<input type='hidden' name='idCarousel' value=" + carousel_id + ">" + 
+        "</div>"
+      );
+    }
+  });
+  
+  $('#guardar').show();
+  var tem_id = $('#template_id').val().toString()
+  var link = "/revisar_template/"+ tem_id
+  $('#preview').attr('href', link) 
+  $('#preview-form').attr('action', link) 
+  $('#frm1_submit').show();
+  $('#preview').show();
+</script>

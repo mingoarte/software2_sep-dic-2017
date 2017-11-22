@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from uidesigner.audio_captcha import CaptchaAuditivo
+from .audio_captcha import CaptchaAuditivo
 from captcha.image import ImageCaptcha
 from .models import KeyPair, GeneratedCaptcha
 from .utils import random_string
@@ -27,7 +27,7 @@ def serve_captcha_audio(request, captcha_id):
     except GeneratedCaptcha.DoesNotExist:
         raise Http404("Captcha no existe")
     with tempfile.TemporaryFile() as temp:
-        temp.write(CaptchaAuditivo('audio-alphabet').generate(captcha.answer))
+        temp.write(CaptchaAuditivo('servecaptcha/audio-alphabet').generate(captcha.answer.upper()))
         temp.seek(0)
         response = HttpResponse(temp.read(), content_type='audio/wav')
     return response
@@ -39,7 +39,7 @@ def api_documentation(request):
     docs_html = markdown2.markdown(docs_md, extras=['fenced-code-blocks'])
     return HttpResponse(docs_html)
 
-
+@csrf_exempt
 def generate_apikey(request):
     """ Función del endpoint para la generación de una APIKEY a través del método GET.
 
@@ -63,7 +63,7 @@ def generate_apikey(request):
         response = HttpResponseNotAllowed(content="Sólo se permite el método GET.", permitted_methods=["GET"])
     return response
 
-
+@csrf_exempt
 def generate_captcha(request, public_key: str):
     """ Función del endpoint para la generación del CAPTCHA.
 

@@ -4,11 +4,10 @@ from builder.views import *
 from . import views
 
 urlpatterns = [
-
-    # List of URL's related to orders
     url(r'^build/(?P<templateID>[0-9]+)$', editarTemplate.as_view(), name='editar'),
     url(r'^build/$', buildTemplate.as_view(), name='build'),
     url(r'^poll-config/$', views.pollConfig, name='pollConfig'),
+    url(r'^faq-config/$', views.faqConfig, name='faqConfig'),
     url(r'^form-config/$', views.formConfig, name='formConfig'),
     url(r'^captcha-config/$', views.captchaConfig, name='captchaConfig'),
     url(r'^erase-captcha/$', views.eraseCaptcha, name='eraseCaptcha'),
@@ -16,7 +15,6 @@ urlpatterns = [
     url(r'^erase-question/$', views.eraseQuestion, name='eraseQuestion'),
     url(r'^create-poll/$', views.createPoll, name='createPoll'),
     url(r'^captcha/', include('captcha_pattern.urls')),
-
-
-
+    url(r'^config-modal/$', views.configModal, name='configModal'),
+    url(r'^delete-pattern/$', views.deletePattern, name='deletePattern'),
 ]

@@ -1,4 +1,6 @@
+import os
 from django.db import models
+
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -6,8 +8,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.text import camel_case_to_spaces
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-import os
-
 
 def get_user_path(username):
     return os.path.join('uploads/templates', username)
@@ -24,7 +24,7 @@ class Template(models.Model):
 
     def sorted_patterns(self):
         components = TemplateComponent.objects.filter(template=self).order_by('position').all()
-        patterns = list(map(lambda c: c.pattern.get(), components))
+        patterns = list(map(lambda c: c.content_object, components))
         return patterns
 
 class TemplateComponent(models.Model):
@@ -40,6 +40,7 @@ class TemplateComponent(models.Model):
 class PatternManager(models.Manager):
     def create_pattern(self, *args, **kwargs):
         # Extraer template_id y position de los argumentos
+        print(args, kwargs)
         template = kwargs.pop('template', None)
         if template:
             template_id = template.id
@@ -61,8 +62,17 @@ class Pattern(models.Model):
     # Overriding default Manager
     objects = PatternManager()
 
+    def template_component_id(self):
+        return self.template_component.get().id
+
     def render(self):
         raise NotImplementedError("Debes implementar el metodo render para el patron {}".format(self))
+
+    def render_config_modal(self):
+        raise NotImplementedError("Debes implementar el metodo render_config_modal para el patron {}".format(self))
+
+    def render_card(self):
+        raise NotImplementedError("Debes implementar el metodo render_card para el patron {}".format(self))
 
     def __str__(self):
         return self.name

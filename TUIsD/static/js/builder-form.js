@@ -1,46 +1,46 @@
-$('.pattern.formulario, .pattern.formulario a').click(function(e) {
-  $(".builder").append("<div id=card_"+i+" class='card-box card-formulario' data-id='"+i+"'>" +
-                         "<div class='btn-group pull-right'>" +
-                           "<button type='button' class='btn btn-default waves-effect config'>Configurar</button>" +
-                           "<button type='button' class='btn btn-danger waves-effect eliminar'>Eliminar</button>" +
-                         "</div>" +
-                         "<h1 class='header-title m-b-30'>Formulario</h1>" +
-                         "<div class='row'>" +
-                           "<div class='col-md-12 pattern-content' style='text-align: center;'>" +
-                           "</div>" +
-                         "</div>" +
-                         "<input type='hidden' name='card_position' value="+i+">" +
-                       "</div>");
-  i = i + 1;
-})
+// variable global que guarda el form builder
+var $formBuilder = null;
 
-$(document).on('click', '.card-formulario button.config', function(e) {
-  editingID = $(this).parents('.card-formulario').data('id');
-  $('#new-form-modal').modal('show');
-})
+var fbOptions = {
+  disabledActionButtons: ['data', 'clear', 'save']
+};
 
-$(document).on('click', ".card-formulario button.eliminar", function(){
-  id = $(this).parents('.card-formulario').data('id');
-  position = $(this).parents('.card-formulario').children('.fb-rendered-form-wrapper').data('position');
-  console.log($(this).parents('.card-formulario').children('.fb-rendered-form-wrapper'))
-  $.ajax({
-      url : "../erase-formulario/",
-      data :  {'template': $('#template_id').val(),
-                'position': position
-              }
+function sendFormData() {
+  formData = $formBuilder.formData;
+  return {
+    url : "../form-config/",
+    data : {
+      'form_json': formData,
+    }
+  }
+}
 
-  })
-  .done(function(data){
-    card = document.getElementById(id);
-    card.remove()
-    });
-});
+function afterLoadFormConfigModal() {
+  // Initialize form builder plugin
+  $formBuilder = $('#fb-editor').formBuilder(fbOptions);
+}
+
+function afterLoadEditFormConfigModal () {
+  // Sacamos la posicion del modal, y extraemos el form json del card correspondiente a esa posicion.
+  var position  = $('#modal-configuracion').data('position'),
+      formData  = $('.fb-rendered-form[data-position="'+ position +'"]').data('form-json'),
+      $fbEditor = $('#fb-editor'),
+      options   = Object.assign({}, fbOptions, {
+        formData: JSON.stringify(formData),
+        dataType: 'json'
+      });
+  // Initialize form builder plugin
+  $formBuilder = $fbEditor.formBuilder(options);
+}
+
+function afterSendFormData(data) {
+  // Render el form recien creado
+  $(".pattern-container[data-position='"+ data.position +"'] .fb-rendered-form").html(formDataToHTML(data.form_json));
+}
 
 $(document).ready(function() {
-  $('.fb-rendered-form').each(function(i,e) {
-    json = formsJSON[$(e).parents('.fb-rendered-form-wrapper').data('position')];
-    console.log(json);
-    $('.pattern.formulario').click();
-    $('#card_'+i+' .pattern-content').html(formDataToHTML(json));
+  // Si hay forms, renderizar el json de los form como html
+  $('.pattern-container .fb-rendered-form').each(function(i, elem) {
+    $(elem).html(formDataToHTML($(elem).data('form-json')));
   })
 })

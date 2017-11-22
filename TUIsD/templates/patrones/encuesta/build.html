@@ -1,26 +1,16 @@
-<div id="card_{{pattern.position|slugify}}" class="card-box">
-  <div class="btn-group pull-right">
-    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-default waves-effect config">Configurar</button>
-    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-danger waves-effect eliminar">Eliminar</button>
-  </div>
-  <h1 class="header-title m-b-30">Encuesta</h1>
-  <div class="row">
-    <div class="col-md-12 pattern-content" style="text-align: center;">
-      <form data-parsley-validate="" novalidate="">
-        <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.position|slugify }}">
-        <input id="position" type="hidden" name="position" value="{{pattern.position|slugify }}">
-        <div class="form-group">
-          <label for="pregunta">Pregunta</label>
-            <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.texto_pregunta}}" class="form-control" id="pregunta">
-          </div>
-          {% for choice in pattern.opciones %}
-          <div class="form-group">
-          <label for="opcion">Opcion:</label>
-            <input type="text" id="opcion" name="opcion" parsley-trigger="change" required="" value="{{ choice.texto_opcion }}" class="form-control">
-          </div>
-          {% endfor %}
-        </form>
-      </div>
+{% extends 'builder/card.html' %}
+
+{% block card_content %}
+  <form data-parsley-validate="" novalidate="">
+    <div class="form-group">
+      <label for="pregunta">Pregunta</label>
+      <input type="text" name="pregunta" parsley-trigger="change" required="" value="{{pattern.texto_pregunta}}" class="form-control" id="pregunta">
     </div>
-    <input type="hidden" name="card_position" value="{{pattern.position|slugify}}">
-  </div>
+    {% for choice in pattern.opciones %}
+    <div class="form-group">
+      <label for="opcion">Opcion:</label>
+      <input type="text" id="opcion" name="opcion" parsley-trigger="change" required="" value="{{ choice.texto_opcion }}" class="form-control">
+    </div>
+    {% endfor %}
+  </form>
+{% endblock %}

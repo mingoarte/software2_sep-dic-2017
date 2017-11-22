@@ -1,56 +1,14 @@
-<div id="card_{{pattern.position|slugify}}" class="card-box">
-  <div class="btn-group pull-right">
-    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-default waves-effect config-captcha">Configurar</button>
-    <button type="button" data-position='{{pattern.template_component.get.position}}' class="btn btn-danger waves-effect eliminar-captcha">Eliminar</button>
+{% extends 'builder/card.html' %}
+
+{% block card_content %}
+<form data-parsley-validate="" novalidate="">
+  <div class="form-group">
+    <label for="public_key">Llave Pública</label>
+      <input type="text" name="public_key" parsley-trigger="change" required readonly value="{{ pattern.public_key }}" class="form-control" id="public_key">
   </div>
-  <h1 class="header-title m-b-30">Captcha</h1>
-  <div class="row">
-    <div class="col-md-12 pattern-content" style="text-align: center;">
-      <form data-parsley-validate="" novalidate="">
-        <input id="card-id" type="hidden" name="card-id" value="card_{{pattern.position|slugify }}">
-        <input id="position" type="hidden" name="position" value="{{pattern.position|slugify }}">
-        <!-- <input id="captcha_id" type="hidden" name="captcha_id" value="{{ captcha_id }}"> -->
-        <div class="form-group">
-          <label for="public_key">Llave Pública</label>
-            <input type="text" name="public_key" parsley-trigger="change" required readonly value="{{ pattern.public_key }}" class="form-control" id="public_key">
-        </div>
-        <div class="form-group">
-          <label for="private_key">Llave Privada</label>
-            <input type="text" name="private_key" parsley-trigger="change" required readonly value="{{ pattern.private_key }}" class="form-control" id="private_key">
-        </div>
-
-
-
-
-        <!--  Comienzo del CAPTCHA. -->
-        <!-- <div class="col">
-          <img id="image_captcha" class="card-img-top" src="" />
-        </div> -->
-
-        <!-- <div class="col col-lg-2">
-          <div class="btn-group-vertical btn-group-sm mr-2" role="group" style="margin-bottom: 0.2em">
-            <button type="button" class="btn btn-secondary btn-dark" data-toggle="tooltip" data-placement="right" title="Refrescar Captcha">
-                      <i id="actualizarCaptcha" class="fa fa-refresh" aria-hidden="true"></i>
-                  </button>
-          </div>
-
-          <div class="btn-group-vertical btn-group-sm mr-2 " role="group" style="margin-bottom: 0.2em">
-            <button id="reproducirAudio" type="button" class="btn btn-secondary btn-dark" data-toggle="tooltip" data-placement="right" title="Audio">
-                      <i class="fa fa-volume-up" aria-hidden="true"></i>
-                  </button>
-                  <audio id='audioCaptcha' src="" preload='auto' type="audio/wav"></audio>
-          </div>
-
-          <div class="btn-separator"></div>
-
-          <div class="btn-group-vertical btn-group-sm mr-2" role="group" aria-label="Second group" style="width: 2em">
-            <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-id="image_captcha" data-target="#exampleModal" data-toggle="tooltip" data-placement="right" title="Ayuda">
-                      <i class="fa fa-fw fa-question-circle" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div> -->
-      </form>
-    </div>
+  <div class="form-group">
+    <label for="private_key">Llave Privada</label>
+      <input type="text" name="private_key" parsley-trigger="change" required readonly value="{{ pattern.private_key }}" class="form-control" id="private_key">
   </div>
-  <input type="hidden" name="card_position" value="{{pattern.position|slugify}}">
-</div>
+</form>
+{% endblock %}

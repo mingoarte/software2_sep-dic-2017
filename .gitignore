@@ -1,4 +1,8 @@
-tuisd/*
+*.pyc
+tuisd/static/*
+!tuisd/static/js
+tuisd/media/*
+!tuisd/templates/*
 *.vscode
 
 # Byte-compiled / optimized / DLL files
