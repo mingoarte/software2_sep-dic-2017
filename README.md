@@ -67,6 +67,18 @@ python manage.py runserver localhost:8000
 ```
 
 ## Cómo crear un nuevo patrón?
+
+### Añadirlo al conjunto de aplicaciones de Django.
+En el archivo `TUIsD/settings.py` agregar el patrón `MiPatron` a las apps
+instaladas.
+```python
+INSTALLED_APPS = [
+  ...
+  'MiPatron.apps.MiPatronConfig',
+]
+```
+
+### Añadir el modelo.
 Para crear un nuevo patrón debes definir su modelo, que implementa el modelo abstracto Patron y definir algunos métodos que especifican como se renderiza el patrón, su formulario de configuración, y qué va en el card del builder.
 
 ```python
@@ -90,7 +102,13 @@ class MiPatron(Patron):
 
 Para crear una nueva instancia de un patrón, puedes utilizar el método create_pattern, que recibe los atributos de MiPatron, así como `template` y `position` para crear el TemplateComponent automaticamente. Este método devuelve la instancia creada.
 
-El método render devuelve el html que se debe mostrar en el card. Por consistencia
+El método `render` devuelve el html que corresponde al patrón. Por consistencia
+este archivo debe estar localizado en `TUIsD/templates/patrones/<nombre_patron>/view.html`.
+
+El método `render_config_modal` devuelve el html que corresponde al formulario de configuración del patrón. Por consistencia
+este archivo debe estar localizado en `TUIsD/templates/patrones/<nombre_patron>/configurar-modal.html`.
+
+El método `render_card` devuelve el html que corresponde corresponde a la visualización del patrón en el constructor. Por consistencia
 este archivo debe estar localizado en `TUIsD/templates/patrones/<nombre_patron>/build.html`.
 
 ## Inclusión en la barra lateral izquierda.
@@ -98,12 +116,12 @@ La barra izquierda se encuentra en `TUIsD/templates/builder/sidebar.html`. Para
 agregar un patrón a esta barra debe incluirse lo siguiente dentro de la lista
 con id `products` y poniendo como ejemplo el captcha:
 ```html
-    <li class="pattern-captcha config" data-pattern-name="captcha"><a href="#">CAPTCHA</a></li>
+    <li class="pattern-captcha" data-pattern-name="captcha"><a href="#">CAPTCHA</a></li>
 ```
 
 De manera abstracta:
 ```html
-    <li class="pattern-{nombre_patrón} config" data-pattern-name="{nombre_patrón}"><a href="#">{nombre_patrón}</a></li>
+    <li class="pattern-{nombre_patrón}" data-pattern-name="{nombre_patrón}"><a href="#">{nombre_patrón}</a></li>
 ```
 
 Lo siguiente que debe incluirse son las funciones en JS que permitan configurar
@@ -116,15 +134,6 @@ del patrón con un modal, como ejemplo captcha:
 
 Por consistencia en el proyecto, estos builder deben localizarse SIEMPRE en
 `TUIsD/static/js/`.
-
-Por último, en `TUIsD/templates/builder/build.html` debe incluirse justo antes
-de cerrar el div de `builder_content` el archivo en html que contiene la
-configuración del modal. Este archivo contiene todo el código en HTML que le
-será incluido al modal cuando se haga clic en el patrón en la barra lateral o
-al darle clic al botón de configurar. Por ejemplo:
-```html
-{% include 'patrones/captcha_pattern/configurar-modal.html' %}
-```
 
 Por consistencia en el proyecto, este archivo debe llamarse SIEMPRE en
 `TUIsD/templates/patrones/<nombre_patrón>/configurar-modal.html`
@@ -161,7 +170,7 @@ function sendMiPatronData() {
     url: "/miRuta",
     data: {
       'x': x,
-      'y': 
+      'y':
      }
   }
 }
