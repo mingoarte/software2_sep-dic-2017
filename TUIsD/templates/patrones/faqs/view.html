@@ -1,31 +1,22 @@
-{% extends 'builder/card.html' %}
-{% block card_content %}
 <div class="row">
-    <div class="panel panel-default">
-        <div class="panel-heading" style="text-align:center">
-            <h2 class="panel-title">FAQ</h2>
-        </div>
-        <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center">
+                <h2 class="panel-title">FAQ</h2>
+            </div>
+            <div class="panel-body">
             <!-- Mostrar las preguntas y respuestas sin agrupar -->
             <div class="form-group">
                 <label for="categoria">Categoria</label>
-                <input type="text" name="categoria" parsley-trigger="change" required
-                       placeholder="Escriba la pregunta" class="form-control"
-                       value="{{pattern.categoria.nombre}}" readonly>
+                <h3>{{pattern.categoria.nombre}}</h3>
             </div>
             {% for pregunta in pattern.preguntas %}
                 <div class="form-group">
-                  <label for="pregunta">Pregunta:</label>
-                  <input type="text" name="pregunta" parsley-trigger="change" required
-                         placeholder="Escriba la pregunta " class="form-control"
-                         value="{{pregunta.pregunta}}" readonly>
+                    <h3>{{pregunta.pregunta}}:</h3>
                 </div>
                 <div class="form-group">
-                  <label for="respuesta">Respuesta:</label>
-                  <textarea type="text" name="respuesta" parsley-trigger="change" required placeholder="Escriba la respuesta " class="form-control" readonly>{{pregunta.respuesta}}</textarea> 
+                    <p>{{pregunta.respuesta}}</p>
                 </div>
             {% endfor %}
+            </div>
         </div>
-    </div>
 </div>
-{% endblock %}
