@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import uuid
-from django.template.response import SimpleTemplateResponse
-from django.http import HttpResponse
-from django.template import loader
 from django.contrib.auth.models import User
 from django.db import models
-from builder.models import TemplateComponent
+from django.template.loader import render_to_string
+from builder.models import Pattern
+
 
 
 class BaseAccordionManager(models.Manager):
@@ -13,24 +12,37 @@ class BaseAccordionManager(models.Manager):
         return super(BaseAccordionManager, self).get_queryset().filter(parent=None).order_by('id')
 
 
-class AccordionAbstract(models.Model):
-    accordion_id = models.UUIDField(
-        u'Id del acordeon',
-        default=uuid.uuid4,
-        editable=False
+# Abstracción de un proyecto creado por el usuario
+# Un proyecto puede contener distintos patrones / solo 1 de cada 1
+class Project(models.Model):
+    # Usuario creador/Editor del proyecto
+    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
+    # Nombre del proyecto
+    # Nota: Default solo aplica a filas anteriores al migrate
+    name = models.CharField(max_length=50, blank=False, default='proyecto')
+    # fecha_creacion = models.
+    # fecha_ultima_edicion = models.
+
+    # Acordion que esta editando el usuario
+    # Guardará la referencia al acordeon que cree el usuario
+    acordion = models.ForeignKey(
+        User,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name='project_acordion'
     )
 
-    title = models.CharField(
-        u'Título',
-        max_length=50
-    )
-    title_style = models.TextField(
-        u'Estilos del Título',
+
+class PatronAbstract(models.Model):
+    """docstring for ClassName"""
+    content = models.TextField(
+        u'Contenido',
         blank=True,
         null=True
     )
-    content = models.TextField(
-        u'Contenido',
+    content_color = models.CharField(
+        u'Color del contenido',
+        max_length=50,
         blank=True,
         null=True
     )
@@ -38,6 +50,24 @@ class AccordionAbstract(models.Model):
         u'Estilos del contenido',
         blank=True,
         null=True
+    )
+    border_style = models.TextField(
+        u'Definir tipo de borde',
+        blank=True,
+        null=True
+    )
+    border_color = models.CharField(
+        u'Color del borde',
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    border_radius = models.CharField(
+        u'Radio del borde (px)',
+        max_length=50,
+        blank=True,
+        null=True,
+        default='0'
     )
     width = models.CharField(
         u'Ancho (%)',
@@ -54,7 +84,7 @@ class AccordionAbstract(models.Model):
         default='30'
     )
     style = models.TextField(
-        u'Estilos generales',
+        u'Extra CSS',
         blank=True,
         null=True
     )
@@ -62,14 +92,37 @@ class AccordionAbstract(models.Model):
     class Meta:
         abstract = True
 
+    def toHtml(self, template_name, var_name):
+        return render_to_string(template_name, context={
+            var_name: self,
+        }
+    )
 
-class Accordion(AccordionAbstract, TemplateComponent):
+
+class Accordion(PatronAbstract, Pattern):
+    name = 'accordion'
+
     parent = models.ForeignKey(
         'self',
         null=True,
         blank=True,
         related_name='panels'
     )
+    accordion_id = models.UUIDField(
+        u'Id del acordeon',
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    title = models.CharField(
+        u'Título',
+        max_length=50
+    )
+    title_style = models.TextField(
+        u'Estilos del Título',
+        blank=True,
+        null=True
+    )    
 
     # objects returns accordions that have no parent.
     # all_objects returns all accordions, with out without parents.
@@ -85,13 +138,3 @@ class Accordion(AccordionAbstract, TemplateComponent):
     def get_child_panels(self):
         panels = Accordion.all_objects.filter(parent=self.id).order_by('id')
         return panels
-
-    def render_to_html(self):
-        context = {}
-        context['accordion'] = self
-        response = SimpleTemplateResponse(
-            template='accordion_preview_integrated.html',
-            context=context
-        )
-
-        return response.rendered_content

@@ -9,7 +9,6 @@ $(".pattern, .pattern-carousel, .pattern-accordion").on('click', function() {
   $("#welcome").hide();
 });
 
-
 // Se bloquea el modal del nombre del template para evitar que
 // desaparezca al hacer click fuera de el o presionando la te-
 // cla ESC. 
@@ -17,7 +16,6 @@ $('#new_template').modal({
   backdrop: 'static',
   keyboard: false
 });
-
 
 // Una vez tenemos el nombre del template se hace request a la
 // aplicacion para guardar el nuevo template en bd

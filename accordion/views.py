@@ -4,13 +4,23 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import JsonResponse
-from django.template.response import TemplateResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from builder.models import Template
 from .forms import AccordionForm
 from .models import *
+
+
+# View to list accordions
+def accordionList(request):
+    return render(
+        request,
+        'list_accordion.html',
+        context={
+            'list': Accordion.objects.all(),
+            'accordionForm': AccordionForm,
+        }
+    )
 
 
 # View to create accordions
@@ -22,15 +32,8 @@ def accordionCreate(request):
         context['accordionForm'] = form
 
         if form.is_valid():
-            template_id = request.POST.get('template')
-            position = request.POST.get('position')
-            template = get_object_or_404(Template, id=template_id)
-
             panel_nro = form.cleaned_data['panels']
-            parent = form.save(commit=False)
-            parent.template = template
-            parent.position = position
-            parent.save()
+            parent = form.save()
 
             for i in range(0, panel_nro):
                 Accordion(
@@ -38,18 +41,18 @@ def accordionCreate(request):
                     parent=parent
                 ).save()
 
-            context['success'] = True
-
-            return render(request, 'create_accordion.html', context)
+            return HttpResponse(
+                content=json.dumps({"redirectTo": reverse('accordion:accordion-list')}),
+                content_type='application/json',
+                status=200
+            )
 
         # Error in form.
-        return render(request, 'create_accordion.html', context)
+        return HttpResponse(json.dumps(form.errors), status=400)
     else:
         context['accordionForm'] = AccordionForm()
-        context['template_id'] = request.GET.get('template')
-        context['position'] = request.GET.get('position')
 
-    return render(request, 'create_accordion.html', context)
+    return render(request, 'index.html', context, status=400)
 
 
 # View to delete accordions
@@ -88,3 +91,21 @@ def accordionDelete(request, accordion_id):
         accordion.delete()
 
     return redirect('accordion:accordion-list')
+
+
+# Inicia sesión del usuario por ajax
+def ajax_log_in_view(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'autenticado': 1})
+    else:
+        return JsonResponse({'autenticado': 0})
+
+
+# Cierra la sesión de un usuario y lo redirige al home
+def logout_user(request):
+    logout(request)
+    return redirect('/')

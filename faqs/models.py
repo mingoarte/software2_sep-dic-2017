@@ -15,8 +15,20 @@ class Faq(Pattern):
     def es_reciente(self):
         return self.fecha_publ >= timezone.now() - datetime.timedelta(days=1)
 
+    def preguntas(self):
+        return PreguntaFaq.objects.filter(faq=self).order_by('id').all()
+
+    def categoria(self):
+        return Categoria.objects.get(faq=self)
+
     def render(self):
-        return render_to_string('', {"pattern": self})
+        return render_to_string('patrones/faqs/view.html', {"pattern": self})
+
+    def render_card(self):
+        return render_to_string('patrones/faqs/build.html', {"pattern": self})
+
+    def render_config_modal(self, request):
+        return render_to_string('patrones/faqs/configurar-formulario.html', {"pattern": self})
 
     def __str__(self):
         return self.name
