@@ -6,8 +6,9 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
+    'navbar': sendNavbarData,
   };
-  
+
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {

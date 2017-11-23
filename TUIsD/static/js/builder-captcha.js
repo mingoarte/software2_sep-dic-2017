@@ -22,6 +22,7 @@ function afterLoadCaptchaConfigModal() {
   });
 };
 
+// Función que envía un Captcha a Django para guardarlo en el modelo.
 function sendCaptchaData() {
   return {
     url : "../captcha-config/",

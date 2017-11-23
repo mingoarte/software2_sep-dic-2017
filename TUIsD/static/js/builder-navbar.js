@@ -6,6 +6,20 @@ var elements = [];
 var counter = 1;
 var limit = 8
 
+// Función que envía un Navbar a Django para guardarlo en el modelo.
+// Es una función que debe retornar un diccionario que contiene el url a donde
+// hacer el request y los datos que se quieran enviar.
+function sendNavbarData() {
+  // document.getElementById('location').value = JSON.stringify(elements);
+  console.log(JSON.stringify(elements));
+  return {
+    url : "../navbar-config/",
+    data : {
+            'elementos': JSON.stringify(elements),
+           },
+  }
+}
+
 function showAddSection() {
   // Obtiene el valor de la opción seleccionada
   var selectedOption = document.getElementById("elementList").value;
@@ -151,3 +165,7 @@ function addElement(element) {
   document.getElementById("addDropdownSection").style.display = "none";
   console.log(elements);
 };
+
+$(document).on('click', '#generarCodigo', function() {
+  document.getElementById('location').value = JSON.stringify(elements);
+});

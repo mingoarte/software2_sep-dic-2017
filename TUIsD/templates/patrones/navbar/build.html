@@ -1,9 +1,29 @@
-{% extends 'builder/card.html' %}
+</li>{% extends 'builder/card.html' %}
 
 {% block card_content %}
-<form data-parsley-validate="" novalidate="">
-  <div class="form-group">
-    <p> Aquí va el patrón NavBar </p>
-  </div>
-</form>
+  {% for elemento in pattern.elementos %}
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>{{ elemento.type }}</h4>
+        <ul>
+          <li>Nombre: {{ elemento.name }}</li>
+        {% if elemento.type == "link" %}
+          <li>Enlace: {{ elemento.link }} </li>
+          <li>Tipo de enlace: {{ elemento.option }} </li>
+        {% elif elemento.type == "brand" %}
+          <li>Enlace: {{ elemento.link }} </li>
+        {% elif elemento.type == "dropdown" %}
+          <li>Elementos:</li>
+          <ul>
+          {% for dropdown_elem in elemento.elements %}
+            <li>Nombre: {{ dropdown_elem.name }} </li>
+            <li>Enlace: {{ dropdown_elem.link }} </li>
+          {% endfor %}
+          </ul>
+        {% else %}
+        {% endif %}
+        </ul>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}

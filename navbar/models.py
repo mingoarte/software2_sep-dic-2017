@@ -2,11 +2,13 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.template.loader import render_to_string
+from django.contrib.postgres.fields import JSONField
 from builder.models import Pattern
 
 
 class Navbar(Pattern):
     # ... mis atributos
+    elementos = JSONField(default=dict)
 
     # Importante, este nombre es utilizado alrededor de la aplicación, y debe
     # ser consistente con el nombre de patrón que utilizas en JD para las

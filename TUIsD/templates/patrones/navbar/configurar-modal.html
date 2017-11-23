@@ -6,6 +6,23 @@
       <h4 class="modal-title">Crear NavBar</h4>
     </div>
     <div class="modal-body">
+      <!-- NavBar -->
+      <div class="padded-container" >
+        <nav class="navbar navbar-expand navbar-light" style="background-color:#E6E6E6;" hidden>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="dynamicBrans">
+          </div>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto" id="dynamicLinks">
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Sus configuraciones -->
+      <div class="card-body">
   	    <div class="row">
   	    	<div class="col-lg-3">
   	    	</div>
@@ -101,13 +118,7 @@
   	    	  <input class="button1" type="button" value="Agregar otro elemento" onClick="addInput('dynamicInput');"></center>
   	      </div>
   	    </div>
-      <!-- <form class="forms" action="#" data-parsley-validate novalidate>
-        <input id="card-id" type="hidden" name="card-id">
-        <input id="position" type="hidden" name="position">
-        <div class="form-group">
-          <p> Aquí va el patrón Navbar </p>
-        </div>
-      </form> -->
+      </div>
     </div>
     <div class="modal-footer">
       <button id="accept_keys" type="button" class="accept-modal btn btn-default" data-dismiss="modal">Aceptar</button>
