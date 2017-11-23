@@ -21,6 +21,7 @@ def CarouselConfig(request):
     if request.method == "POST":
         template_id = request.POST.get("template", None)
         position = request.POST.get("position", None)
+        isNew = False
 
         if position is None:
             template = Template.objects.get(pk=int(template_id))
@@ -32,6 +33,12 @@ def CarouselConfig(request):
             else:
                 position = 0
 
+            isNew = True
+        else:
+            template = Template.objects.get(pk=int(template_id))
+            component = TemplateComponent.objects.get(position=int(position), template=template)
+            carousel = Carousel.objects.get(template_component=component)
+
         form = CarouselForm(request.POST, request.FILES, instance=carousel)
         if form.is_valid():
             created_carousel = form.save(commit=False)
@@ -39,14 +46,17 @@ def CarouselConfig(request):
                 request.POST, request.FILES, instance=created_carousel)
             if formset.is_valid():
                 created_carousel.save()
-                TemplateComponent.objects.create(
-                    content_object=created_carousel, template_id=int(template_id), position=position)
+                if isNew:
+                    TemplateComponent.objects.create(
+                        content_object=created_carousel, 
+                        template_id=int(template_id), 
+                        position=position
+                    )
                 formset.save()
-                return render(
-                    request, 
-                    'carrusel/carousel_create_success.html', 
-                    {'carousel': carousel, 'position': position, 'html': carousel.render_card()}
-                )
+                return JsonResponse({
+                    'position': carousel.template_component.get().position,
+                    'html': carousel.render_card()
+                })
     else:
         template_id = request.GET.get("template", None)
         position = request.GET.get("position", None)

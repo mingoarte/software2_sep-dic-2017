@@ -234,8 +234,26 @@ def faqConfig(request):
 
 
     if position is not None:
-        pass
-        #Configure
+        template = Template.objects.get(pk=int(template_pk))
+        component = TemplateComponent.objects.get(position=int(position), template=template)
+        faq = Faq.objects.get(template_component=component)
+        faq_category = faq.categoria_set.all()[0]
+        faq_category.nombre = category
+        faq_category.save()
+
+        faq.preguntafaq_set.all().delete()
+
+        for i,question in enumerate(questions):
+            PreguntaFaq.objects.create(faq=faq, tema=faq_category, pregunta=question, respuesta=answers[i]).save()
+
+        questions = PreguntaFaq.objects.filter(faq=faq).order_by('id')
+        print(questions)
+        return JsonResponse(
+            data={
+            'position': faq.template_component.get().position,
+            'html': faq.render_card()
+            })
+
     else:
         template = Template.objects.get(id=int(template_pk))
         patterns = template.sorted_patterns()
@@ -256,10 +274,11 @@ def faqConfig(request):
             PreguntaFaq.objects.create(faq=faq, tema=category, pregunta=question, respuesta=answers[i]).save()
         questions = PreguntaFaq.objects.filter(faq=faq).order_by('id')
         print(questions)
-        return JsonResponse({
+        return JsonResponse(
+            data={
             'position': faq.template_component.get().position,
             'html': faq.render_card()
-        })
+            })
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
