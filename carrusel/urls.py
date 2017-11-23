@@ -1,21 +1,21 @@
 from django.conf.urls import url
-from .views import CarouselContentListView, CarouselContentCreateView, CarouselContentUpdateView
+from .views import CarouselConfig, CarouselDelete
 
 # Carousel URLs
 urlpatterns = [
     url(
-        regex='^carousel/index/$',
-        view=CarouselContentListView.as_view(),
-        name='carousel-list'
+        regex='^carousel/configurar/$',
+        view=CarouselConfig,
+        name='carousel-config'
     ),
     url(
-        regex='^carousel/create/$',
-        view=CarouselContentCreateView.as_view(),
-        name='carousel-create',
+        regex='^carousel/configurar/(?P<pk>[0-9]+)$',
+        view=CarouselConfig,
+        name='carousel-modify'
     ),
     url(
-        regex='^carousel/(?P<pk>\d+)/update/$',
-        view=CarouselContentUpdateView.as_view(),
-        name='carousel-update'
+        regex='^carousel/eliminar/$',
+        view=CarouselDelete,
+        name='carousel-delete'
     ),
 ]

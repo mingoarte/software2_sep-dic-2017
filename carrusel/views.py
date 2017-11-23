@@ -1,74 +1,61 @@
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView, ListView, UpdateView
-from django.core.urlresolvers import reverse_lazy
-from django.db import transaction
+import json
+
+from django.forms import model_to_dict, inlineformset_factory
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.template.loader import get_template
+
+from builder.models import Template, TemplateComponent
+from .forms import CarouselForm
 from .models import Carousel, Content
-from .forms import CarouselContentFormSet
 
-class CarouselContentListView(ListView):
-    model = Carousel
+def CarouselConfig(request, pk=None):
+    print("POST:", request.POST, "GET:", request.GET)
+    if request.method == "POST":
+        template_id = request.POST.get("template", None)
+        position = request.POST.get("position", None)
+    else:
+        template_id = request.GET.get("template", None)
+        position = request.GET.get("position", None)
 
-class CarouselContentCreateView(CreateView):
-    model = Carousel
-    success_url = reverse_lazy('carousel-list')
-    fields = '__all__'
+    if pk is not None:
+        carousel = Carousel.objects.get(pk=pk)
+    else:
+        carousel = Carousel()
 
-    def get_context_data(self, **kwargs):
-        context = super(CarouselContentCreateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['carouselcontent'] = CarouselContentFormSet(self.request.POST, self.request.FILES)
+    if position is None:
+        template = Template.objects.get(pk=int(template_id))
+        patterns = template.sorted_patterns()
+
+        if patterns:
+            position = patterns[-1].template_component.get().position
+            position += 1
         else:
-            template_id = self.request.GET.get('template', None)
-            position = self.request.GET.get('position', None)
-            context['carouselcontent'] = CarouselContentFormSet()
-            if template_id:
-                context['form'].initial['template'] = template_id
-            if position:
-                context['form'].initial['position'] = position
-        return context
+            position = 0
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        carouselContent = context['carouselcontent']
-        with transaction.atomic():
-            if carouselContent.is_valid():
-                self.object = form.save()
-                carouselContent.instance = self.object
-                carouselContent.save()
-                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object})
-            else:
-                return self.render_to_response(self.get_context_data(form=form))
-        return super(CarouselContentCreateView, self).form_valid(form)
+    ContentInlineFormSet = inlineformset_factory(Carousel, Content, fields=('title', 'description', 'image'), extra=2)
 
-class CarouselContentUpdateView(UpdateView):
-    model = Carousel
-    success_url = reverse_lazy('carousel-list')
-    fields = '__all__'
+    if request.method == "POST":
+        form = CarouselForm(request.POST, request.FILES, instance=carousel)
+        if form.is_valid():
+            created_carousel = form.save(commit=False)
+            formset = ContentInlineFormSet(request.POST, request.FILES, instance=created_carousel)
+            if formset.is_valid():
+                created_carousel.save()
+                TemplateComponent.objects.create(content_object=created_carousel, template_id=int(template_id), position=position)
+                formset.save()
+                return render(request, 'carrusel/carousel_create_success.html', {'carousel': carousel, 'position': position})
+    else:
+        form = CarouselForm(instance=carousel)
+        formset = ContentInlineFormSet(instance=carousel)
+    return render(request, 'carrusel/carousel_form.html', {'formset': formset, 'form': form, 'carousel': carousel})
 
-    def get_context_data(self, **kwargs):
-        context = super(CarouselContentUpdateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['carouselcontent'] = CarouselContentFormSet(self.request.POST, instance=self.object)
-            context['carouselcontent'].full_clean()
-        else:
-            template_id = self.request.GET.get('template', None)
-            position = self.request.GET.get('position', None)
-            context['carouselcontent'] = CarouselContentFormSet(instance=self.object)
-            if template_id:
-                context['form'].initial['template'] = template_id
-            if position:
-                context['form'].initial['position'] = position
-        return context
+def CarouselDelete(request):
+    template = request.GET.get('template', None)
+    position = request.GET.get('position', None)
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        carouselContent = context['carouselcontent']
-        with transaction.atomic():
-            if carouselContent.is_valid():
-                self.object = form.save()
-                carouselContent.instance = self.object
-                carouselContent.save()
-                return render(self.request, 'carrusel/carousel_create_success.html', {'carousel': self.object})
-            else:
-                return self.render_to_response(self.get_context_data(form=form))
-        return super(CarouselContentUpdateView, self).form_valid(form)
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template))
+    carousel = Carousel.objects.get(template_component=component)
+    carousel.delete()
+
+    return JsonResponse(data={})

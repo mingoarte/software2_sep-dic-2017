@@ -1,11 +1,11 @@
 from django.forms import ModelForm
-from django.forms.models import inlineformset_factory
+# from django.forms.models import inlineformset_factory
 from .models import Carousel, Content
 
 class CarouselForm(ModelForm):
     class Meta:
         model = Carousel
-        fields = ['template', 'position', 'title', 'timer', 'auto', 'circular']
+        fields = ['title', 'timer', 'auto', 'circular']
         labels = {
             'title': 'Título',
             'timer': 'Tiempo de transición',
@@ -23,5 +23,5 @@ class ContentForm(ModelForm):
             'image': 'Imagen'
         }
 
-CarouselContentFormSet = inlineformset_factory(Carousel, Content, form=ContentForm, 
-                                               extra=2, can_delete=True)
+# CarouselContentFormSet = inlineformset_factory(Carousel, Content, form=ContentForm, 
+#                                                extra=2, can_delete=True)

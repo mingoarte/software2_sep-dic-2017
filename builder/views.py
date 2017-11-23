@@ -5,10 +5,11 @@ from django.views.generic import TemplateView
 from builder.models import *
 from encuestas.models import *
 from carrusel.models import Carousel, Content
+from faqs.models import *
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
-from django.forms import formset_factory
+from django.forms import formset_factory, model_to_dict
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.core import serializers
@@ -53,6 +54,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         context = self.get_context_data(**kwargs)
         prev = request.GET.get('type')
+        print("KKKKKKKKKKKKKKKK")
 
         if prev is not None:
             context['page_name'] = prev
@@ -60,7 +62,8 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
             context['page_name'] = 'revisar'
 
         template = Template.objects.get(id=(kwargs['templateID']))
-
+        patterns = template.sorted_patterns()
+        print(patterns)
         context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
 
@@ -75,6 +78,9 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context = self.get_context_data(**kwargs)
         template = Template.objects.get(id=(kwargs['templateID']))
         patterns = template.sorted_patterns()
+        components = TemplateComponent
+        for pattern in patterns:
+            print(pattern.template_component.get().position)
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
@@ -89,98 +95,83 @@ def pollConfig(request):
     options = request.GET.getlist('opciones[]', None)
     template_pk = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    created = request.GET.get('created', None)
 
-    print ("\n\n\n")
-    print (position)
 
-    template = Template.objects.get(pk=int(template_pk))
-    question = Pregunta.objects.filter(template=template, position=int(position))
-    print (question_text)
-    print ("\n\n\n")
-    if question.count():
-        print("ENTRO")
-        question[0].texto_pregunta = question_text
-        options2 = Opcion.objects.filter(pregunta=question[0]).delete()
-        print(options2)
-        # options2 = question[0].opcion_set.all()
-        # print(options2)
-        # for option in options2:
-        #     option.delete()
+    if position != '':
+        template = Template.objects.get(pk=int(template_pk))
+        component = TemplateComponent.objects.filter(position=int(position), template=template)
+        question = Pregunta.objects.filter(template_component=component)
+        question.texto_pregunta = question_text
+        Opcion.objects.filter(pregunta=question).delete()
 
-        print(options)
         for option in options:
-            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+            Opcion.objects.create(pregunta=question, texto_opcion=option).save()
 
-        question[0].save()
+        question.save()
+        return JsonResponse(data={'question': model_to_dict(question), 
+                            'options': list(options.values())})
     else:
-        question = Pregunta.objects.create(texto_pregunta=question_text,template=template,position=int(position))
-        question_pk = question.pk
+        template = Template.objects.get(id=int(template_pk))
+        patterns = template.sorted_patterns()
+
+        if patterns:
+            position = patterns[-1].template_component.get().position
+            position += 1
+        else:
+            position = 0
+
+        question = Pregunta.objects.create_pattern(texto_pregunta=question_text, position=position, template=template)
         question.save()
 
-        question = Pregunta.objects.filter(pk=question_pk)
         for option in options:
-            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
+            Opcion.objects.create(pregunta=question, texto_opcion=option).save()
+        options = Opcion.objects.filter(pregunta=question).order_by('id')
 
-    options = Opcion.objects.filter(pregunta=question)
+        return JsonResponse(data={'question': model_to_dict(question), 
+                            'options': list(options.values()),
+                            'position': question.template_component.get().position})
+
+
     # print (options)
-    p1 = list(question.values('texto_pregunta', 'template', 'position'))
-    p2 = list(options.values())
-
-    return JsonResponse(data={'question': p1, 'options': p2})
+    # p1 = list(question.values('texto_pregunta', 'template', 'position'))
+    # p2 = list(options.values())
 
 @login_required(redirect_field_name='/')
-def carouselConfig(request):
+def faqConfig(request):
     user = request.user
-    carousel = {
-        'title': request.GET.get('title', None),
-        'count': request.GET.get('count', None),
-        'timer': request.GET.get('timer', None),
-        'auto': request.GET.get('auto', None).capitalize(),
-        'circular': request.GET.get('circular', None).capitalize(),
-        'descriptions': request.GET.getlist('descriptions[]', None),
-        'images': request.GET.getlist('images[]', None),
-    }
-    #print(carousel)
+    category = request.GET.get('categoria', None)
+    questions = request.GET.getlist('preguntas[]', None)
+    answers = request.GET.getlist('respuestas[]', None)
+    print(questions,answers)
     template_pk = request.GET.get('template', None)
-    position = request.GET.get('position', '0')
-    created = request.GET.get('created', None)
+    position = request.GET.get('position', None)
 
-    template = Template.objects.get(pk=int(template_pk))
-    obj = Carousel.objects.filter(template=template, position=int(position))
-    if obj.count():
-        obj[0].title = carousel['title']
-        obj[0].timer = carousel['timer']
-        obj[0].auto = carousel['auto']
-        obj[0].circular = carousel['circular']
-        '''options2 = Opcion.objects.filter(pregunta=question[0]).delete()
 
-        print(options)
-        for option in options:
-            Opcion.objects.create(pregunta=question[0], texto_opcion=option).save()
-        '''
-        obj[0].save()
+    if position != '':
+        pass
+        #Configure
     else:
-        obj = Carousel.objects.create(title=carousel['title'], count=carousel['count'], 
-            timer=carousel['timer'], auto=carousel['auto'], circular=carousel['circular'], 
-            template=template, position=int(position))
-        obj_pk = obj.pk
-        #print("Primary Key: ", obj_pk)
-        obj.save()
-        obj = Carousel.objects.filter(pk=obj_pk)
+        template = Template.objects.get(id=int(template_pk))
+        patterns = template.sorted_patterns()
 
-        for index, elem in enumerate(carousel['descriptions']):
-            #print("Description: ", elem)
-            #print("Image: ", carousel['images'][index])
-            obj_content = Content.objects.create(carousel=obj[0], description=elem, 
-              image=carousel['images'][index], title=elem)
-            obj_content.save()
-    
-    contents = Content.objects.filter(carousel=obj)
-    p1 = list(obj.values('title', 'count', 'timer', 'circular', 'template', 'position'))
-    p2 = list(contents.values('description', 'image'))
-    return JsonResponse(data={'carousel': p1, 'contents': p2})
+        if patterns:
+            position = patterns[-1].template_component.get().position
+            position += 1
+        else:
+            position = 0
 
+        faq = Faq.objects.create_pattern(position=position, template=template)
+        faq.save()
+        print(faq)
+
+        if category != '':
+            category = Categoria.objects.create(faq=faq,nombre=category).save()
+        for i,question in enumerate(questions):
+            PreguntaFaq.objects.create(faq=faq, tema=category, pregunta=question, respuesta=answers[i]).save()
+        questions = PreguntaFaq.objects.filter(faq=faq).order_by('id')
+        return JsonResponse(data={'faq': model_to_dict(faq), 
+                            'questions': list(questions.values()),
+                            'position': faq.template_component.get().position})
 
 @login_required(redirect_field_name='/')
 def newTemplate(request):
@@ -196,10 +187,25 @@ def eraseQuestion(request):
 
     template_id = request.GET.get('template', None)
     position = request.GET.get('position', None)
-    template = Template.objects.get(id=int(template_id))
-    question = Pregunta.objects.get(template=template, position=int(position))
+    print(template_id,position)
+    component = TemplateComponent.objects.filter(position=int(position), template_id=int(template_id))
+    question = Pregunta.objects.get(template_component=component)
     question.delete()
     return JsonResponse(data={})
+
+@login_required(redirect_field_name='/')
+def createPoll(request):
+    template_id = request.GET.get('template', None)
+    template = Template.objects.get(id=int(template_id))
+    patterns = template.sorted_patterns()
+
+    if patterns:
+        position = patterns.last().get().position
+        position += 1
+    else:
+        position = 0
+    
+    return JsonResponse(data={'position':position,})
 
 class userTemplate(TemplateView):
     template_name = 'crear_usuario.html'

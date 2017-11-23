@@ -3,4 +3,5 @@
 tuisd/static/*
 !tuisd/static/js
 TUIsD/media/*
+!tuisd/templates/*
 *.vscode

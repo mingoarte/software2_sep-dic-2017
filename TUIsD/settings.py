@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'encuestas.apps.EncuestasConfig',
     'carrusel.apps.CarruselConfig',
     'accordion',
+    'faqs.apps.FaqsConfig',
 ]
 
 MIDDLEWARE = [
