@@ -138,27 +138,20 @@ Por consistencia en el proyecto, estos builder deben localizarse SIEMPRE en
 Por consistencia en el proyecto, este archivo debe llamarse SIEMPRE en
 `TUIsD/templates/patrones/<nombre_patrón>/configurar-modal.html`
 
-## Aceptar las configuraciones hechas al patrón en el modal.
-Para poder enviar todo lo configurado en el modal a a la base de datos, debe
-configurarse el botón de `aceptar` del mismo para que tome las variables que
-necesite y las envíe.
+## Añadir tu patrón en el JS del constructor.
+De modo que el constructor sepa a donde enviar tu información, se debe escribir cómo se llama tu función que envia los datos. Esta información se añade a la función `sendPatternData` dentro de `builder.js`, específicamente en el diccionario `ajaxOptsPatterns` como se muestra a continuación:
+```javascript
+ajaxOptsPatterns = {
+    'encuesta': sendPollData,
+    'formulario': sendFormData,
+    'faq': sendFAQData,
+    'captcha': sendCaptchaData,
+    ....
+    'MiPatron': sendMiPatronData,
+  };
+```
 
-Esta función recibirá, si es la primera vez que se crea un patrón, la posición y
-debe ser debidamente añadida.
-
-Esta función debe estar en `builder-<nombre_patrón>.js`.
-Por consistencia, debe hacer un request a `../<nombre_patrón>-config/`. Como
-parte de los datos siempre deben ir `'template': $('#template_id').val()` y
-`position': $('#position').val(),`.
-
-## Para configurar el botón de elimado de un patrón.
-Para eliminar un patrón, debe definirse una vista en `builder/urls.py` y `builder/views.py`,
-por consistencia, este request se hace al view `../erase-<nombre_patrón>/`.
-
-Los datos obligatorios que debe tener esta llamada es `template` y `position`,
-que representan el id del template y la posición, respectivamente.
-
-
+## Configuración de botones de configuración y eliminado
 En cuánto al JS, los botones de configurar y eliminar son genéricos, no tienes que modificar su comportamiento para cada patrón. Lo que debes implementar, además de cualquier JS particular de tu modal de configuración, es una función que devuelva un JSON con la url y data para hacer la llamada ajax a tu endpoint que guarda/crea tu patron. Ejemplo:
 
 ```javascript
@@ -178,7 +171,27 @@ function sendMiPatronData() {
 
 Para guiarte, puedes tomar como referencia el patron Encuesta.
 
+### Aceptar las configuraciones hechas al patrón en el modal.
+Para poder enviar todo lo configurado en el modal a a la base de datos, debe
+configurarse el botón de `aceptar` del mismo para que tome las variables que
+necesite y las envíe.
+
+Esta función recibirá, si es la primera vez que se crea un patrón, la posición y
+debe ser debidamente añadida.
+
+Esta función debe estar en `builder-<nombre_patrón>.js`.
+Esta función debe llamarse `sendMiPatronData` como se mencionó anteriormente.
+
+Por consistencia, el url debe apuntar a `../MiPatron-config/`.
+
+La data solo es necesaria si el patrón necesita enviar algo al modelo para
+guardarlo.
+
+### Para configurar el botón de elimado de un patrón.
+El botón de eliminado no debe configurarse, es general para todos los patrones.
+
 
 # Bugs conocidos
 - A veces al agregar un patron se agrega dos veces.
+- Al eliminar un patrón, éste no se elimina de la BD.
 - ~~Al editar una encuesta se crea una nueva (views.pollConfig)~~
