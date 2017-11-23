@@ -7,7 +7,7 @@ from django.forms import inlineformset_factory
 
 
 class Carousel(Pattern):
-    name = 'carrusel'
+    name = 'carousel'
 
     title = models.CharField(max_length=50)
     timer = models.IntegerField(

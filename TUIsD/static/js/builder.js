@@ -6,7 +6,6 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
-    //'carousel': sendCarouselData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -85,7 +84,6 @@ $(".pattern").on('click', function() {
 // Permite acceder a las configuraciones de la nueva encuesta del template
 $(document).on('click', "button.config", function() {
   patternContainer = $(this).parents('.pattern-container');
-  console.log(patternContainer);
   patternName = patternContainer.data('pattern-name');
   templateComponentID = patternContainer.data('template-component-id');
   position = patternContainer.data('position');
@@ -106,7 +104,6 @@ $(document).on('click', "button.config", function() {
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
       afterLoadEditPatternConfigModal(patternName);
-      //afterLoadPatternConfigModal(patternName);
     }
   })
   $('#modal-configuracion').modal('show');
