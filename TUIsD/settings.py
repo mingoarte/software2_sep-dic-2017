@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'faqs.apps.FaqsConfig',
     'servecaptcha.apps.ServeCaptchaConfig',
     'captcha_pattern.apps.CaptchaPatternConfig',
+    'pagination.apps.PaginationConfig',
     'formBuilder.apps.FormbuilderConfig',
 ]
 
