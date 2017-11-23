@@ -33,9 +33,7 @@
   <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
   <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
   <script>
-    { % include 'patrones/formulario/customFormBuilder.js'
-      with captchaHTML = captchaHTML %
-    }
+    {% include 'patrones/formulario/customFormBuilder.js' with captchaHTML=captchaHTML %}
   </script>
 </head>
 
