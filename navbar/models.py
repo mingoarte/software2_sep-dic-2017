@@ -17,7 +17,7 @@ class Navbar(Pattern):
 
     # Este método devuelve el html que corresponde al patrón.
     def render(self):
-        return render_to_string('patrones/navbar/view.html', {"pattern": self})
+        return render_to_string('patrones/navbar/view.html', {"pattern": self, "lista": self.elementos})
     # Este método devuelve el html que corresponde a la visualización del patrón
     # en el constructor.
     def render_card(self):
