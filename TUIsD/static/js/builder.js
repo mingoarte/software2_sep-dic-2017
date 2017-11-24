@@ -26,6 +26,7 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'formulario': afterLoadFormConfigModal,
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
+    'navbar': afterLoadNavbarConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {

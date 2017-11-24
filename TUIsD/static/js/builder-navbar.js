@@ -6,12 +6,22 @@ var elements = [];
 var counter = 1;
 var limit = 8
 
+// Datos que deben cargarse en el modal de configuración del navbar cuando Este
+// es CREADO (no modificado), es decir, se está seleccionando de la barra lateral.
+function afterLoadNavbarConfigModal() {
+  elements = []
+  counter = 1
+  // $("#navbar-elements").val("");
+  // $("#navbar-counter").val(1);
+}
+
 // Función que envía un Navbar a Django para guardarlo en el modelo.
 // Es una función que debe retornar un diccionario que contiene el url a donde
 // hacer el request y los datos que se quieran enviar.
 function sendNavbarData() {
   // document.getElementById('location').value = JSON.stringify(elements);
   console.log(JSON.stringify(elements));
+  // var elements = $("#navbar-elements").val();
   return {
     url : "../navbar-config/",
     data : {
@@ -50,7 +60,8 @@ function showAddSection() {
 }
 
 function addInput(divName){
-
+    //  var elements = $("#navbar-elements").val();
+    //  var counter = parseInt($("#navbar-counter").val());
      if (counter == limit)  {
           alert("You have reached the limit of adding " + counter + " inputs");
      }
@@ -67,6 +78,7 @@ function addInput(divName){
           newdiv.innerHTML = newItem;
           document.getElementById(divName).appendChild(newdiv);
           counter++;
+          $("#navbar-counter").val(counter);
      }
 }
 
@@ -100,6 +112,8 @@ function showAddSection() {
 }
 
 function addElement(element) {
+  // var counter = $("#navbar-counter").val();
+  // var elements = $("#navbar-elements").val();
   switch(element) {
     case "dropdown":
 
@@ -116,6 +130,7 @@ function addElement(element) {
 
       var object = {type: "dropdown", name: dropdownName, elements:elementsList}
       elements.push(object);
+      // $("#navbar-elements").val(elements + JSON.stringify(object));
 
       // Se genera codigo html para el dropdown.
       var newdiv = document.createElement('li');
@@ -131,6 +146,7 @@ function addElement(element) {
       var linkOption = document.getElementById("linkOption").value;
       var object = {type: "link", name: linkName, link: linkLink, option: linkOption}
       elements.push(object);
+      // $("#navbar-elements").val(elements + JSON.stringify(object));
 
       // Se genera codigo html para los links.
       var newdiv = document.createElement('li');
@@ -151,6 +167,7 @@ function addElement(element) {
       var brandImage = document.getElementById("navbarBrandLogo").value;
       var object = {type: "brand", name: brandName, link: brandImage}
       elements.push(object);
+      // $("#navbar-elements").val(elements + JSON.stringify(object));
 
       // Se genera codigo html para el Brand.
       var newdiv = document.createElement('a');
@@ -164,6 +181,7 @@ function addElement(element) {
   document.getElementById("addBrandSection").style.display = "none";
   document.getElementById("addDropdownSection").style.display = "none";
   console.log(elements);
+  // console.log($("#navbar-elements").val())
 };
 
 $(document).on('click', '#generarCodigo', function() {
