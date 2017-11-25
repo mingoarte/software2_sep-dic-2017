@@ -2,6 +2,7 @@
 
 {% block card_content %}
   {% for elemento in pattern.elementos %}
+  <div class="navbar-wrapper" data-navbar-position='{{pattern.template_component.get.position}}' data-navbar-json="{{ pattern.elementos }}">
     <div class="row">
       <div class="col-xs-12">
         <h4>{{ elemento.type }}</h4>
@@ -25,5 +26,6 @@
         </ul>
       </div>
     </div>
+  </div>
   {% endfor %}
 {% endblock %}

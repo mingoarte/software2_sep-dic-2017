@@ -184,7 +184,7 @@ def navbarConfig(request):
         template_id = int(request.POST.get('template', None))
         position = request.POST.get('position', None)
         elementos = json.loads(request.POST.get('elementos',None))
-        
+
         # Editando patron
         if position != None:
             template = Template.objects.get(pk=template_id)
