@@ -6,8 +6,9 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
+    'navbar': sendNavbarData,
   };
-  
+
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {
@@ -25,6 +26,7 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'formulario': afterLoadFormConfigModal,
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
+    'navbar': afterLoadNavbarConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -35,7 +37,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
 function afterLoadEditPatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal de editar
   patternFuncs = {
-    'formulario': afterLoadEditFormConfigModal
+    'formulario': afterLoadEditFormConfigModal,
+    'navbar': afterLoadEditNavbarConfigModal,
   }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
