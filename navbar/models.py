@@ -24,7 +24,7 @@ class Navbar(Pattern):
         return render_to_string('patrones/navbar/build.html', {"pattern": self})
     # Este método devuelve el html que corresponde al formulario de configuración
     # del patrón.
-    def render_config_modal(self):
+    def render_config_modal(self, request):
         return render_to_string('patrones/navbar/configurar-modal.html', {"pattern": self})
 
     def __str__(self):

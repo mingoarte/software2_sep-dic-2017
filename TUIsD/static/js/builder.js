@@ -8,7 +8,7 @@ function sendPatternData(patternName) {
     'captcha': sendCaptchaData,
     'navbar': sendNavbarData,
   };
-
+  
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {
@@ -26,8 +26,9 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'formulario': afterLoadFormConfigModal,
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
-    'navbar': afterLoadNavbarConfigModal,
-  }
+    'carousel': afterLoadCarouselConfigModal,
+    'navbar': afterLoadNavbarConfigModal,  
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -38,8 +39,9 @@ function afterLoadEditPatternConfigModal(patternName) {
   // Funcion que se ejecuta al cargar el modal de editar
   patternFuncs = {
     'formulario': afterLoadEditFormConfigModal,
-    'navbar': afterLoadEditNavbarConfigModal,
-  }
+    'carousel': afterLoadCarouselConfigModal,
+    'navbar': afterLoadEditNavbarConfigModal,  
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -67,6 +69,7 @@ $(".pattern").on('click', function() {
   patternName = $(this).data('pattern-name');
   // Limpiar modal
   $('#modal-configuracion .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').removeClass("modal-lg");
   $.get({
     url: '/builder/config-modal',
     data: {
@@ -84,7 +87,6 @@ $(".pattern").on('click', function() {
 // Permite acceder a las configuraciones de la nueva encuesta del template
 $(document).on('click', "button.config", function() {
   patternContainer = $(this).parents('.pattern-container');
-  console.log(patternContainer);
   patternName = patternContainer.data('pattern-name');
   templateComponentID = patternContainer.data('template-component-id');
   position = patternContainer.data('position');
@@ -96,6 +98,7 @@ $(document).on('click', "button.config", function() {
 
   // Limpiar modal
   $('#modal-configuracion .modal-dialog').html('');
+  $('#modal-configuracion .modal-dialog').removeClass("modal-lg");
   $.get({
     url: '/builder/config-modal',
     data: {

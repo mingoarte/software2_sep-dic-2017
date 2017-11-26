@@ -68,7 +68,7 @@ class Pattern(models.Model):
     def render(self):
         raise NotImplementedError("Debes implementar el metodo render para el patron {}".format(self))
 
-    def render_config_modal(self):
+    def render_config_modal(self, request):
         raise NotImplementedError("Debes implementar el metodo render_config_modal para el patron {}".format(self))
 
     def render_card(self):

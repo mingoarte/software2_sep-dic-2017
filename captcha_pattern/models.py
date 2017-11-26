@@ -16,7 +16,7 @@ class Captcha(Pattern):
     def render_card(self):
 	    return render_to_string('patrones/captcha_pattern/build.html', {"pattern": self})
 
-    def render_config_modal(self):
+    def render_config_modal(self, request):
 	    return render_to_string('patrones/captcha_pattern/configurar-modal.html', {"pattern": self})
 
     def __str__(self):

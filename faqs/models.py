@@ -25,9 +25,9 @@ class Faq(Pattern):
         return render_to_string('patrones/faqs/view.html', {"pattern": self})
 
     def render_card(self):
-        return render_to_string('patrones/faqs/view.html', {"pattern": self})
+        return render_to_string('patrones/faqs/build.html', {"pattern": self})
 
-    def render_config_modal(self):
+    def render_config_modal(self, request):
         return render_to_string('patrones/faqs/configurar-formulario.html', {"pattern": self})
 
     def __str__(self):
