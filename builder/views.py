@@ -12,6 +12,7 @@ from captcha_pattern.models import *
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
+from navbar.models import *
 from django.forms import formset_factory, model_to_dict
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -100,7 +101,7 @@ def formConfig(request):
         form_json = json.loads(request.POST['form_json'])
         template_id = int(request.POST['template'])
         position = request.POST.get('position', None)
-        
+
         if position != None:
             component = TemplateComponent.objects.get(template_id=template_id, position=position)
             form = component.content_object
@@ -174,6 +175,43 @@ def eraseCaptcha(request):
     captcha = Captcha.objects.get(template_component=component)
     captcha.delete()
     return JsonResponse(data={})
+
+@csrf_exempt
+@login_required(redirect_field_name='/')
+def navbarConfig(request):
+    if request.method == 'POST':
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position', None)
+        elementos = json.loads(request.POST.get('elementos',None))
+
+        # Editando patron
+        if position != None:
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(position=int(position), template=template)
+            navbar = Navbar.objects.get(template_component=component)
+            navbar.elementos = elementos
+            navbar.save()
+        else:
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            navbar = Navbar.objects.create_pattern(elementos = elementos,
+                                                   position = position,
+                                                   template = template)
+
+        return JsonResponse({
+            'position': navbar.template_component.get().position,
+            'html': navbar.render_card()
+        })
 
 @csrf_exempt
 @login_required(redirect_field_name='/')

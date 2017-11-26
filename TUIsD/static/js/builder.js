@@ -6,6 +6,7 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
+    'navbar': sendNavbarData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -26,7 +27,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-  }
+    'navbar': afterLoadNavbarConfigModal,  
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -38,7 +40,8 @@ function afterLoadEditPatternConfigModal(patternName) {
   patternFuncs = {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-  }
+    'navbar': afterLoadEditNavbarConfigModal,  
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
