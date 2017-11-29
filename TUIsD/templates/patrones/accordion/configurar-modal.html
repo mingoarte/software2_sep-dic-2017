@@ -14,8 +14,7 @@
                     Cerrar.
                 </button>
             {% else %}
-                <form action='{% url "accordion:accordion-create" %}' id="accordion-create-form" method="POST" class="post-form" novalidate>
-                    {% csrf_token %}
+                <form id="accordion-create-form" method="POST" class="post-form" novalidate>
                     <div class="row">
                         <div class="col-lg-6">
                             {% bootstrap_field accordionForm.title %}
@@ -30,7 +29,7 @@
                             {% bootstrap_field accordionForm.style %}
                         </div>
                     </div>
-                    <button id type="submit" class="save btn btn-default" id="accordion-create-submit">Crear</button>
+                    <button id type="submit" class="save btn btn-default accept-modal" id="accordion-create-submit">Crear</button>
                 </form>
             {% endif %}
         </div>

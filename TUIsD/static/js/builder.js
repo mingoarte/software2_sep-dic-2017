@@ -6,6 +6,7 @@ function sendPatternData(patternName) {
     'formulario': sendFormData,
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
+    'accordion': sendAccordionData,
   };
   
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -14,7 +15,6 @@ function sendPatternData(patternName) {
    ajaxOpts.data.position = $('#modal-configuracion').data('position');
   }
   ajaxOpts.method = 'POST';
-
   return $.ajax(ajaxOpts);
 }
 
@@ -142,6 +142,7 @@ $(document).on('click', 'button.accept-modal', function(e){
   console.log("Enviando data del patron ", patternName);
 
   sendPatternData(patternName).done(function(data){
+      console.log("Ok termino vamo a ver");
 
       if (data.position != null) {
         // Si se esta editando el patron, modificar el card existente
@@ -163,8 +164,9 @@ $(document).on('click', 'button.accept-modal', function(e){
 
       // Limpiar modal
       $('#modal-configuracion').removeData()
-
+      console.log("EEEEEEEEEEEEEEEEEE TERMINANDO");
       afterSendPatternData(patternName, data);
+      console.log("Termino");
   });
 })
 

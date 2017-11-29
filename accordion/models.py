@@ -3,34 +3,12 @@ import uuid
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.loader import render_to_string
-from builder.models import Pattern
+from builder.models import Pattern, PatternManager
 
 
-
-class BaseAccordionManager(models.Manager):
+class BaseAccordionManager(PatternManager):
     def get_queryset(self):
         return super(BaseAccordionManager, self).get_queryset().filter(parent=None).order_by('id')
-
-
-# Abstracción de un proyecto creado por el usuario
-# Un proyecto puede contener distintos patrones / solo 1 de cada 1
-class Project(models.Model):
-    # Usuario creador/Editor del proyecto
-    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
-    # Nombre del proyecto
-    # Nota: Default solo aplica a filas anteriores al migrate
-    name = models.CharField(max_length=50, blank=False, default='proyecto')
-    # fecha_creacion = models.
-    # fecha_ultima_edicion = models.
-
-    # Acordion que esta editando el usuario
-    # Guardará la referencia al acordeon que cree el usuario
-    acordion = models.ForeignKey(
-        User,
-        null=False,
-        on_delete=models.CASCADE,
-        related_name='project_acordion'
-    )
 
 
 class PatronAbstract(models.Model):
@@ -138,3 +116,18 @@ class Accordion(PatronAbstract, Pattern):
     def get_child_panels(self):
         panels = Accordion.all_objects.filter(parent=self.id).order_by('id')
         return panels
+
+    def render(self):
+        # return render_to_string('patrones/accordion/view.html', {"pattern": self})
+        return "UUUUUUUUUUUYUYUYUYUYY"
+
+    def render_card(self):
+        # return render_to_string('patrones/accordion/build.html', {"pattern": self})
+        return "HUEHUEHUEHUEHUEHUEHEUH"
+
+    def render_config_modal(self, request):
+        from .forms import AccordionForm
+        form = AccordionForm()
+
+        return render_to_string('patrones/accordion/configurar-modal.html', {"accordionForm": form})
+

@@ -9,6 +9,7 @@ from carrusel.models import Carousel, Content
 from faqs.models import *
 from formBuilder.models import *
 from captcha_pattern.models import *
+from accordion.models import Accordion
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
@@ -24,6 +25,7 @@ from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
 
+
 class buildTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
     redirect_field_name = '/'
@@ -36,8 +38,10 @@ class buildTemplate(LoginRequiredMixin,TemplateView):
     def post(self, request, *args, **kwargs):
         return render(request, '/builder/build.html')
 
+
 class homeTemplate(TemplateView):
     template_name = 'home.html'
+
 
 class ver_templatesTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
@@ -49,6 +53,7 @@ class ver_templatesTemplate(LoginRequiredMixin,TemplateView):
 
         context['templates'] = Template.objects.all()
         return context
+
 
 class revisarTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
@@ -73,6 +78,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         return self.render_to_response(context)
 
+
 class editarTemplate(LoginRequiredMixin,TemplateView):
     login_url = '/login/'
     redirect_field_name = '/'
@@ -91,6 +97,7 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context['captchaHTML'] = render_to_string('patrones/captcha/captcha.html', { 'public_key':'demoPublicKey' })
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
+
 
 @login_required(redirect_field_name='/')
 @csrf_exempt
@@ -120,6 +127,47 @@ def formConfig(request):
             "position": form.template_component.get().position,
             "form_json": form_json
         })
+
+
+@csrf_exempt
+def accordionConfig(request):
+    if request.method == 'POST':
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position', None)
+
+        # print("{} - {}\n".format(template_id, position))
+        # Editando patron
+        if position is not None:
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(
+                position=int(position),
+                template=template
+            )
+            accordion = Accordion.objects.get(template_component=component)
+            accordion.save()
+        else:
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            accordion = Accordion.objects.create_pattern(
+                position=position,
+                template=template
+            )
+
+        return JsonResponse({
+            'position': accordion.template_component.get().position,
+            'html': accordion.render_card()
+        })
+
 
 @login_required(redirect_field_name='/')
 @csrf_exempt

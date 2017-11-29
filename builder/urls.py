@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^poll-config/$', views.pollConfig, name='pollConfig'),
     url(r'^faq-config/$', views.faqConfig, name='faqConfig'),
     url(r'^form-config/$', views.formConfig, name='formConfig'),
+    url(r'^accordion-config/$', views.accordionConfig, name='accordionConfig'),
     url(r'^captcha-config/$', views.captchaConfig, name='captchaConfig'),
     url(r'^erase-captcha/$', views.eraseCaptcha, name='eraseCaptcha'),
     url(r'^new-template/$', views.newTemplate, name='newTemplate'),
