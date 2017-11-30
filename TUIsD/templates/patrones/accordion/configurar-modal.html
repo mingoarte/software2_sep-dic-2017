@@ -14,7 +14,7 @@
                     Cerrar.
                 </button>
             {% else %}
-                <form id="accordion-create-form" method="POST" class="post-form" novalidate>
+                <form id="accordion-create-form" data-parsley-validate="" class="post-form" novalidate>
                     <div class="row">
                         <div class="col-lg-6">
                             {% bootstrap_field accordionForm.title %}
