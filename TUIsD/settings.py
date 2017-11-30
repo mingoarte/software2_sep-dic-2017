@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'captcha_pattern.apps.CaptchaPatternConfig',
     'pagination.apps.PaginationConfig',
     'formBuilder.apps.FormbuilderConfig',
+    'navbar.apps.NavbarConfig',
 ]
 
 MIDDLEWARE = [
