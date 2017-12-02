@@ -7,8 +7,9 @@ function sendPatternData(patternName) {
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
     'navbar': sendNavbarData,
+    'sidebar': sendSidebarData,
   };
-  
+
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {
@@ -27,7 +28,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-    'navbar': afterLoadNavbarConfigModal,  
+    'navbar': afterLoadNavbarConfigModal,
+    'sidebar': afterLoadSidebarConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -40,7 +42,8 @@ function afterLoadEditPatternConfigModal(patternName) {
   patternFuncs = {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-    'navbar': afterLoadEditNavbarConfigModal,  
+    'navbar': afterLoadEditNavbarConfigModal,
+    'sidebar': afterLoadEditSidebarConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
