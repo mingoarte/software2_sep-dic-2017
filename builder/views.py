@@ -89,7 +89,6 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
-        context['captchaHTML'] = render_to_string('patrones/captcha/captcha.html', { 'public_key':'demoPublicKey' })
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
 

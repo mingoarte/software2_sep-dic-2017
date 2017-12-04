@@ -45,6 +45,9 @@
     {{ pattern.render }}
   {% endfor %}
 </div>
+<!-- Captcha HTML para ser usado por FormBuilder -->
+<div id='captcha-html'>{% include 'patrones/captcha_pattern/view.html' %}</div>
+
 <script>
 $('.check').on('change', function() {
     if (this.checked) {
