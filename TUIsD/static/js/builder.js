@@ -8,7 +8,7 @@ function sendPatternData(patternName) {
     'captcha': sendCaptchaData,
     'navbar': sendNavbarData,
   };
-  
+
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {
@@ -27,7 +27,7 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-    'navbar': afterLoadNavbarConfigModal,  
+    'navbar': afterLoadNavbarConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -40,7 +40,7 @@ function afterLoadEditPatternConfigModal(patternName) {
   patternFuncs = {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
-    'navbar': afterLoadEditNavbarConfigModal,  
+    'navbar': afterLoadEditNavbarConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -168,22 +168,5 @@ $(document).on('click', 'button.accept-modal', function(e){
       $('#modal-configuracion').removeData()
 
       afterSendPatternData(patternName, data);
-  });
-})
-
-// Una vez tenemos el nombre del template se hace request a la
-// aplicacion para guardar el nuevo template en bd
-$('#accept_name_template').click(function(){
-  $('#title').text($('#template_name').val())
-  $.ajax({
-      url : "../new-template/",
-      data :  {'name': $('#template_name').val()},
-
-  })
-  .done(function(data){
-    if(data){
-      $('#template_id').val(data.id);
-      $('#new_template').modal('hide');
-    }
   });
 });
