@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
