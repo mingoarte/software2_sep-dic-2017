@@ -27,6 +27,24 @@ class Template(models.Model):
         patterns = list(map(lambda c: c.content_object, components))
         return patterns
 
+    def content_patterns(self):
+        excluded_patterns = ['navbar', 'sidebar']
+        return list(filter(lambda p: p.name not in excluded_patterns, self.sorted_patterns()))
+
+    def navbar(self):
+        patterns = self.sorted_patterns()
+        for p in patterns:
+            if p.name == 'navbar':
+                return p
+        return None
+
+    def sidebar(self):
+        patterns = self.sorted_patterns()
+        for p in patterns:
+            if p.name == 'sidebar':
+                return p
+        return None
+
 class TemplateComponent(models.Model):
     position = models.IntegerField(null=True)
     template = models.ForeignKey(Template, null=True)
