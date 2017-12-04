@@ -176,4 +176,45 @@ class ModelsTestCase(TestCase):
             self.assertEqual(self.faq2.es_reciente(), True)
             self.assertEqual(self.faq3.es_reciente(), True)
 
+        # Se prueba el método 'categoria' y su correcto funcionamiento.
+        def test_categoria(self):
+            self.assertEqual(self.categ1, faq1.categoria())
+            self.assertEqual(self.categ2, faq2.categoria())
+            self.assertEqual(self.categ3, faq3.categoria())
+
+        # PRUEBAS DE LA CLASE "Categoria"
+
+        # Se prueba el campo 'nombre' y su correctitud.
+        def test_nombre(self):
+            self.assertEqual(self.categ1.nombre, "categoria1")
+            self.assertEqual(self.categ2.nombre, "categoria2")
+            self.assertEqual(self.categ3.nombre, "categoria3")
+
+        # Se prueba el campo 'fecha_publ' y su correctitud.
+        def test_fecha_publicacion(self):
+            self.assertLess(self.categ1.fecha_publ, datetime.now(timezone.utc))
+            self.assertLess(self.categ2.fecha_publ, datetime.now(timezone.utc))
+            self.assertLess(self.categ3.fecha_publ, datetime.now(timezone.utc))
+
+        # Se prueba el método '__str__' y su correcto funcionamiento.
+        def test_str_method_categoria(self):
+            self.assertEqual(self.categ1.nombre, self.categ1.__str__())
+            self.assertEqual(self.categ2.nombre, self.categ2.__str__())
+            self.assertEqual(self.categ3.nombre, self.categ3.__str__())
+
+        # PRUEBAS DE LA CLASE "PreguntaFaq"
+
+        # Se prueba el campo 'faq' y su correctitud.
+        def test_preg_faq(self):
+            self.assertEqual(self.preg1.faq, self.faq1)
+            self.assertEqual(self.preg2.faq, self.faq2)
+            self.assertEqual(self.preg3.faq, self.faq3)
+
+        # Se prueba el campo 'tema' y su correctitud.
+        def test_preg_categ(self):
+            self.assertEqual(self.preg1.tema, self.categ1)
+            self.assertEqual(self.preg2.tema, self.categ2)
+            self.assertEqual(self.preg3.tema, self.categ3)
+
+        # Se prueba el campo 'pregunta' y su correctitud.
         
