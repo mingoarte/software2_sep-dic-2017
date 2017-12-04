@@ -217,4 +217,19 @@ class ModelsTestCase(TestCase):
             self.assertEqual(self.preg3.tema, self.categ3)
 
         # Se prueba el campo 'pregunta' y su correctitud.
-        
+        def test_preg_pregunta(self):
+            self.assertEqual(self.preg1.pregunta, "¿Cómo instalar Ubuntu mediante un pendrive?")
+            self.assertEqual(self.preg2.pregunta, "¿Cómo sobrevivir en la USB?")
+            self.assertEqual(self.preg3.pregunta, "¿Cómo hacer capturas de pantalla en Ubuntu?")
+
+        # Se prueba el campo 'respuesta' y su correctitud.
+        def test_preg_respuesta(self):
+            self.assertEqual(self.preg1.respuesta, "Usar Rufus, bootear desde el pendrive y seguir los pasos.")
+            self.assertEqual(self.preg2.respuesta, "Fajándose.")
+            self.assertEqual(self.preg3.respuesta, "Presionar el botón ImprPant.")
+
+        # Se prueba el método '__str__' y su correcto funcionamiento.
+        def test_str_method_pregunta(self):
+            self.assertEqual(self.preg1.pregunta, self.preg1.__str__())
+            self.assertEqual(self.preg2.pregunta, self.preg2.__str__())
+            self.assertEqual(self.preg3.pregunta, self.preg3.__str__())        
