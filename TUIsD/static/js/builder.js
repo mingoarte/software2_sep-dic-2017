@@ -7,6 +7,8 @@ function sendPatternData(patternName) {
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
     'navbar': sendNavbarData,
+    'formattedcontent': sendFormattedcontentData,
+    'pagination' : sendPaginationData
   };
 
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();

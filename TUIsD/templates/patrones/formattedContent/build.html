@@ -1,0 +1,9 @@
+{% extends 'builder/card.html' %}
+
+{% block card_content %}
+	
+	<h1> {{pattern.title}} </h1>
+	</br>
+	{{ pattern.htmlContent | safe }}
+
+{% endblock %}

@@ -5,6 +5,7 @@ from django.template.loader import get_template
 from builder.models import Template, TemplateComponent
 from .forms import PaginationForm
 from .models import Pagination
+from django.views.decorators.csrf import csrf_exempt
 
 def get_tempid_pos(request):
 	#if request.method == 'GET':
@@ -23,58 +24,43 @@ def get_last_pos(template_id):
 		position += 1
 		
 	return position
-	
+
+@csrf_exempt
 def pagination_config(request):
-	# Creo mi objeto Pagination
-	pagination = Pagination()
-		
-	# En caso de estar creando patron decido en que posicion ponerlo
+	# Obtengo template_id y position de mi request
+	title = request.POST.get('title', None)
+	nItemsOnPage = request.POST.get('nItemsOnPage', None)
+	content = request.POST.get('content', None)
+	template_id = request.POST.get("template", None)
+	template = Template.objects.get(pk=int(template_id))
+	position = request.POST.get('position', None)
 	
-	
-	# Mostrar formulario de creacion/modificacion
-	if request.method == 'GET':
-		form = PaginationForm(instance = pagination)
-		
-		return render(request, 'pagination/configurar-modal.html', {'form': form, 'pagination' : pagination})
-	# Procesar formulario
-	elif request.method == 'POST':
-		# Obtengo template_id y position de mi request
-		template_id = request.POST.get("template", None)
+	# modificando
+	if position != None:
+		component = TemplateComponent.objects.get(position=int(position), template=template)
+		pattern = Pagination.objects.get(template_component=component)
+		pattern.title = title
+		pattern.nItemsOnPage = nItemsOnPage
+		pattern.content = content
+		pattern.save()
+	# creando
+	else:
 		position = get_last_pos(template_id)
+		pattern = Pagination.objects.create_pattern(title=title, nItemsOnPage=nItemsOnPage, content=content, position=position, template=template)
 		
-		form = PaginationForm(request.POST, instance = pagination)
-		if form.is_valid():
-			new_pagination = form.save()
-			TemplateComponent.objects.create(content_object = new_pagination, template_id = int(template_id), position = int(position))
-			
-			return render(request, 'pagination/pagination_create_success.html', {'pagination': pagination, 'position': position})
+	component = pattern.template_component.get()
 	
-	return render(request, '', {})
+	return JsonResponse(
+		data={
+			'position' : position,
+			'html' : pattern.render_card()
+		}
+	)
 
 def pagination_delete(request):
-	template = request.GET.get('template', None)
-	position = request.GET.get('position', None)
+	pass
 
-	component = TemplateComponent.objects.filter(position=int(position), template_id=int(template))
-	pagination = Pagination.objects.get(template_component=component)
-	pagination.delete()
-
-	return JsonResponse(data={})
-	
+@csrf_exempt	
 def pagination_update(request, pk):
-	pagination = Pagination.objects.get(pk = pk)
-	
-	if request.method == 'GET':
-		form = PaginationForm(instance = pagination)
-		
-		return render(request, 'pagination/pagination_form.html', {'form': form, 'pagination' : pagination})
-	elif request.method == 'POST':
-		form = PaginationForm(request.POST, instance = pagination)
-		if form.is_valid():
-			pagination.title = form.cleaned_data['title']
-			pagination.nItemsOnPage = form.cleaned_data['nItemsOnPage']
-			pagination.content = form.cleaned_data['content']
-			pagination.save()
-			component = TemplateComponent.objects.filter(content_object = pagination)
-			
-			return render(request, 'pagination/pagination_create_success.html', {'pagination': pagination, 'position': component.position})
+	pass
+
