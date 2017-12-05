@@ -195,3 +195,47 @@ El botón de eliminado no debe configurarse, es general para todos los patrones.
 - A veces al agregar un patron se agrega dos veces.
 - Al eliminar un patrón, éste no se elimina de la BD.
 - ~~Al editar una encuesta se crea una nueva (views.pollConfig)~~
+## Integrar Con Buildbot
+
+### Para utilizar las herramientas de integracion continua de builbot, primero:
+Para crear el servidor master:
+```
+$ buildbot create-master *directorio*
+```
+ Para ejecutar el servidor master:
+```
+$ buildbot start master
+```
+ Para crear el o los workers:
+```
+$ buildbot-worker create-worker *worker-model* *hostname* *worker-name* *worker-pass*
+ El nombre y el worker name debe tambier ser configurado en master/master.cfg
+```
+ Para ejecutar el o los workers:
+```
+$ buildbot-worker start worker
+```
+###Para configurar master y workers:
+ Revisar la carpeta buildbot_files y sus directorios internos.
+
+ Crear master y workers segun sea necesario, explicado aca:
+* http://docs.buildbot.net/current/tutorial/
+
+### Configurar para cada rama:
+
+ En master/master.cfg se tienen las secciones de *CHANGESOURCES* y
+*SCHEDULERS*, cada una apuntando a un repo de git y su branch respectiva, para
+cada una ajustar el repo y branch necesarios ademas de agregar los *test nuevos*
+en la seccion de *BUILDERS* asi como cualquier otro worker necesario para
+correrlos en la misma seccion
+
+### Cualquier cambio a la configuracion de master.cfg debe ser seguido de:
+```
+$ buildbot reconfig master
+$ buildbot restart master
+```
+
+### Cualquier cambio a la configuracion de algun worker:
+```
+$ buildbot-worker restart worker-name
+```
