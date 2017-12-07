@@ -165,6 +165,7 @@ def accordionConfig(request):
             if form.is_valid():
                 form.save()
 
+
             #accordion.save()
         else:
             # Se obtiene el template ID junto con los patrones para poder

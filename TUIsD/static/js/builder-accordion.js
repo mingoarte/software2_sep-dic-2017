@@ -10,5 +10,5 @@ function sendAccordionData() {
 }
 
 function afterLoadAccordionConfigModal() {
-    console.log("HUEHUEHUE");    
+    //console.log("HUEHUEHUE");
 }
