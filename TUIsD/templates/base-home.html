@@ -1,21 +1,22 @@
 <!DOCTYPE html> {% load static %}
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>TUIsD</title>
 
   <!-- Global stylesheets -->
   <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css'%}">
 
   <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/formulario.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/navbar.css' %}" rel="stylesheet" type="text/css">
 
   <!-- /global stylesheets -->
@@ -23,8 +24,6 @@
 
   <!-- Captcha CSS -->
   <link href="{% static 'captcha_pattern/css/captcha.css' %}" rel="stylesheet">
-
-  <!-- /global stylesheets -->
 
   <!-- Core JS files -->
   <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
@@ -44,61 +43,53 @@
 </head>
 
 <body>
-<div>
-<!-- Main navbar -->
-{% block navbar %}
+  <div>
+    <!-- Main navbar -->
+    {% block navbar %}
+      <nav class="navbar navbar-default" id ='navbar'>
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li id="home"><a href="{% url 'home' %}">Home</a></li>
+            {% if request.user.is_authenticated %}
+            <li id="diseno"><a href="{% url 'build' %}">Diseño</a></li>
+            <li id="temp"><a href="{% url 'ver_templates' %}">Ver Templates</a></li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+              <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Cerrar Sesión </a></li>
+            {% else %}
 
-<nav class="navbar navbar-default" id ='navbar'>
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="{% url 'home' %}">TUIsD</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li id="home"><a href="{% url 'home' %}">Home</a></li>
-      {% if request.user.is_authenticated %}
-      <li id="diseno"><a href="{% url 'build' %}">Diseño</a></li>
-      <li id="temp"><a href="{% url 'ver_templates' %}">Ver Templates</a></li>
-      {% endif %}
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      {% if request.user.is_authenticated %}
-        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Cerrar Sesión </a></li>
-      {% else %}
+              <li id="crear_usuario"><a href="{% url 'crear_usuario' %}"><span class="glyphicon glyphicon-user"></span>Crear Usuario</a></li>
 
-        <li id="crear_usuario"><a href="{% url 'crear_usuario' %}"><span class="glyphicon glyphicon-user"></span>Crear Usuario</a></li>
+              <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Iniciar Sesión</a></li>
+            {% endif %}
 
-        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Iniciar Sesión</a></li>
-      {% endif %}
+          </ul>
+        </div>
+      </nav>
+    {% endblock navbar %}
+    <!-- /main navbar -->
 
-    </ul>
-  </div>
-</nav>
-
-{% endblock navbar %}
-<!-- /main navbar -->
-
-
-  <!-- Page container -->
-  <div class="page-container">
-    <!-- Page content -->
-    <div class="page-content">
-      <!-- Main content -->
-
+    <!-- Page container -->
+    <div class="page-container">
+      <!-- Page content -->
+      <div class="page-content">
         <!-- Main sidebar -->
+        {% block sidebar %} {% endblock sidebar %}
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="sidebar"></div>
-        {% block sidebar %}
-        {% endblock sidebar %}
         <!-- /main sidebar -->
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="content" >
-          {% block content %}
-          {% endblock content %}
-      </div>
-          <!-- Footer -->
-          {% block footer %}
-          {% endblock footer %}
-          <!-- /footer -->
+        <!-- Main content -->
+        {% block content %} {% endblock content %}
+        
 
+        <!-- Footer -->
+        {% block footer %} {% endblock footer %}
+        <!-- /footer -->
       </div>
       <!-- /main content -->
     </div>
@@ -106,9 +97,7 @@
   </div>
   <!-- /page container -->
 
-  {% block custom_script %}
-  {% endblock custom_script %}
-
-
+  {% block custom_script %} {% endblock custom_script %}
 </body>
+
 </html>
