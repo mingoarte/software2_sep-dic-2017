@@ -80,6 +80,7 @@ $(".pattern").on('click', function() {
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
       $('#modal-configuracion').data('pattern-name', patternName);
+      $('#modal-configuracion')[0].removeAttribute('data-position');
       afterLoadCreatePatternConfigModal(patternName);
     }
   })

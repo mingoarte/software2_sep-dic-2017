@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.forms import ModelForm
 # from django.forms.models import inlineformset_factory
 from .models import Carousel, Content

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.template.loader import render_to_string

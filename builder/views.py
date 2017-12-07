@@ -1,8 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
+from urllib.parse import urlsplit, parse_qsl, unquote
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
+
+from accordion.forms import AccordionForm
 from builder.models import *
 from encuestas.models import *
 from carrusel.models import Carousel, Content
@@ -137,12 +143,14 @@ def accordionConfig(request):
         # Extraemos las variables del form.
         template_id = int(request.POST.get('template', None))
         position = request.POST.get('position', None)
-        titulo = request.POST.get('title', None)
 
-        print(titulo)
+        form_data = {}
+        for input in request.POST['form'].split('&'):
+            key,value = input.split('=')
+            form_data[unquote(key)] = unquote(value)
 
-        print("{} - {}\n".format(template_id, position))
-        print("EL webooooooooooo")
+        print(form_data)
+
         # Editando patron
         if position is not None:
             template = Template.objects.get(pk=template_id)
@@ -150,8 +158,14 @@ def accordionConfig(request):
                 position=int(position),
                 template=template
             )
+
             accordion = Accordion.objects.get(template_component=component)
-            accordion.save()
+            form = AccordionForm(form_data,instance= accordion)
+
+            if form.is_valid():
+                form.save()
+
+            #accordion.save()
         else:
             # Se obtiene el template ID junto con los patrones para poder
             # configurarle la posición a este patrón.
@@ -164,10 +178,12 @@ def accordionConfig(request):
             else:
                 position = 0
 
-            accordion = Accordion.objects.create_pattern(
-                position=position,
-                template=template
-            )
+            form_data['position'] = position
+            form_data['template'] = template
+
+
+
+            accordion = Accordion.objects.create_pattern(**form_data)
 
         return JsonResponse(
             data={

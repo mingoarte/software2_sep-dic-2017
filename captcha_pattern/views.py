@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse
@@ -32,7 +34,7 @@ def showCaptchaCode(request):
     }
     return render(request, 'captcha_pattern/generatedCode.html', context)
 
-def generate_captcha_code_as_zip(request, public_key: str):
+def generate_captcha_code_as_zip(request, public_key):
     html = render_to_string('captcha_pattern/captcha/captcha_with_includes.html', { 'public_key': public_key })
 
     # Copio el contenido del zip base (con los recursos estaticos, CSS, JS) para

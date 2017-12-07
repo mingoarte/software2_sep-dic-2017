@@ -1,15 +1,41 @@
-<div id="card_" class="card-box">
-  <div class="btn-group pull-right">
-    <button type="button" class="btn btn-default waves-effect config">Configurar</button>
-    <button type="button" class="btn btn-danger waves-effect eliminar">Eliminar</button>
-  </div>
-  <h1 class="header-title m-b-30">Accordion</h1>
+{% extends 'builder/card.html' %}
+
+{% block card_content %}
   <div class="row">
     <div class="col-md-12 pattern-content">
-      <ul>
-        {{ childs }}
-      </ul>
+            <!-- Print parent panel -->
+            <div class="panel-group" id="accordion-{{accordion.get_uuid_as_str}}">
+                <div id="parent_{{pattern.get_uuid_as_str}}" class="panel panel-default" >
+                        <div class="panel-heading" role="tab" id="head-{{pattern.get_uuid_as_str}}" >
+                                <h4 class="panel-title " >
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion-{{pattern.get_uuid_as_str}}" href="#{{pattern.get_uuid_as_str}}">
+                                    {{ pattern.title|safe | default:"Link collapsable" }}
+                                    </a>
+                                </h4>
+                        </div>
+                    <div id="{{pattern.get_uuid_as_str}}" class="panel-collapse collapse" >
+                        <div class="panel-body">
+                            <p> {{ pattern.content|safe | default:"Paragraph" }} </p>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Print child panels, if any -->
+            {% for child_panel in pattern.get_child_panels %}
+                <div class="panel panel-default" >
+                        <div class="panel-heading" >
+                                <a data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{pattern.get_uuid_as_str}}">
+                                {{ child_panel.title|safe | default:"Link collapsable" }}
+                                </a>
+                            </h4>
+                        </div>
+                    <div id="{{ child_panel.get_uuid_as_str }}" class="panel-collapse collapse" >
+                        <div class="panel-body">
+                            <p> {{ child_panel.content|safe | default:"Paragraph" }} </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
-  <input type="hidden" name="card_position" value="">
-</div>
+{% endblock %}

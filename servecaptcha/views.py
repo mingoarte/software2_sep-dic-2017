@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import escape
@@ -64,7 +66,7 @@ def generate_apikey(request):
     return response
 
 @csrf_exempt
-def generate_captcha(request, public_key: str):
+def generate_captcha(request, public_key):
     """ Función del endpoint para la generación del CAPTCHA.
 
         Se recibe a través del URL la llave pública del CAPTCHA que se quiere generar.
