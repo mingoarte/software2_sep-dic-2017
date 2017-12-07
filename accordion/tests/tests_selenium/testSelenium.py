@@ -8,25 +8,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.webdriver import WebDriver
 from accordion.models import Accordion
 
-
-class TestSeleniumHome(StaticLiveServerTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super(TestSeleniumHome, cls).setUpClass()
-        cls.selenium = webdriver.Firefox()
-        cls.selenium.implicitly_wait(0)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(TestSeleniumHome, cls).tearDownClass()
-
-    ## Solo abre el home y chequea que se muestre el título correcto en el navegador
-    def test_home_ok(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/'))
-        self.assertIn("Phoenix Team | Editor", self.selenium.title)
-
-
 ## Chequea que la página acordeon funcione correctamente
 class TestSeleniumAcordeon(StaticLiveServerTestCase):
     @classmethod
@@ -39,11 +20,6 @@ class TestSeleniumAcordeon(StaticLiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         super(TestSeleniumAcordeon, cls).tearDownClass()
-
-    def test_tiene_el_titulo_adecuado(self):
-        "Prueba que la página del acordeon tenga el título adecuado"
-        self.selenium.get('%s%s' % (self.live_server_url, '/acordeon/'))
-        self.assertIn("Phoenix Team | Editor", self.selenium.title)
 
     def test_no_tiene_acordeon(self):
         "Comprueba que no se muestre ningun acordeon en la vista"
