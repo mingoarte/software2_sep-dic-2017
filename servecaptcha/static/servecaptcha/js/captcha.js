@@ -1,6 +1,3 @@
-/* IMPORTANTE: Cuando se importe este script, debe definirse una variable captchaPublicKey,
-sino se usara 'demoPublicKey' por defecto */
-
 $(document).ready(function(){
   $('#actualizarCaptcha').trigger("click");
 });

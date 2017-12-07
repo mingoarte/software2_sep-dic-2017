@@ -1,10 +1,6 @@
 // variable global que guarda el form builder
 var $formBuilder = null;
 
-var fbOptions = {
-  disabledActionButtons: ['data', 'clear', 'save']
-};
-
 function sendFormData() {
   formData = $formBuilder.formData;
   return {

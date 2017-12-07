@@ -33,3 +33,7 @@ ul.nav.navbar-nav>li>a:hover{
 .test_it_now :hover{
     color:#d206d6;
 }
+
+#captcha-html {
+	display: none;
+}
