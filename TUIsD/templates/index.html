@@ -48,8 +48,11 @@
 <!-- /main navbar -->
 {% block content %}
 
-
-<div class="container" style="margin-left: 320px;">
+{% if sidebar %}
+  <div class="container" style="margin-left: 320px;">
+{% else %}
+  <div class="container">
+{% endif %}
   {% if page_name == 'Preview' %}
     <div class="row" style="margin-bottom: 10px;">
       <a type="button" class="btn btn-primary btn-lg" href="{% url 'editar' tem_id%}" style="margin-top: 20px;"><< Volver</a>

@@ -60,6 +60,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
 
         context = self.get_context_data(**kwargs)
+        context['sidebar'] = False
         prev = request.GET.get('type')
 
         if prev is not None:
@@ -69,9 +70,17 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         template = Template.objects.get(id=(kwargs['templateID']))
         patterns = template.sorted_patterns()
-        print(patterns)
+
+        for i in patterns:
+
+            if (i.name == "sidebar"):
+                context['sidebar'] = True
+                break
+
         context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
+
+        print(context)
 
         return self.render_to_response(context)
 
