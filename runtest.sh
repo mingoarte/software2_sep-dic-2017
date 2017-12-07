@@ -5,4 +5,4 @@ wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodrive
 tar -xvzf geckodriver*
 chmod +x geckodriver
 export PATH=$PATH:.
-python pruebas-python -m unittest pruebas-selenium/captcha/captcha.py
+python -m unittest pruebas-selenium/captcha/captcha.py
