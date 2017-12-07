@@ -1,45 +1,96 @@
-{% autoescape off %}
-<nav class="navbar navbar-default" style="background-color:#E6E6E6;">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbarContent" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-      </button>
-      {% for list in lista %}
-    	  {% if list.type == 'brand' %}
-    	  	<a class="navbar-brand" href="{{list.link}}">{{list.name}}</a>
-    	  {% endif %}
-      {% endfor %}
-    </div>
+<!DOCTYPE html> {% load static %}
+<html lang="en">
 
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="nav navbar-nav">
-  	     {% for list in lista %}
-      		{% if list.type == 'link' %}
-    	     	<li>
-    	     	  {% if list.option == 'disabled' %}
-    	     	  	<a class="nav-{{list.type}} {{list.option}}" href="{{list.link}}">{{list.name}}<span class="sr-only">(current)</span></a>
-    	     	  {% elif list.option == 'active' %}
-    	     	  	<a class="nav-{{list.type}}" href="{{list.link}}">{{list.name}}<span class="sr-only">(current)</span></a>
-    	     	  {% endif %}
-    	     	</li>
-  	      {% elif list.type == 'dropdown' %}
-  	     		<li class="dropdown">
-  	     		  <a class="dropdown-toggle" id="{{list.name}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  	     		    {{list.name}}
-  	     		  </a>
-  	     		  <ul class="dropdown-menu">
-    	     		  {% for elem in list.elements %}
-    	     		    <li>
-                    <a href="{{elem.link}}">{{elem.name}}</a>
-                  </li>
-    	     		  {% endfor %}
-              </ul>
-  	     		</li>
-  		    {% endif %}
-  	     {% endfor %}
-      </ul>
-    </div>
-  </div>
-</nav>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>TUIsD</title>
+
+  <!-- Global stylesheets -->
+  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css'%}">
+
+  <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/formulario.css' %}" rel="stylesheet" type="text/css">
+
+  <!-- /global stylesheets -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+
+  <!-- Captcha CSS -->
+  <link href="{% static 'captcha_pattern/css/captcha.css' %}" rel="stylesheet">
+
+  <!-- Core JS files -->
+  <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+  <script src="http://malsup.github.com/jquery.form.js"></script>
+  <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <!-- /core JS files -->
+
+  <!-- JSWeCan -->
+  <script src="{% static 'servecaptcha/js/captcha.js' %}"></script>
+  <script src="{% static 'formBuilder/js/jquery-ui.min.js' %}"></script>
+  <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
+  <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
+  <script src="{% static 'formBuilder/js/custom-form-builder.js' %}"></script>
+  <link href="{% static 'navbar/css/navbar.css' %}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+{% autoescape off %}
+<div class="nav-side-menu">
+    <div class="wrapper">
+      {% for list in lista %}
+        {% if list.type == 'brand' %}
+          <li class="sidebar-brand">
+              <a href="{{list.link}}">
+                 {{list.name}}
+              </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% for list in lista %}
+       {% if list.type == 'link' %}
+         <li class="pattern pattern-formulario">
+            <a href="{{list.link}}"> {{list.name}}<i class="glyphicon glyphicon-none"></i></a>
+         </li>
+       {% elif list.type == 'dropdown' %}
+         <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+          <div class="menu-list">
+            <ul id="menu-content" class="menu-content collapse out">
+              <li data-toggle="collapse" data-target="#builder-form-btn" class="collapsed">
+                  <a href="#"> {{list.name}} <span class="arrow"></span></a>
+              </li>
+              <div style="text-align: center;">
+                <ul class="sub-menu collapse" id="builder-form-btn">
+                    {% for elem in list.elements %}
+                      <li><a href="{{elem.link}}">  {{elem.name}}</a></li>
+                    {% endfor %}
+                </ul>
+              </div>
+          </ul>
+       </div>
+       {% endif %}
+      {% endfor %}
+  </div>    
+</div>
 {% endautoescape %}
+
+</body>
+
+<style type="text/css">
+    .wrapper {
+        text-align: center;
+    }
+
+    .glyphicon-none:before {
+        content: "\2122";
+        color: transparent !important;
+    }
+</style>
+
+</html>
