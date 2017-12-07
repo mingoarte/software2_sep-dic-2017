@@ -5,7 +5,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Crear Acordeon</h4>
+            <h4 class="modal-title" id="myModalLabel">Configurar Acordeon</h4>
         </div>
         <div class="modal-body">
             {% if success %}
@@ -31,7 +31,8 @@
                             {% bootstrap_field accordionForm.style %}
                         </div>
                     </div>
-                    <button type="button" class="save btn btn-default accept-modal" id="accordion-create-submit" data-dismiss="modal">Crear</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="save btn btn-primary accept-modal" id="accordion-create-submit" data-dismiss="modal">Aceptar</button>
                 </form>
             {% endif %}
         </div>

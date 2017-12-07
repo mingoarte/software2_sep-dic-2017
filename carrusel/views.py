@@ -1,10 +1,8 @@
 import json
 
-from django.forms import inlineformset_factory, model_to_dict
+from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.template.loader import render_to_string
-from django.views.decorators.csrf import csrf_exempt
 
 from builder.models import Template, TemplateComponent
 

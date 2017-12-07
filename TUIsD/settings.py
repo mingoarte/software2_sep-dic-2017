@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     'encuestas.apps.EncuestasConfig',
     'carrusel.apps.CarruselConfig',
     'accordion',
+    'tab',
     'faqs.apps.FaqsConfig',
     'servecaptcha.apps.ServeCaptchaConfig',
     'captcha_pattern.apps.CaptchaPatternConfig',
     'pagination.apps.PaginationConfig',
     'formBuilder.apps.FormbuilderConfig',
     'navbar.apps.NavbarConfig',
+    'breadcrumbs.apps.BreadcrumbsConfig',
+    'formattedcontent.apps.FormattedcontentConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
 
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -59,22 +61,41 @@ def accordionEdit(request, accordion_id):
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist()
 
-    context = {
-        'accordionForm': AccordionForm(),
-        'accordion': accordion
-    }
-
     if request.method == 'POST':
         form = AccordionForm(request.POST or None, instance=accordion)
-        context['accordionFormEdit'] = form
-
-        if form.is_valid():
-            form.save()
+    elif request.method == 'GET':
+        form = AccordionForm(request.GET or None, instance=accordion)
     else:
-        context['accordionFormEdit'] = AccordionForm(instance=accordion)
+        raise Http404()
 
-    return render(request, 'edit_accordion.html', context)
+    if form.is_valid():
+        form.save()
 
+    return JsonResponse({'success':True})
+
+def accordionModalEdit(request):
+    if request.method == 'GET' and request.GET.get('acordeon-id','') :
+
+        acordeon_id = request.GET['acordeon-id']
+
+        try:
+            accordion = Accordion.all_objects.get(accordion_id=acordeon_id)
+        except ObjectDoesNotExist:
+            raise Http404()
+
+        accordionForm = AccordionForm(instance=accordion)
+
+
+        return JsonResponse(
+            data={
+                'html':render_to_string(
+                    'patrones/accordion/modal_editar_panel.html',
+                    {"accordionForm": accordionForm}
+                )
+            }
+        )
+
+    raise Http404()
 
 # View to delete accordions
 def accordionDelete(request, accordion_id):
@@ -86,22 +107,7 @@ def accordionDelete(request, accordion_id):
             raise ObjectDoesNotExist()
         accordion.delete()
 
+        if request.is_ajax():
+            return JsonResponse({'success':True})
+
     return redirect('accordion:accordion-list')
-
-
-# Inicia sesión del usuario por ajax
-def ajax_log_in_view(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return JsonResponse({'autenticado': 1})
-    else:
-        return JsonResponse({'autenticado': 0})
-
-
-# Cierra la sesión de un usuario y lo redirige al home
-def logout_user(request):
-    logout(request)
-    return redirect('/')

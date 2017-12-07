@@ -2,11 +2,43 @@
 import uuid
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import CASCADE
 from django.template.loader import render_to_string
 from builder.models import Pattern, PatternManager
 
 
 class BaseAccordionManager(PatternManager):
+
+    def create_pattern(self, *args, **kwargs):
+        # Extraer template_id y position de los argumentos
+        template = kwargs.pop('template', None)
+        if template:
+            template_id = template.id
+        elif 'template_id' in kwargs:
+            template_id = kwargs.pop('template_id', None)
+
+        position = kwargs.pop('position', 0)
+
+        card_id = kwargs.pop('card-id', 0)
+
+        # Crear patron y asignarle un TemplateComponent
+        total_panels = kwargs.pop('panels', 0)
+
+        parent = self.model(*args, **kwargs)
+        parent.save()
+
+        temp_c = parent.template_component.create(template_id=template_id, position=position)
+
+        for i in range(0, int(total_panels)):
+            accord_hijo = Accordion(
+                title='Panel hijo',
+                parent=parent
+            )
+            accord_hijo.save()
+            #accord_hijo.template_component = temp_c
+
+        return parent
+
     def get_queryset(self):
         return super(BaseAccordionManager, self).get_queryset().filter(parent=None).order_by('id')
 
@@ -84,7 +116,8 @@ class Accordion(PatronAbstract, Pattern):
         'self',
         null=True,
         blank=True,
-        related_name='panels'
+        related_name='panels',
+        on_delete=CASCADE
     )
     accordion_id = models.UUIDField(
         u'Id del acordeon',
@@ -118,18 +151,16 @@ class Accordion(PatronAbstract, Pattern):
         return panels
 
     def render(self):
-        # return render_to_string('patrones/accordion/view.html', {"pattern": self})
-        return "El render del acordion"
+        return render_to_string('patrones/accordion/full_preview.html', {"accordion": self})
 
     def render_card(self):
         return render_to_string(
-            'patrones/accordion/build.html',
-            {"accordion": self, "childs": self.get_child_panels()}
+            'patrones/accordion/card_content_mini_preview.html',
+            {"pattern": self}
         )
 
     def render_config_modal(self, request):
         from .forms import AccordionForm
-        form = AccordionForm()
+        form = AccordionForm(instance=self)
 
         return render_to_string('patrones/accordion/configurar-modal.html', {"accordionForm": form})
-

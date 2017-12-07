@@ -7,7 +7,10 @@ function sendPatternData(patternName) {
     'faq': sendFAQData,
     'captcha': sendCaptchaData,
     'accordion': sendAccordionData,
+    'tab': sendTabData,
     'navbar': sendNavbarData,
+    'formattedcontent': sendFormattedcontentData,
+    'pagination' : sendPaginationData
   };
 
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -29,8 +32,10 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'accordion': afterLoadAccordionConfigModal,
+    'tab': afterLoadTabConfigModal,
     'navbar': afterLoadNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -43,7 +48,8 @@ function afterLoadEditPatternConfigModal(patternName) {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadEditNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -80,6 +86,7 @@ $(".pattern").on('click', function() {
     success: function (res) {
       $('#modal-configuracion .modal-dialog').html(res);
       $('#modal-configuracion').data('pattern-name', patternName);
+      $('#modal-configuracion').removeData('position');
       afterLoadCreatePatternConfigModal(patternName);
     }
   })

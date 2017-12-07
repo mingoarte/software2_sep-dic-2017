@@ -1,8 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
+from urllib.parse import urlsplit, parse_qsl, unquote
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
+
+from accordion.forms import AccordionForm
+from tab.forms import TabForm
 from builder.models import *
 from encuestas.models import *
 from carrusel.models import Carousel, Content
@@ -10,6 +17,7 @@ from faqs.models import *
 from formBuilder.models import *
 from captcha_pattern.models import *
 from accordion.models import Accordion
+from tab.models import Tab, TabContainer
 from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
@@ -137,8 +145,11 @@ def accordionConfig(request):
         # Extraemos las variables del form.
         template_id = int(request.POST.get('template', None))
         position = request.POST.get('position', None)
+        form_data = {}
+        for input in request.POST['form'].split('&'):
+            key,value = input.split('=')
+            form_data[unquote(key)] = unquote(value)
 
-        # print("{} - {}\n".format(template_id, position))
         # Editando patron
         if position is not None:
             template = Template.objects.get(pk=template_id)
@@ -146,8 +157,22 @@ def accordionConfig(request):
                 position=int(position),
                 template=template
             )
+
             accordion = Accordion.objects.get(template_component=component)
-            accordion.save()
+            form = AccordionForm(form_data,instance= accordion)
+
+            if form.is_valid():
+                form.save()
+
+                total_panels = form_data.pop('panels', 0)
+                for i in range(0, int(total_panels)):
+                    accord_hijo = Accordion(
+                        title='Panel hijo',
+                        parent=accordion
+                    )
+                    accord_hijo.save()
+
+
         else:
             # Se obtiene el template ID junto con los patrones para poder
             # configurarle la posición a este patrón.
@@ -160,17 +185,79 @@ def accordionConfig(request):
             else:
                 position = 0
 
-            form = request.POST.get('form', None)
+            form_data['position'] = position
+            form_data['template'] = template
 
-            accordion = Accordion.objects.create_pattern(
-                position=position,
-                template=template,
-            )
+
+
+            accordion = Accordion.objects.create_pattern(**form_data)
 
         return JsonResponse(
             data={
                 'position': accordion.template_component.get().position,
                 'html': accordion.render_card()
+            }
+        )
+
+
+@csrf_exempt
+@login_required(redirect_field_name='/')
+def tabConfig(request):
+    if request.method == 'POST':
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position', None)
+        form_data = {}
+        for input in request.POST['form'].split('&'):
+            key,value = input.split('=')
+            form_data[unquote(key)] = unquote(value)
+
+        # Editando patron
+        if position is not None:
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(
+                position=int(position),
+                template=template
+            )
+
+            tab = Tab.objects.get(template_component=component)
+            form = TabForm(form_data, instance=tab)
+
+            if form.is_valid():
+                form.save()
+
+                total_tabs = form_data.pop('number_tabs', 0)
+                for i in range(0, int(total_tabs)):
+                    tab_hijo = Tab(
+                        title='Tab extra',
+                        parent=tab.parent
+                    )
+                    tab_hijo.save()
+
+
+        else:
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            form_data['position'] = position
+            form_data['template'] = template
+            form_data.pop('number_tabs')
+            form_data.pop('card-id')
+
+            tab = Tab.objects.create_pattern(**form_data)
+
+        return JsonResponse(
+            data={
+                'position': tab.template_component.get().position,
+                'html': tab.render_card()
             }
         )
 
