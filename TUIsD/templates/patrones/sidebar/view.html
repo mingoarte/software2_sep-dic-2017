@@ -1,47 +1,5 @@
-<!DOCTYPE html> {% load static %}
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>TUIsD</title>
-
-  <!-- Global stylesheets -->
-  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css'%}">
-
-  <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/formulario.css' %}" rel="stylesheet" type="text/css">
-
-  <!-- /global stylesheets -->
-  <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
-
-  <!-- Captcha CSS -->
-  <link href="{% static 'captcha_pattern/css/captcha.css' %}" rel="stylesheet">
-
-  <!-- Core JS files -->
-  <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-  <script src="http://malsup.github.com/jquery.form.js"></script>
-  <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-  <!-- /core JS files -->
-
-  <!-- JSWeCan -->
-  <script src="{% static 'servecaptcha/js/captcha.js' %}"></script>
-  <script src="{% static 'formBuilder/js/jquery-ui.min.js' %}"></script>
-  <script src="{% static 'formBuilder/js/form-builder.min.js' %}"></script>
-  <script src="{% static 'formBuilder/js/form-render.min.js' %}"></script>
-  <script src="{% static 'formBuilder/js/custom-form-builder.js' %}"></script>
-  <link href="{% static 'navbar/css/navbar.css' %}" rel="stylesheet" type="text/css">
-</head>
-
-<body>
+{% load static %}
 {% autoescape off %}
-
 <div class="page-content">
   <div class="nav-side-menu-patron">
       <div class="wrapper">
@@ -82,8 +40,6 @@
   </div>
 </div>
 {% endautoescape %}
-
-</body>
 
 <style type="text/css">
     .wrapper {
@@ -241,5 +197,3 @@
     }
 
 </style>
-
-</html>
