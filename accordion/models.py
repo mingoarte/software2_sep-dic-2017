@@ -152,11 +152,11 @@ class Accordion(PatronAbstract, Pattern):
         return panels
 
     def render(self):
-        return render_to_string('patrones/accordion/view.html', {"accordion": self})
+        return render_to_string('patrones/accordion/full_preview.html', {"accordion": self})
 
     def render_card(self):
         return render_to_string(
-            'patrones/accordion/build.html',
+            'patrones/accordion/card_content_mini_preview.html',
             {"pattern": self}
         )
 

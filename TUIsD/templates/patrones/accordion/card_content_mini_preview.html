@@ -11,11 +11,6 @@
                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion-{{pattern.get_uuid_as_str}}" href="#{{pattern.get_uuid_as_str}}">
                                     {{ pattern.title|safe | default:"Link collapsable" }}
                                     </a>
-                                    <div style="display: inline-block;">
-                                        <a href="#" class="delete-panel-button ">
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
                                 </h4>
                         </div>
                     <div id="{{pattern.get_uuid_as_str}}" class="panel-collapse collapse" >
@@ -34,10 +29,10 @@
                                 {{ child_panel.title|safe | default:"Link collapsable" }}
                                 </a>
                                 <div style="display: inline-block;">
-                                    <a href="#" class="delete-panel-button ">
+                                    <a href="#" class="delete-panel-button " data-accordion-id = "{{child_panel.get_uuid_as_str}}">
                                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                                     </a>
-                                    <a href="#" class="edit-panel-button ">
+                                    <a href="#" class="edit-panel-button " data-accordion-id = "{{child_panel.get_uuid_as_str}}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                     </a>
                                 </div>

@@ -92,4 +92,7 @@ def accordionDelete(request, accordion_id):
             raise ObjectDoesNotExist()
         accordion.delete()
 
+        if request.is_ajax():
+            return JsonResponse({'success':True})
+
     return redirect('accordion:accordion-list')
