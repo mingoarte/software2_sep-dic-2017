@@ -8,6 +8,8 @@ function sendPatternData(patternName) {
     'captcha': sendCaptchaData,
     'accordion': sendAccordionData,
     'navbar': sendNavbarData,
+    'formattedcontent': sendFormattedcontentData,
+    'pagination' : sendPaginationData
   };
 
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
@@ -30,7 +32,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'carousel': afterLoadCarouselConfigModal,
     'accordion': afterLoadAccordionConfigModal,
     'navbar': afterLoadNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -43,7 +46,8 @@ function afterLoadEditPatternConfigModal(patternName) {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadEditNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();

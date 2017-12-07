@@ -22,11 +22,10 @@ class Pagination(Pattern):
 							     
 	def render_config_modal(self, request):
 		from .forms import PaginationForm
-		form = PaginationForm(instance = self)
-		print('config modal pagination')
-		return render_to_string(template_name = 'pagination/configurar-modal.html',
-								context = {'form' : form},
-								request = request
+		form = PaginationForm()
+		return render_to_string(template_name = 'patrones/pagination/configurar-modal.html',
+								context = {'form' : form,
+										   'pattern' : self},
 								)
 		
 	def render_card(self):
