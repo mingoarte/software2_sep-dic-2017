@@ -22,6 +22,7 @@ from builder.forms import *
 from encuestas.forms import *
 from carrusel.forms import *
 from navbar.models import *
+from sidebar.models import *
 from django.forms import formset_factory, model_to_dict
 from .forms import *
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -72,6 +73,7 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
 
         context = self.get_context_data(**kwargs)
+        context['sidebar'] = False
         prev = request.GET.get('type')
 
         if prev is not None:
@@ -81,9 +83,17 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
 
         template = Template.objects.get(id=(kwargs['templateID']))
         patterns = template.sorted_patterns()
-        print(patterns)
+
+        for i in patterns:
+
+            if (i.name == "sidebar"):
+                context['sidebar'] = True
+                break
+
         context['patterns'] = template.sorted_patterns()
         context['tem_id'] = kwargs['templateID']
+
+        print(context)
 
         return self.render_to_response(context)
 
@@ -103,7 +113,6 @@ class editarTemplate(LoginRequiredMixin,TemplateView):
         context['patterns'] = patterns
         context['tem_id'] = kwargs['templateID']
         context['tem_name'] = template.name
-        context['captchaHTML'] = render_to_string('patrones/captcha/captcha.html', { 'public_key':'demoPublicKey' })
         #context['page_name'] = 'preview'
         return self.render_to_response(context)
 
@@ -351,6 +360,44 @@ def navbarConfig(request):
         return JsonResponse({
             'position': navbar.template_component.get().position,
             'html': navbar.render_card()
+        })
+
+
+@csrf_exempt
+@login_required(redirect_field_name='/')
+def sidebarConfig(request):
+    if request.method == 'POST':
+        # Extraemos las variables del form.
+        template_id = int(request.POST.get('template', None))
+        position = request.POST.get('position', None)
+        elementos = json.loads(request.POST.get('elementos',None))
+
+        # Editando patron
+        if position != None:
+            template = Template.objects.get(pk=template_id)
+            component = TemplateComponent.objects.filter(position=int(position), template=template)
+            sidebar = Sidebar.objects.get(template_component=component)
+            sidebar.elementos = elementos
+            sidebar.save()
+        else:
+            # Se obtiene el template ID junto con los patrones para poder
+            # configurarle la posición a este patrón.
+            template = Template.objects.get(pk=template_id)
+            patterns = template.sorted_patterns()
+
+            if patterns:
+                position = patterns[-1].template_component.get().position
+                position += 1
+            else:
+                position = 0
+
+            sidebar = Sidebar.objects.create_pattern(elementos = elementos,
+                                                   position = position,
+                                                   template = template)
+
+        return JsonResponse({
+            'position': sidebar.template_component.get().position,
+            'html': sidebar.render_card()
         })
 
 @csrf_exempt

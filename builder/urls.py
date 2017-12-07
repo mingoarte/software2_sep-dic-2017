@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^config-modal/$', views.configModal, name='configModal'),
     url(r'^delete-pattern/$', views.deletePattern, name='deletePattern'),
     url(r'^navbar-config/$', views.navbarConfig, name='navbarConfig'),
+    url(r'^sidebar-config/$', views.sidebarConfig, name='sidebarConfig'),
 ]

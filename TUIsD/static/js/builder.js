@@ -9,7 +9,8 @@ function sendPatternData(patternName) {
     'accordion': sendAccordionData,
     'tab': sendTabData,
     'navbar': sendNavbarData,
-    'formattedcontent': sendFormattedcontentData,
+    'sidebar': sendSidebarData,
+	 'formattedcontent': sendFormattedcontentData,
     'pagination' : sendPaginationData
   };
 
@@ -34,8 +35,9 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'accordion': afterLoadAccordionConfigModal,
     'tab': afterLoadTabConfigModal,
     'navbar': afterLoadNavbarConfigModal,
-    'breadcrumb': afterLoadBreadcrumbConfigModal,
-  }
+    'sidebar': afterLoadSidebarConfigModal,
+	'breadcrumb': afterLoadBreadcrumbConfigModal,
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -48,8 +50,9 @@ function afterLoadEditPatternConfigModal(patternName) {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadEditNavbarConfigModal,
-    'breadcrumb': afterLoadBreadcrumbConfigModal,
-  }
+    'sidebar': afterLoadEditSidebarConfigModal,
+	'breadcrumb': afterLoadBreadcrumbConfigModal,
+}
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
