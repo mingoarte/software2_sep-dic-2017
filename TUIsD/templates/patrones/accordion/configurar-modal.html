@@ -14,7 +14,9 @@
                     Cerrar.
                 </button>
             {% else %}
-                <form id="accordion-create-form" data-parsley-validate="" class="post-form" novalidate>
+                <form id="accordion-create-form" action="#" class="post-form forms" data-parsley-validate novalidate>
+                    <input id="card-id" type="hidden" name="card-id">
+                    <input id="position" type="hidden" name="position">
                     <div class="row">
                         <div class="col-lg-6">
                             {% bootstrap_field accordionForm.title %}
@@ -29,7 +31,7 @@
                             {% bootstrap_field accordionForm.style %}
                         </div>
                     </div>
-                    <button id type="submit" class="save btn btn-default accept-modal" id="accordion-create-submit">Crear</button>
+                    <button type="button" class="save btn btn-default accept-modal" id="accordion-create-submit" data-dismiss="modal">Crear</button>
                 </form>
             {% endif %}
         </div>

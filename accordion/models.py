@@ -122,8 +122,10 @@ class Accordion(PatronAbstract, Pattern):
         return "UUUUUUUUUUUYUYUYUYUYY"
 
     def render_card(self):
-        # return render_to_string('patrones/accordion/build.html', {"pattern": self})
-        return "HUEHUEHUEHUEHUEHUEHEUH"
+        return render_to_string(
+            'patrones/accordion/build.html',
+            {"accordion": self}
+        )
 
     def render_config_modal(self, request):
         from .forms import AccordionForm

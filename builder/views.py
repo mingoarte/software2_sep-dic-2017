@@ -131,13 +131,18 @@ def formConfig(request):
 
 
 @csrf_exempt
+@login_required(redirect_field_name='/')
 def accordionConfig(request):
     if request.method == 'POST':
         # Extraemos las variables del form.
         template_id = int(request.POST.get('template', None))
         position = request.POST.get('position', None)
+        titulo = request.POST.get('title', None)
 
-        # print("{} - {}\n".format(template_id, position))
+        print(titulo)
+
+        print("{} - {}\n".format(template_id, position))
+        print("EL webooooooooooo")
         # Editando patron
         if position is not None:
             template = Template.objects.get(pk=template_id)
@@ -164,10 +169,12 @@ def accordionConfig(request):
                 template=template
             )
 
-        return JsonResponse({
-            'position': accordion.template_component.get().position,
-            'html': accordion.render_card()
-        })
+        return JsonResponse(
+            data={
+                'position': accordion.template_component.get().position,
+                'html': accordion.render_card()
+            }
+        )
 
 
 @login_required(redirect_field_name='/')

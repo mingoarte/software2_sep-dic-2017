@@ -16,6 +16,7 @@ function sendPatternData(patternName) {
    ajaxOpts.data.position = $('#modal-configuracion').data('position');
   }
   ajaxOpts.method = 'POST';
+
   return $.ajax(ajaxOpts);
 }
 
@@ -27,6 +28,7 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'faq': afterLoadFAQConfigModal,
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
+    'accordion': afterLoadAccordionConfigModal,
     'navbar': afterLoadNavbarConfigModal,
 }
 
@@ -140,13 +142,10 @@ $(document).on('click', 'button.accept-modal', function(e){
       }
    *
    */
-
   patternName = $('#modal-configuracion').data('pattern-name');
   console.log("Enviando data del patron ", patternName);
 
   sendPatternData(patternName).done(function(data){
-      console.log("Ok termino vamo a ver");
-
       if (data.position != null) {
         // Si se esta editando el patron, modificar el card existente
         if ($(".pattern-container[data-position='"+ data.position +"']").length) {
@@ -167,8 +166,6 @@ $(document).on('click', 'button.accept-modal', function(e){
 
       // Limpiar modal
       $('#modal-configuracion').removeData()
-      console.log("EEEEEEEEEEEEEEEEEE TERMINANDO");
       afterSendPatternData(patternName, data);
-      console.log("Termino");
   });
 });

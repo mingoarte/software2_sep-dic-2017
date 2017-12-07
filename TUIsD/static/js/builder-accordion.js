@@ -9,6 +9,6 @@ function sendAccordionData() {
     }
 }
 
-function afterLoadPollConfigModal() {
+function afterLoadAccordionConfigModal() {
     console.log("HUEHUEHUE");    
 }
