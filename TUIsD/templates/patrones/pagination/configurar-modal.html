@@ -1,0 +1,41 @@
+<!-- Modal content -->
+{% load widget_tweaks %}
+<div class="modal-content">
+	<div class='modal-header'>
+		<button type='button' class='close' data-dismiss='modal'>&times;</button>
+		<h4 class='modal-title'>Configurar Paginacion</h4>
+	</div>
+  
+	 <div class="modal-body">
+		 <form action="#" class="form">
+			<input id="card-id" type="hidden" name="card-id">
+			<input id="position" type="hidden" name="position">
+
+			<div class='form-group'>
+      			<label for='title'>Titulo</label>
+      			<input class='form-control' id='title' type='text' name='title' required placeholder='Introduzca un titulo' value='{{pattern.title}}'>
+      			
+      			<label for='nItemsOnPage'>Numero de items por pagina</label>
+      			<input class='form-control' id='nItemsOnPage' type='number' name='nItemsOnPage' required value='{{pattern.nItemsOnPage}}'>
+      			
+      			<label for='content'>Contenido</label>
+      			<select class='form-control' id='content' name='content' required>
+					{% for choice in form.choices %}
+						{% if choice.0 == pattern.content %}
+							<option value="{{choice.0}}" selected>{{choice.0}}</option>
+						{% else %}
+							<option value="{{choice.0}}">{{choice.0}}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+      			
+      		</div>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<button id='accept_paginatio' type='button' class='accept-modal btn btn-default' data-dismiss='modal'>Aceptar</button>
+		<button type='button' class='btn btn-default' data-dismiss='modal'>Cerrar</button>
+	</div>
+  
+</div>
