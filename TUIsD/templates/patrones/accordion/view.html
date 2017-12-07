@@ -26,7 +26,8 @@
     {% for child_panel in accordion.get_child_panels %}
         <div class="panel panel-default" style='width: {{child_panel.width}}%;{{child_panel.style}}'>
                 <div class="panel-heading" style="min-height: {{ child_panel.height }}px;">
-                        <a data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{accordion.get_uuid_as_str}}">
+                    <h4>
+                        <a class="collapsed" data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{accordion.get_uuid_as_str}}">
                         {{ child_panel.title|safe | default:"Link collapsable" }}
                         </a>
                     </h4>

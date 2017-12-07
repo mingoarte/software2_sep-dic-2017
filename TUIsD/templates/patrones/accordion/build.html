@@ -24,7 +24,8 @@
             {% for child_panel in pattern.get_child_panels %}
                 <div class="panel panel-default" >
                         <div class="panel-heading" >
-                                <a data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{pattern.get_uuid_as_str}}">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{pattern.get_uuid_as_str}}">
                                 {{ child_panel.title|safe | default:"Link collapsable" }}
                                 </a>
                             </h4>
@@ -38,4 +39,5 @@
             {% endfor %}
         </div>
     </div>
+  </div>
 {% endblock %}
