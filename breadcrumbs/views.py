@@ -1,20 +1,18 @@
-import json
-
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import render
 
 from builder.models import Template, TemplateComponent
 
-from .forms import CarouselForm
-from .models import Carousel, Content
+from .forms import ContentForm, BreadcrumbsForm
+from .models import BreadcrumbContent, Breadcrumb
 
 
-def CarouselConfig(request):
-    carousel = Carousel()
+def BreadcrumbConfig(request):
+    breadcrumb = Breadcrumb()
 
     ContentInlineFormSet = inlineformset_factory(
-        Carousel, Content, fields=('title', 'description', 'image'), extra=2)
+        Breadcrumb, BreadcrumbContent, fields=('title', 'url'), extra=2)
 
     if request.method == "POST":
         template_id = request.POST.get("template", None)
@@ -26,8 +24,7 @@ def CarouselConfig(request):
             patterns = template.sorted_patterns()
 
             if patterns:
-                position = patterns[-1].template_component.get().position
-                position += 1
+                position = patterns[-1].template_component.get().position + 1
             else:
                 position = 0
 
@@ -35,25 +32,25 @@ def CarouselConfig(request):
         else:
             template = Template.objects.get(pk=int(template_id))
             component = TemplateComponent.objects.get(position=int(position), template=template)
-            carousel = Carousel.objects.get(template_component=component)
+            breadcrumb = Breadcrumb.objects.get(template_component=component)
 
-        form = CarouselForm(request.POST, request.FILES, instance=carousel)
+        form = BreadcrumbsForm(request.POST, instance=breadcrumb)
         if form.is_valid():
-            created_carousel = form.save(commit=False)
+            created_breadcrumb = form.save(commit=False)
             formset = ContentInlineFormSet(
-                request.POST, request.FILES, instance=created_carousel)
+                request.POST, instance=created_breadcrumb)
             if formset.is_valid():
-                created_carousel.save()
+                created_breadcrumb.save()
                 if isNew:
                     TemplateComponent.objects.create(
-                        content_object=created_carousel, 
+                        content_object=created_breadcrumb, 
                         template_id=int(template_id), 
                         position=position
                     )
                 formset.save()
                 return JsonResponse({
-                    'position': carousel.template_component.get().position,
-                    'html': carousel.render_card()
+                    'position': breadcrumb.template_component.get().position,
+                    'html': breadcrumb.render_card()
                 })
     else:
         template_id = request.GET.get("template", None)
@@ -64,11 +61,10 @@ def CarouselConfig(request):
             patterns = template.sorted_patterns()
 
             if patterns:
-                position = patterns[-1].template_component.get().position
-                position += 1
+                position = patterns[-1].template_component.get().position + 1
             else:
                 position = 0
 
-        form = CarouselForm(instance=carousel)
-        formset = ContentInlineFormSet(instance=carousel)
-    return render(request, 'carrusel/configurar-modal.html', {'formset': formset, 'form': form, 'carousel': carousel})
+        form = BreadcrumbsForm(instance=breadcrumb)
+        formset = ContentInlineFormSet(instance=breadcrumb)
+    return render(request, 'breadcrumbs/configurar-modal.html', {'formset': formset, 'form': form, 'breadcrumb': breadcrumb})

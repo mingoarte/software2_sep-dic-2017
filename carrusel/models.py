@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from builder.models import Pattern
 from django.template.loader import render_to_string
-from django.shortcuts import redirect
 from django.forms import inlineformset_factory
 
 

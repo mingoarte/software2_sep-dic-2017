@@ -1,0 +1,7 @@
+<div class="row">
+    <ol id="breadcrumb{{ pattern.pk }}" class="breadcrumb" >
+        {% for content in pattern.content %}
+          <li><a href="{{ content.url }}">{{ content.title }}</a></li>
+        {% endfor %}
+    </ol>
+</div>

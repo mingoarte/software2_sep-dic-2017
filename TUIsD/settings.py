@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'pagination.apps.PaginationConfig',
     'formBuilder.apps.FormbuilderConfig',
     'navbar.apps.NavbarConfig',
+    'breadcrumbs.apps.BreadcrumbsConfig'
 ]
 
 MIDDLEWARE = [

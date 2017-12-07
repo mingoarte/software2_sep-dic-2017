@@ -28,7 +28,8 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'captcha': afterLoadCaptchaConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
@@ -41,7 +42,8 @@ function afterLoadEditPatternConfigModal(patternName) {
     'formulario': afterLoadEditFormConfigModal,
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadEditNavbarConfigModal,
-}
+    'breadcrumb': afterLoadBreadcrumbConfigModal,
+  }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
     patternFuncs[patternName]();
