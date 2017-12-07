@@ -1,14 +1,15 @@
 function sendAccordionData() {
-    var form = $('#accordion-create-form').serialize();
+    var form = $('#accordion-create-form').serializeArray();
 
     return {
         url: '../accordion-config/',
         data: {
-            'form': form,
+            'form': JSON.stringify(form),
+            'dataType': 'json',
         }
     }
 }
 
 function afterLoadAccordionConfigModal() {
-    console.log("HUEHUEHUE");    
+    console.log("afterload");    
 }

@@ -100,7 +100,7 @@ class Accordion(PatronAbstract, Pattern):
         u'Estilos del Título',
         blank=True,
         null=True
-    )    
+    )
 
     # objects returns accordions that have no parent.
     # all_objects returns all accordions, with out without parents.
@@ -119,12 +119,12 @@ class Accordion(PatronAbstract, Pattern):
 
     def render(self):
         # return render_to_string('patrones/accordion/view.html', {"pattern": self})
-        return "UUUUUUUUUUUYUYUYUYUYY"
+        return "El render del acordion"
 
     def render_card(self):
         return render_to_string(
             'patrones/accordion/build.html',
-            {"accordion": self}
+            {"accordion": self, "childs": self.get_child_panels()}
         )
 
     def render_config_modal(self, request):

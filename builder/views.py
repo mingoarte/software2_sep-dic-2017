@@ -137,12 +137,8 @@ def accordionConfig(request):
         # Extraemos las variables del form.
         template_id = int(request.POST.get('template', None))
         position = request.POST.get('position', None)
-        titulo = request.POST.get('title', None)
 
-        print(titulo)
-
-        print("{} - {}\n".format(template_id, position))
-        print("EL webooooooooooo")
+        # print("{} - {}\n".format(template_id, position))
         # Editando patron
         if position is not None:
             template = Template.objects.get(pk=template_id)
@@ -164,9 +160,11 @@ def accordionConfig(request):
             else:
                 position = 0
 
+            form = request.POST.get('form', None)
+
             accordion = Accordion.objects.create_pattern(
                 position=position,
-                template=template
+                template=template,
             )
 
         return JsonResponse(

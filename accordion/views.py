@@ -30,7 +30,6 @@ def accordionCreate(request):
     if request.method == 'POST':
         form = AccordionForm(request.POST)
         context['accordionForm'] = form
-        print("En teoria fue post")
 
         if form.is_valid():
             panel_nro = form.cleaned_data['panels']
@@ -42,16 +41,13 @@ def accordionCreate(request):
                     parent=parent
                 ).save()
 
-            print("FUE VALIDO")
             return redirect('accordion:accordion-edit', question.pk)
 
         # Error in form.
-        print("Fue post pero con error")
         return HttpResponse(json.dumps(form.errors), status=400)
     else:
         context['accordionForm'] = AccordionForm()
 
-    print("VAMO A VER Q ES LO Q ES")
     return render(request, 'index.html', context, status=400)
 
 
