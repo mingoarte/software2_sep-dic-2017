@@ -82,15 +82,8 @@ class revisarTemplate(LoginRequiredMixin,TemplateView):
             context['page_name'] = 'revisar'
 
         template = Template.objects.get(id=(kwargs['templateID']))
-        patterns = template.sorted_patterns()
-
-        for i in patterns:
-
-            if (i.name == "sidebar"):
-                context['sidebar'] = True
-                break
-
-        context['patterns'] = template.sorted_patterns()
+        print(template.content_patterns(), template.navbar())
+        context['templ'] = template
         context['tem_id'] = kwargs['templateID']
 
         print(context)
