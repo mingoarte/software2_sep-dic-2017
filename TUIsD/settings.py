@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'formBuilder.apps.FormbuilderConfig',
     'navbar.apps.NavbarConfig',
     'sidebar.apps.SidebarConfig',
+	'breadcrumbs.apps.BreadcrumbsConfig',
+    'formattedcontent.apps.FormattedcontentConfig',
 ]
 
 MIDDLEWARE = [

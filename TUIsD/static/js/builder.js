@@ -8,8 +8,10 @@ function sendPatternData(patternName) {
     'captcha': sendCaptchaData,
     'navbar': sendNavbarData,
     'sidebar': sendSidebarData,
+	 'formattedcontent': sendFormattedcontentData,
+    'pagination' : sendPaginationData
   };
-  
+
   ajaxOpts = ajaxOptsPatterns[patternName.toLowerCase()]();
   ajaxOpts.data.template = $('#template_id').val();
   if ($('#modal-configuracion').data('position') !== undefined) {
@@ -30,6 +32,7 @@ function afterLoadCreatePatternConfigModal(patternName) {
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadNavbarConfigModal,
     'sidebar': afterLoadSidebarConfigModal,
+	'breadcrumb': afterLoadBreadcrumbConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {
@@ -44,6 +47,7 @@ function afterLoadEditPatternConfigModal(patternName) {
     'carousel': afterLoadCarouselConfigModal,
     'navbar': afterLoadEditNavbarConfigModal,
     'sidebar': afterLoadEditSidebarConfigModal,
+	'breadcrumb': afterLoadBreadcrumbConfigModal,
 }
 
   if (patternFuncs.hasOwnProperty(patternName)) {

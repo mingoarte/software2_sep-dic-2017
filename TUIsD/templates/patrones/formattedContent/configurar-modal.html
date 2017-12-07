@@ -1,0 +1,30 @@
+<!-- Modal content-->
+<div class='modal-content' style='min-width: 690px;'>
+
+	<div class='modal-header'>
+		<button type='button' class='close' data-dismiss='modal'>&times;</button>
+		<h4 class='modal-title'>Configuracion de Contenido</h4>
+	</div>
+	
+	<div class='modal-body'>
+		<form class='' action='#' >
+			<input id="card-id" type="hidden" name="card-id">
+      		<input id="position" type="hidden" name="position">
+      		
+      		<div class='form-group'>
+      			<label for='title'>Titulo</label>
+      			<input class='form-control' id='title' type='text' name='title' required placeholder='Introduzca un titulo' value='{{pattern.title}}'>
+      			
+      			<label for='content'>Contenido</label>
+      			<textarea style='min-height : 300px;'class='form-control' id='content' name='content' required>{{pattern.tagContent}}</textarea>
+      		</div>
+		</form>
+	</div>
+	
+	<div class='modal-footer'>
+		<button id='accept_formattedcontent' type='button' class='accept-modal btn btn-default' data-dismiss='modal'>Aceptar</button>
+		<button type='button' class='btn btn-default' data-dismiss='modal'>Cerrar</button>
+	</div>
+  
+  
+</div>

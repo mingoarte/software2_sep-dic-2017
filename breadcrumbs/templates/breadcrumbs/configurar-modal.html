@@ -1,0 +1,68 @@
+{% load widget_tweaks %}
+
+<div class="modal-content">
+
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        <span class="sr-only">Cerrar</span>
+      </button>
+      <h4 class="modal-title">Configurar Breadcrumb</h4>
+    </div><!-- /.modal-header -->
+
+    <form  
+      action="{% url 'breadcrumb-config' %}" method="post" id="breadcrumb-create" class="form"
+    >
+      {% csrf_token %}
+      <div class="modal-body">
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}">Título</label>
+          {% render_field form.title class="form-control" placeholder="Ingrese un título" %}
+          {% for error in form.title.errors %}
+            <span class="help-block">{{ error }}</span>
+          {% endfor %}
+        </div>
+  
+        <table class="table">
+          {{ formset.management_form }}
+    
+          {% for form in formset.forms %}
+            {% if forloop.first %}
+              <thead>
+                <tr>
+                  {% for field in form.visible_fields %}
+                    <th>{{ field.label|capfirst }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+            {% endif %}
+            <tr class="formset_row">
+              {% for field in form.visible_fields %}
+                <td>
+                  {# Include the hidden fields in the form #}
+                  {% if forloop.first %}
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                  {% endif %}
+                  {{ field }}
+                  {% for error in field.errors %}
+                    <span class="help-block">{{ error }}</span>
+                  {% endfor %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+      </div><!-- /.modal-body -->
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <input type="submit" class="btn btn-primary" value="Aceptar" id="accept-breadcrumb" />
+        <!-- <button type="submit" class="btn btn-primary accept-modal">Aceptar</button> -->
+      </div><!-- /.modal-footer -->
+    </form>
+  </div><!-- /.modal-content -->
