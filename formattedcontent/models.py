@@ -26,6 +26,6 @@ class Formattedcontent(Pattern):
 		return render_to_string('patrones/formattedContent/build.html', {"pattern": self})
 		
 	def __str__(self):
-		return 'Fomatted Content N'+str(self.pk)
+		return 'Contenido "'+str(self.title)+'"'
 		
 		
