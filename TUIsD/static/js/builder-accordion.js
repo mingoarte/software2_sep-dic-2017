@@ -13,7 +13,7 @@ function afterLoadAccordionConfigModal() {
     //console.log("HUEHUEHUE");
 }
 
-$('.delete-panel-button').click(function (e) {
+$(document).on('click', "a.delete-panel-button",function (e) {
 
     var $this = $(this);
     var acordeon_id = $this.data('accordion-id')
@@ -29,6 +29,6 @@ $('.delete-panel-button').click(function (e) {
     }
 });
 
-$('.edit-panel-button').click(function (e) {
+$(document).on('click', "a.edit-panel-button",function (e) {
     alert()
 });

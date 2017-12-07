@@ -149,8 +149,6 @@ def accordionConfig(request):
             key,value = input.split('=')
             form_data[unquote(key)] = unquote(value)
 
-        print(form_data)
-
         # Editando patron
         if position is not None:
             template = Template.objects.get(pk=template_id)
@@ -165,8 +163,15 @@ def accordionConfig(request):
             if form.is_valid():
                 form.save()
 
+                total_panels = form_data.pop('panels', 0)
+                for i in range(0, int(total_panels)):
+                    accord_hijo = Accordion(
+                        title='Panel hijo',
+                        parent=accordion
+                    )
+                    accord_hijo.save()
 
-            #accordion.save()
+
         else:
             # Se obtiene el template ID junto con los patrones para poder
             # configurarle la posición a este patrón.

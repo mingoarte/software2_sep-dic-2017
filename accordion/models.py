@@ -35,7 +35,6 @@ class BaseAccordionManager(PatternManager):
                 parent=parent
             )
             accord_hijo.save()
-            print(accord_hijo)
             #accord_hijo.template_component = temp_c
 
         return parent
