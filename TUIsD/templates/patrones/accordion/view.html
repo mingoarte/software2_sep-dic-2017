@@ -9,7 +9,7 @@
         </style>
         <div id="parent_{{accordion.get_uuid_as_str}}" class="panel panel-default" style='width: {{accordion.width}}%;{{accordion.style}}'>
                 <div class="panel-heading" role="tab" id="head-{{accordion.get_uuid_as_str}}" style="min-height: {{ accordion.height }}px">
-                        <h4 class="panel-title " style="display: inline-block; {{ accordion.title_style }};">
+                        <h4 class="panel-title " style="{{ accordion.title_style }};">
                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion-{{accordion.get_uuid_as_str}}" href="#{{accordion.get_uuid_as_str}}">
                             {{ accordion.title|safe | default:"Link collapsable" }}
                             </a>
@@ -26,7 +26,7 @@
     {% for child_panel in accordion.get_child_panels %}
         <div class="panel panel-default" style='width: {{child_panel.width}}%;{{child_panel.style}}'>
                 <div class="panel-heading" style="min-height: {{ child_panel.height }}px;">
-                    <h4>
+                    <h4 class="panel-title ">
                         <a class="collapsed" data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{accordion.get_uuid_as_str}}">
                         {{ child_panel.title|safe | default:"Link collapsable" }}
                         </a>

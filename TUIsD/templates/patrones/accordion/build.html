@@ -7,10 +7,15 @@
             <div class="panel-group" id="accordion-{{accordion.get_uuid_as_str}}">
                 <div id="parent_{{pattern.get_uuid_as_str}}" class="panel panel-default" >
                         <div class="panel-heading" role="tab" id="head-{{pattern.get_uuid_as_str}}" >
-                                <h4 class="panel-title " >
+                                <h4 class="panel-title" >
                                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion-{{pattern.get_uuid_as_str}}" href="#{{pattern.get_uuid_as_str}}">
                                     {{ pattern.title|safe | default:"Link collapsable" }}
                                     </a>
+                                    <div style="display: inline-block;">
+                                        <a href="#" class="delete-panel-button ">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
                                 </h4>
                         </div>
                     <div id="{{pattern.get_uuid_as_str}}" class="panel-collapse collapse" >
@@ -28,6 +33,14 @@
                                 <a class="collapsed" data-toggle="collapse" href="#{{ child_panel.get_uuid_as_str }}" data-parent="#accordion-{{pattern.get_uuid_as_str}}">
                                 {{ child_panel.title|safe | default:"Link collapsable" }}
                                 </a>
+                                <div style="display: inline-block;">
+                                    <a href="#" class="delete-panel-button ">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="edit-panel-button ">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </h4>
                         </div>
                     <div id="{{ child_panel.get_uuid_as_str }}" class="panel-collapse collapse" >
