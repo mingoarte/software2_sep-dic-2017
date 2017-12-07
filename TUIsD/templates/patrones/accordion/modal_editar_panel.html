@@ -1,0 +1,28 @@
+{% load static bootstrap3 %}
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Configurar Panel</h4>
+    </div>
+    <div class="modal-body">
+        <form id="panel-edit-form" action="#" class="post-form forms" data-parsley-validate novalidate>
+            <div class="row">
+                <div class="col-lg-6">
+                    {% bootstrap_field accordionForm.title %}
+                    {% bootstrap_field accordionForm.title_style %}
+                    {% bootstrap_field accordionForm.content %}
+                    {% bootstrap_field accordionForm.content_style %}
+                </div>
+                <div class="col-lg-6">
+                    {% bootstrap_field  accordionForm.width %}
+                    {% bootstrap_field accordionForm.height %}
+                    {% bootstrap_field accordionForm.style %}
+                </div>
+            </div>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="panel-edit-submit" data-dismiss="modal">Aceptar</button>
+        </form>
+    </div>
+</div>
+</div>
